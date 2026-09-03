@@ -267,7 +267,7 @@ foreach ($legajosDeudaData as $info) {
     $keyEsc = $escuela !== '' ? $escuela : '(sin escuela)';
     $esInactivo = !empty($info['es_inactivo']);
 
-    $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, true);
+    $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, true, $curso);
 
     $deudaTotalComplejo += $ventana['deuda_reportada'];
     if ($esInactivo) {

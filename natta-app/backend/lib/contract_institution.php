@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/ingresantes_externos_2027.php';
+
 if (!function_exists('mb_strtoupper')) {
     function mb_strtoupper($string, $encoding = null)
     {
@@ -534,13 +536,9 @@ function contrato_build_confirmation_email(array $data): array
 /**
  * Cuota futura según configuración vigente (misma lógica que home.php / contratos.php).
  */
-function contrato_es_cuota_futura_status(int $numCuota, int $cuotaVigente, int $mesActual): bool
+function contrato_es_cuota_futura_status(int $numCuota, int $cuotaVigente, int $mesActual, string $curso = ''): bool
 {
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso($numCuota, $cuotaVigente, $mesActual, $curso);
 }
 
 function contrato_curso_es_su(string $curso): bool
@@ -596,12 +594,30 @@ function contrato_adelanto_rv_estado(mysqli $conn, string $legajo, string $curso
 
 function contrato_resto_rv_estado(mysqli $conn, string $legajo, string $curso): array
 {
+    if (curso_es_ingresante_externo_2027($curso)) {
+        return ['aplica' => false, 'cumplido' => true, 'disponible' => false];
+    }
+
     return contrato_cuota_rv_estado($conn, $legajo, $curso, 11);
 }
 
 function contrato_numero_cuota_noviembre(string $curso): int
 {
     return contrato_curso_es_su($curso) ? 10 : 9;
+}
+
+/**
+ * Habilitación de firma: noviembre (ciclo regular) o cuota 10 Adelanto RV 2027 (ingresantes externos).
+ */
+function contrato_alumno_puede_firmar(mysqli $conn, string $legajo, string $curso): bool
+{
+    if (curso_es_ingresante_externo_2027($curso)) {
+        $adelanto = contrato_adelanto_rv_estado($conn, $legajo, $curso);
+
+        return !empty($adelanto['cumplido']);
+    }
+
+    return contrato_alumno_noviembre_abonado($conn, $legajo, $curso);
 }
 
 /**
@@ -639,7 +655,7 @@ function contrato_familia_noviembre_abonado(mysqli $conn, array $legajosConCurso
     }
 
     foreach ($legajosConCurso as $legajo => $curso) {
-        if (!contrato_alumno_noviembre_abonado($conn, (string)$legajo, (string)$curso)) {
+        if (!contrato_alumno_puede_firmar($conn, (string)$legajo, (string)$curso)) {
             return false;
         }
     }
@@ -654,50 +670,81 @@ function contrato_msg_firma_bloqueada_noviembre(): string
         . 'Aún no registramos el pago de noviembre para este alumno.';
 }
 
-/**
- * @param array<string,string> $legajosConCurso legajo => curso
- *
- * @return array{aplica:bool,cumplido:bool,disponible:bool}
- */
-function contrato_sin_deudas_familia_estado(
-    mysqli $conn,
-    array $legajosConCurso,
-    int $cuotaVigente,
-    int $mesActual
-): array {
-    if ($legajosConCurso === []) {
-        return ['aplica' => true, 'cumplido' => false, 'disponible' => false];
+function contrato_msg_firma_bloqueada_adelanto_rv(): string
+{
+    return 'La firma del contrato se habilita únicamente una vez abonada la CUOTA-10 '
+        . ingresante_externo_2027_nombre_cuota()
+        . '. Aún no registramos ese pago para este alumno.';
+}
+
+function contrato_msg_firma_bloqueada(string $curso): string
+{
+    if (curso_es_ingresante_externo_2027($curso)) {
+        return contrato_msg_firma_bloqueada_adelanto_rv();
     }
 
-    $noviembreAbonado = contrato_familia_noviembre_abonado($conn, $legajosConCurso);
-    if (!$noviembreAbonado) {
-        return ['aplica' => true, 'cumplido' => false, 'disponible' => false];
-    }
-
-    $deudaPorLegajo = contrato_deuda_vigente_por_legajos(
-        $conn,
-        array_keys($legajosConCurso),
-        $cuotaVigente,
-        $mesActual
-    );
-    foreach ($deudaPorLegajo as $tieneDeuda) {
-        if ($tieneDeuda) {
-            return ['aplica' => true, 'cumplido' => false, 'disponible' => true];
-        }
-    }
-
-    return ['aplica' => true, 'cumplido' => true, 'disponible' => true];
+    return contrato_msg_firma_bloqueada_noviembre();
 }
 
 /**
- * @return array<string,bool> legajo => tiene deuda vigente
+ * @param array<string,string> $legajosConCurso legajo => curso
+ *
+ * Para evaluar "sin deudas 2026":
+ * - regulares: noviembre abonado
+ * - ingresantes externos 2027: CUOTA-11 Resto RV abonada
  */
-function contrato_deuda_vigente_por_legajos(mysqli $conn, array $legajos, int $cuotaVigente, int $mesActual): array
+function contrato_familia_puede_evaluar_sin_deuda(mysqli $conn, array $legajosConCurso): bool
 {
+    if ($legajosConCurso === []) {
+        return false;
+    }
+
+    foreach ($legajosConCurso as $legajo => $curso) {
+        $legajo = (string)$legajo;
+        $curso = (string)$curso;
+        if ($legajo === '') {
+            return false;
+        }
+        if (curso_es_ingresante_externo_2027($curso)) {
+            // Evaluar cuota 11 aunque aún no figure en el bloque de Reserva de Vacante.
+            $resto = contrato_cuota_rv_estado($conn, $legajo, $curso, 11);
+            if (empty($resto['cumplido'])) {
+                return false;
+            }
+            continue;
+        }
+        if (!contrato_alumno_noviembre_abonado($conn, $legajo, $curso)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Deuda del ciclo 2026 (marzo–noviembre / cuotas 1–9). No incluye RV (10–12).
+ * Si un hermano regular debe alguna de esas cuotas, el requisito permanece pendiente.
+ *
+ * @return array<string,bool> legajo => tiene deuda ciclo 2026
+ */
+function contrato_deuda_ciclo_2026_por_legajos(
+    mysqli $conn,
+    array $legajos,
+    int $cuotaVigente,
+    int $mesActual,
+    array $cursoPorLegajo = []
+): array {
     $resultado = [];
     foreach ($legajos as $legajo) {
         $legajo = (string)$legajo;
         if ($legajo === '') {
+            continue;
+        }
+        $curso = (string)($cursoPorLegajo[$legajo] ?? '');
+
+        // Ingresantes externos 2027 no aportan deuda de cuotas mensuales 2026.
+        if (curso_es_ingresante_externo_2027($curso)) {
+            $resultado[$legajo] = false;
             continue;
         }
 
@@ -716,7 +763,90 @@ function contrato_deuda_vigente_por_legajos(mysqli $conn, array $legajos, int $c
         $saldo = 0.0;
         foreach ($rows as $row) {
             $numCuota = (int)($row['numero_cuota'] ?? 0);
-            if (!contrato_es_cuota_futura_status($numCuota, $cuotaVigente, $mesActual)) {
+            // Solo marzo–noviembre del ciclo 2026 (cuotas 1–9).
+            if ($numCuota < 1 || $numCuota > 9) {
+                continue;
+            }
+            if (!contrato_es_cuota_futura_status($numCuota, $cuotaVigente, $mesActual, $curso)) {
+                $saldo += (float)($row['diferencia'] ?? 0);
+            }
+        }
+        $resultado[$legajo] = round($saldo, 2) > 0.01;
+    }
+
+    return $resultado;
+}
+
+/**
+ * @param array<string,string> $legajosConCurso legajo => curso
+ *
+ * @return array{aplica:bool,cumplido:bool,disponible:bool}
+ */
+function contrato_sin_deudas_familia_estado(
+    mysqli $conn,
+    array $legajosConCurso,
+    int $cuotaVigente,
+    int $mesActual
+): array {
+    if ($legajosConCurso === []) {
+        return ['aplica' => true, 'cumplido' => false, 'disponible' => false];
+    }
+
+    $puedeEvaluar = contrato_familia_puede_evaluar_sin_deuda($conn, $legajosConCurso);
+    if (!$puedeEvaluar) {
+        return ['aplica' => true, 'cumplido' => false, 'disponible' => false];
+    }
+
+    $deudaPorLegajo = contrato_deuda_ciclo_2026_por_legajos(
+        $conn,
+        array_keys($legajosConCurso),
+        $cuotaVigente,
+        $mesActual,
+        $legajosConCurso
+    );
+    foreach ($deudaPorLegajo as $tieneDeuda) {
+        if ($tieneDeuda) {
+            return ['aplica' => true, 'cumplido' => false, 'disponible' => true];
+        }
+    }
+
+    return ['aplica' => true, 'cumplido' => true, 'disponible' => true];
+}
+
+/**
+ * @return array<string,bool> legajo => tiene deuda vigente
+ */
+function contrato_deuda_vigente_por_legajos(
+    mysqli $conn,
+    array $legajos,
+    int $cuotaVigente,
+    int $mesActual,
+    array $cursoPorLegajo = []
+): array {
+    $resultado = [];
+    foreach ($legajos as $legajo) {
+        $legajo = (string)$legajo;
+        if ($legajo === '') {
+            continue;
+        }
+        $curso = (string)($cursoPorLegajo[$legajo] ?? '');
+
+        $stmt = $conn->prepare(
+            'SELECT numero_cuota, diferencia FROM cuotas WHERE nro_legajo = ? AND diferencia > 0'
+        );
+        if (!$stmt) {
+            $resultado[$legajo] = false;
+            continue;
+        }
+        $stmt->bind_param('s', $legajo);
+        $stmt->execute();
+        $rows = fetchAllFromStmt($stmt);
+        $stmt->close();
+
+        $saldo = 0.0;
+        foreach ($rows as $row) {
+            $numCuota = (int)($row['numero_cuota'] ?? 0);
+            if (!contrato_es_cuota_futura_status($numCuota, $cuotaVigente, $mesActual, $curso)) {
                 $saldo += (float)($row['diferencia'] ?? 0);
             }
         }

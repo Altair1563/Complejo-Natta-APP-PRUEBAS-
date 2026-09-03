@@ -26,6 +26,7 @@ $csrf_token = $_SESSION['csrf_token'];
 // ============================================
 define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conn->connect_error) {
@@ -108,7 +109,7 @@ $nombres_cuotas = [
     7  => 'Septiembre',
     8  => 'Octubre',
     9  => 'Noviembre',
-    10 => 'Adelanto Reserva de Vacante',
+    10 => 'Adelanto de Reserva de vacante (2027)',
     11 => 'Resto Reserva de Vacante',
     12 => 'Reserva de Vacante 2026'
 ];
@@ -122,7 +123,7 @@ $alumnosConSolicitudes = [];
 $alumnoTieneSolicitudActiva = [];
 
 if (!$error_conexion) {
-    $sql = "SELECT nro_legajo, nombre_alumno, apellido_alumno FROM legajos WHERE nro_familia = ?";
+    $sql = "SELECT nro_legajo, nombre_alumno, apellido_alumno, curso FROM legajos WHERE nro_familia = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("s", $nro_familia_raw);
@@ -158,10 +159,19 @@ if (!$error_conexion) {
                 foreach ($cuotas as &$cuota) {
                     $cuota['pagada'] = ($cuota['diferencia'] <= 0);
                     $num = (int)$cuota['numero_cuota'];
-                    $cuota['descripcion'] = isset($nombres_cuotas[$num]) ? $nombres_cuotas[$num] : 'Cuota ' . $num;
+                    $cuota['descripcion'] = cuota_nombre_para_curso(
+                        $num,
+                        (string)($alumno['curso'] ?? ''),
+                        $nombres_cuotas[$num] ?? null
+                    );
                     $cuota['monto'] = $cuota['monto_facturado'];
                 }
                 unset($cuota);
+                if (curso_es_ingresante_externo_2027((string)($alumno['curso'] ?? ''))) {
+                    $cuotas = array_values(array_filter($cuotas, static function ($cuota) {
+                        return (int)($cuota['numero_cuota'] ?? 0) === ingresante_externo_2027_numero_cuota();
+                    }));
+                }
                 $cuotasPorAlumno[$legajo] = $cuotas;
             } else {
                 error_log("Error prepare cuotas para legajo $legajo: " . $conn->error);
@@ -245,13 +255,9 @@ if (!$error_conexion) {
 // ============================================
 //  DATOS PARA MODAL DE PAGO (misma lógica home)
 // ============================================
-function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $alumnosConSaldo = [];
@@ -284,7 +290,7 @@ if (!$error_conexion && !empty($alumnos)) {
 
         $saldoVigente = 0.0;
         foreach ($rowsSaldo as $rowSaldo) {
-            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual)) {
+            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual, (string)($alumno['curso'] ?? ''))) {
                 $saldoVigente += (float)($rowSaldo['diferencia'] ?? 0);
             }
         }

@@ -30,13 +30,14 @@ Describe qué puede hacer una familia en la app, qué solicitudes genera y qué 
 ### `home.php` — Estado de cuenta
 
 - Datos de alumnos del grupo familiar.
-- Historial de pagos por alumno.
+- Historial de pagos por alumno (ingresantes EX*: solo cuota 10 visible).
 - Modal de pagos.
-- Enlaces/indicadores de **estado del contrato 2027** (pendiente, firmado, aprobado).
+- Enlaces/indicadores de **estado del contrato 2027** (bloqueado por pago, pendiente, firmado, requisitos, aprobado).
 
 ### `contratos.php` — Contratos
 
 - Pantalla dedicada para ver estado y **firmar** el contrato por alumno.
+- Aviso de habilitación: noviembre (regulares) o Adelanto RV 2027 (ingresantes).
 - El responsable debe leer el contrato HTML y el reglamento antes de marcar la casilla.
 - Al firmar: confirma identidad con contraseña, nombre, DNI y domicilio.
 - Recibe email con comprobante y enlace al PDF firmado.
@@ -60,14 +61,23 @@ Describe qué puede hacer una familia en la app, qué solicitudes genera y qué 
 
 | Estado | Significado |
 |--------|-------------|
-| **Pendiente de firmar** | Aún no aceptó el contrato vigente para ese alumno |
-| **Firmado — pendiente de aprobación** | Firma registrada; secretaría debe revisar documentación |
-| **Aprobado** | Administración confirmó (`admin_aprobado = 1`) |
+| **Pendiente de firmar** | Puede firmar; aún no aceptó el contrato vigente |
+| **Bloqueado — noviembre** | Alumno regular: falta abonar la cuota de noviembre |
+| **Bloqueado — Adelanto RV** | Ingresante externo 2027: falta abonar la cuota 10 (Adelanto RV 2027) |
+| **Firmado — requisitos pendientes** | Firma registrada; faltan documentación, deudas y/o reserva |
+| **Aprobado / validez completa** | Firma + todos los requisitos cumplidos |
 | **No aplica (inactivo)** | Alumno inactivo sin firma previa |
+
+### Requisito para habilitar la firma
+
+| Tipo de alumno | Cuándo se habilita el botón Firmar |
+|----------------|-------------------------------------|
+| **Regular** | Cuando la cuota de **noviembre** figura pagada |
+| **Ingresante externo 2027** (cursos `EXCJ`, `EXHV`, `EXJA`, `EXJN`, `EXSC`, `EXMB`, `EXET`) | Cuando figura pagada la **CUOTA-10 Adelanto de Reserva de vacante (2027)** |
 
 ### Qué hace la familia al firmar
 
-1. Entra a **Contratos** (o desde el home).
+1. Entra a **Contratos** (o desde el home, si la firma ya está habilitada).
 2. Abre el **contrato con sus datos** (HTML) y el **reglamento** (PDF).
 3. Completa datos del firmante y marca la declaración de lectura.
 4. Ingresa su **contraseña** de la app y confirma.
@@ -78,9 +88,42 @@ Describe qué puede hacer una familia en la app, qué solicitudes genera y qué 
 - Email con fecha, IP, versión del documento y **código SHA-256** del PDF.
 - Enlace para **descargar el PDF firmado** (requiere sesión en la app).
 
+### Requisitos para que el contrato entre en vigencia
+
+Tras firmar, la familia ve una lista de requisitos. El orden y los textos cambian según el tipo de alumno.
+
+**Ingresantes externos 2027**
+
+1. Pago del ADELANTO RV 2027 (cuota 10)
+2. Firma y aceptación del contrato / reglamento
+3. Presentación de documentación institucional
+4. Sin deudas del ciclo 2026 (se habilita tras el Resto de RV / cuota 11 y sin deuda del grupo)
+
+**Alumnos regulares**
+
+1. Sin deudas del ciclo 2026
+2. Firma y aceptación
+3. Documentación
+4. Pago de la Reserva de Vacante 2027 (adelanto + resto; aranceles en diciembre)
+
 ---
 
-## 5) Contratos — gestión administrativa
+## 5) Ingresantes externos 2027 — operación
+
+### Quiénes son
+
+Alumnos en cursos **EX*** (alta de ingresantes nuevos). Solo tienen liquidada / visible la **cuota 10** (Adelanto RV 2027). No deben verse ni pedirse cuotas mensuales 1–9 ni el resto de reserva en estado de cuenta, talón o modal de pagos.
+
+### Qué debe hacer administración
+
+1. Al cargar datos: importar **únicamente la cuota 10** para esos legajos.
+2. Cuando esa cuota figure **pagada**, la familia puede firmar el contrato del colegio correspondiente (CJ, HV, JA, JN, SC, MB o ET).
+3. Seguir el flujo habitual de aprobación documental en secretaría.
+4. El **Resto de RV (cuota 11)** no se muestra aún como requisito de reserva en ingresantes; sí condiciona más adelante la evaluación de “sin deudas 2026”.
+
+---
+
+## 6) Contratos — gestión administrativa
 
 ### Configuración por colegio (base de datos)
 
@@ -118,7 +161,7 @@ Tras la firma digital, el registro queda con `admin_aprobado = 0` hasta que secr
 
 ---
 
-## 6) Notificaciones
+## 7) Notificaciones
 
 - Icono de campana en el dashboard.
 - Se marcan como leídas al abrir el panel.
@@ -126,7 +169,7 @@ Tras la firma digital, el registro queda con `admin_aprobado = 0` hasta que secr
 
 ---
 
-## 7) Modal de pagos
+## 8) Modal de pagos
 
 Opciones para la familia:
 
@@ -138,7 +181,7 @@ Muestra concepto, monto, referencia y datos bancarios (CBU, CUIT, titular). En p
 
 ---
 
-## 8) Solicitudes que impactan administración
+## 9) Solicitudes que impactan administración
 
 | Solicitud | Comportamiento |
 |-----------|----------------|
@@ -149,41 +192,44 @@ Muestra concepto, monto, referencia y datos bancarios (CBU, CUIT, titular). En p
 
 ---
 
-## 9) Buenas prácticas operativas
+## 10) Buenas prácticas operativas
 
 - Revisar diariamente: talones, emails, informes de error y **contratos pendientes de aprobación**.
 - Mantener comunicados actualizados.
 - Al inicio de ciclo: verificar `contrato_activo` y plantillas HTML por colegio.
+- Ingresantes EX*: importar solo cuota 10; no liquidar mensuales hasta que corresponda.
 - Validar pagos con comprobante, referencia (legajo/DNI), fecha y monto.
 
 ---
 
-## 10) Flujo recomendado de atención
+## 11) Flujo recomendado de atención
 
-1. Identificar familia (`nro_familia` / alumno).
+1. Identificar familia (`nro_familia` / alumno) y si el curso es **EX*** (ingresante) o regular.
 2. Revisar comunicados vigentes.
-3. **Contratos:** verificar si firmó, si falta aprobación, si el PDF está disponible.
+3. **Contratos:** verificar si puede firmar (noviembre vs Adelanto RV), si firmó, requisitos y PDF.
 4. **Pagos:** talón, referencia, acreditación (hasta 72 h hábiles).
 5. **Datos:** informe de error → corrección en sistema fuente.
 6. **Acceso:** primer ingreso u olvidé contraseña.
 
 ---
 
-## 11) Incidencias frecuentes
+## 12) Incidencias frecuentes
 
 | Consulta | Acción |
 |----------|--------|
 | No veo pago acreditado | Ventana 72 h; pedir comprobante |
 | No puedo pedir talón | Solicitud activa pendiente |
 | No puedo cambiar email | Solicitud pendiente en esa posición |
-| No aparece botón firmar contrato | Alumno inactivo, o colegio sin `contrato_activo = 1` |
+| No aparece botón firmar (regular) | Falta cuota de noviembre pagada, alumno inactivo, o colegio sin `contrato_activo` |
+| No aparece botón firmar (ingresante) | Falta CUOTA-10 Adelanto RV 2027 pagada; verificar curso EX* |
+| Ingresante ve muchas cuotas | Revisar importación: solo debe liquidarse la cuota 10 |
 | Error al firmar contrato | Escalar a soporte técnico (PDF / servidor) |
 | SHA del PDF no coincide | Ver guía SHA; puede ser PDF regenerado o código impreso vs archivo final |
 | Modal de pagos no abre | Escalar a soporte técnico |
 
 ---
 
-## 12) Alcance
+## 13) Alcance
 
 Esta guía cubre operación funcional. Para código, endpoints y estructura de archivos:
 
@@ -192,4 +238,4 @@ Esta guía cubre operación funcional. Para código, endpoints y estructura de a
 
 ---
 
-*Última actualización: junio 2026.*
+*Última actualización: septiembre 2026 — ingresantes externos 2027.*

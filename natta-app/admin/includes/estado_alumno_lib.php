@@ -1678,7 +1678,7 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
     foreach ($legajosData as $info) {
         $curso = trim((string)($info['curso'] ?? ''));
         $escuela = estado_alumno_obtener_escuela_desde_curso($curso);
-        $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false);
+        $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false, $curso);
         $deuda = (float)$ventana['deuda_neta'];
         $alDia = $deuda <= $umbral;
         $pctBeca = (int)($info['porcentaje_descuento'] ?? 0);

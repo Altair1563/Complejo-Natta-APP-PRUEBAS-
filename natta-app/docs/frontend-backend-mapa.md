@@ -40,9 +40,12 @@ natta-app/
 │  ├─ bootstrap.php
 │  ├─ ajax/
 │  └─ lib/
+│     ├─ ingresantes_externos_2027.php  ← cursos EX*, cuota 10
 │     ├─ contract_institution.php
 │     ├─ contract_render.php
-│     └─ contract_pdf.php
+│     ├─ contract_pdf.php
+│     ├─ familia_context.php
+│     └─ talon_context.php
 ├─ docs/contratos/             ← plantillas HTML (no DB)
 ├─ storage/contratos_firmados/ ← PDF firmados
 ├─ estados_de_cuenta/          ← secretaría / informes admin
@@ -95,9 +98,11 @@ Definidos en `frontend/js/config/apiEndpoints.js`.
 
 | Endpoint | Uso | Respuesta clave |
 |----------|-----|-----------------|
-| `ajax_contract_status.php` | Estado por alumno del grupo | `status[]`: `signed`, `admin_aprobado`, `estado_flujo` |
+| `ajax_contract_status.php` | Estado por alumno del grupo | `status[]`: `signed`, `admin_aprobado`, `estado_flujo`, `es_ingresante_externo`, `firma_habilitada`, `requisitos` |
 | `ajax_contract_get.php` | Datos modal firma | `contract.contract_version`, `institucion_contrato` |
 | `ajax_contract_accept.php` | Registrar firma | Genera PDF + inserta `contratos_aceptados` |
+
+`estado_flujo` puede ser: `pendiente_firma`, `firma_bloqueada_noviembre`, `firma_bloqueada_adelanto_rv`, `pendiente_aprobacion`, `aprobado`, `inactivo_sin_firma`.
 
 ### Vistas contrato (no AJAX)
 
@@ -140,11 +145,38 @@ ajax_contract_accept.php
 | ~~`contracts`~~ | **Eliminada** (jun 2026) |
 
 Plantillas: `docs/contratos/Contrato_{INST}_{AÑO}_{REV}.html`  
-Código institución = últimas 2 letras del curso (`ET` → archivo `IDET`).
+Código institución = últimas 2 letras del curso (`ET` → archivo `IDET`).  
+Ingresantes: cursos `EXCJ`…`EXET` → misma institución; ver `ingresantes_externos_2027.php`.
 
 ---
 
-## 6) Flujo: firma de contrato
+## 6) Ingresantes externos 2027 (mapa rápido)
+
+```text
+Curso EX*
+    │
+    ├─► ingresantes_externos_2027.php
+    │       └─► solo cuota 10 liquidada (Adelanto RV 2027)
+    │
+    ├─► home / historial / talón / ajax_cuotas
+    │       └─► cuota_es_futura_para_curso(..., $curso)
+    │
+    └─► contract_institution.php
+            ├─► firma si cuota 10 pagada
+            └─► requisitos: adelanto aplica; resto_rv no aplica
+                    └─► homeContracts.js (orden y textos distintos a regulares)
+```
+
+| Pieza | Rol |
+|-------|-----|
+| `ingresantes_externos_2027.php` | Lista de cursos, nombre cuota 10, `cuota_es_futura_para_curso` |
+| `contract_institution.php` | `contrato_alumno_puede_firmar`, mensajes de bloqueo, requisitos |
+| `homeContracts.js` | UI estados + checklist post-firma por tipo de alumno |
+| `admin/includes/cuotas_admin_lib.php` | Ventana de cuotas en listados admin (solo cuota 10 en EX*) |
+
+---
+
+## 7) Flujo: firma de contrato
 
 ```mermaid
 sequenceDiagram
@@ -172,15 +204,17 @@ sequenceDiagram
 
 ---
 
-## 7) Flujos clásicos (no contratos)
+## 8) Flujos clásicos (no contratos)
 
 ### Estado de cuenta
 
-`home.php` → `ajax_historial.php` + `ajax_cuotas.php` (modal pagos).
+`home.php` → `ajax_historial.php` + `ajax_cuotas.php` (modal pagos).  
+Ambos respetan `cuota_es_futura_para_curso` (ingresantes: solo cuota 10).
 
 ### Talones
 
-`talondepago.php` → `ajax_solicitar_talon.php` / `ajax_cancelar_solicitudes.php`.
+`talondepago.php` → `ajax_solicitar_talon.php` / `ajax_cancelar_solicitudes.php`  
+(+ filtro de cuotas liquidables por curso en `talon_context.php`).
 
 ### Auth
 
@@ -192,16 +226,17 @@ sequenceDiagram
 
 ---
 
-## 8) Backend admin / secretaría
+## 9) Backend admin / secretaría
 
 | Archivo | Uso |
 |---------|-----|
 | `estados_de_cuenta/secretaria_documentacion.php` | Documentación y contratos por alumno |
 | `estados_de_cuenta/informacion_general.php` | KPIs; contratos activos por `contratos_instituciones` |
+| `admin/includes/cuotas_admin_lib.php` | Ventana de cuotas (EX* → solo cuota 10) |
 
 ---
 
-## 9) Configuración
+## 10) Configuración
 
 | Archivo | Contenido |
 |---------|-----------|
@@ -212,7 +247,7 @@ sequenceDiagram
 
 ---
 
-## 10) Checklist: nueva página dashboard
+## 11) Checklist: nueva página dashboard
 
 1. Vista PHP + `data-page`.
 2. `pages/nuevaPage.js` → `initNuevaPage`.
@@ -223,7 +258,7 @@ sequenceDiagram
 
 ---
 
-## 11) SQL de referencia
+## 12) SQL de referencia
 
 | Archivo | Cuándo usar |
 |---------|-------------|
@@ -232,4 +267,4 @@ sequenceDiagram
 
 ---
 
-*Última actualización: junio 2026.*
+*Última actualización: septiembre 2026 — ingresantes externos 2027.*

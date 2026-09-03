@@ -43,7 +43,7 @@ frontend/js/
 backend/
   bootstrap.php
   ajax/                   # Endpoints JSON
-  lib/                    # Lógica de contratos, PDF, render
+  lib/                    # Lógica de contratos, PDF, render, ingresantes
 storage/
   contratos_firmados/     # PDF firmados (no público directo)
 config/
@@ -97,17 +97,72 @@ contratos.php             # Pantalla familiar: firmar / ver estado
 | `php/` | Auth, primer ingreso, recupero clave |
 | `config/` | DB, SMTP, app URL |
 
-### Librerías de contratos (`backend/lib/`)
+### Librerías de contratos y cuotas (`backend/lib/`)
 
 | Archivo | Responsabilidad |
 |---------|-----------------|
-| `contract_institution.php` | Código institución desde curso, datos de `contratos_instituciones`, contrato vigente, emails |
+| `ingresantes_externos_2027.php` | Cursos EX*, cuota 10 liquidada, nombres y “cuota futura” por curso |
+| `contract_institution.php` | Código institución, firma habilitada, requisitos 2027, emails |
 | `contract_render.php` | Render HTML desde plantilla + placeholders, vista documento |
 | `contract_pdf.php` | HTML → PDF (Dompdf), storage, SHA-256, regeneración |
+| `familia_context.php` / `talon_context.php` | Contexto financiero / talones (usan la misma regla de cuota futura) |
 
 ---
 
-## 7) Módulo de contratos digitales
+## 7) Ingresantes externos 2027
+
+Regla centralizada en `backend/lib/ingresantes_externos_2027.php`.
+
+### Cursos
+
+`EXCJ`, `EXHV`, `EXJA`, `EXJN`, `EXSC`, `EXMB`, `EXET`  
+(código institución = últimas 2 letras → plantilla `CJ`, `HV`, …, `ET`→`IDET`, `MB`→`IMB`).
+
+### Cuotas
+
+| Alumno | Qué se liquida / muestra |
+|--------|--------------------------|
+| **Ingresante externo** | Solo **cuota 10** — *Adelanto de Reserva de vacante (2027)*. El resto se trata como futura (no entra en saldo, historial, talón ni modal de pagos). |
+| **Regular** | Regla habitual: cuotas 1–9 según `cuota_vigente`; 10–12 futuras solo antes de marzo. |
+
+Función clave: `cuota_es_futura_para_curso($num, $cuotaVigente, $mesActual, $curso)`.  
+Consumida desde vistas (`home.php`, `contratos.php`, `talondepago.php`, …), AJAX (`ajax_cuotas.php`, `ajax_historial.php`), admin (`cuotas_admin_lib.php`) y contextos de familia/talón.
+
+### Firma de contrato
+
+| Tipo | Habilitación (`contrato_alumno_puede_firmar`) |
+|------|-----------------------------------------------|
+| Regular | Cuota de **noviembre** abonada (9; o 10 en cursos SU) |
+| Ingresante externo | **Cuota 10** (Adelanto RV 2027) con diferencia saldada |
+
+Estados de flujo adicionales:
+
+- `firma_bloqueada_noviembre`
+- `firma_bloqueada_adelanto_rv`
+
+`ajax_contract_status.php` expone por alumno: `es_ingresante_externo`, `firma_habilitada`, `requisitos`, `estado_flujo`.
+
+### Requisitos post-firma (UI en `homeContracts.js`)
+
+**Ingresantes** (orden):
+
+1. Pago del ADELANTO RV 2027 (cuota 10)  
+2. Firma y aceptación  
+3. Documentación institucional  
+4. Sin deudas ciclo 2026 (se evalúa tras cuota 11 Resto RV; los ingresantes no aportan deuda 1–9)
+
+**Regulares** (orden):
+
+1. Sin deudas ciclo 2026  
+2. Firma y aceptación  
+3. Documentación  
+4. Reserva de Vacante 2027 (adelanto + resto; resto no aplica en ingresantes)
+
+En ingresantes, `contrato_resto_rv_estado` marca `aplica: false` (solo cuenta el adelanto en el bloque RV de requisitos).
+
+---
+
+## 8) Módulo de contratos digitales
 
 ### Modelo de datos (post-migración)
 
@@ -185,7 +240,7 @@ Subir nuevas plantillas `docs/contratos/Contrato_*_2028_v1.html` antes de activa
 
 ---
 
-## 8) Autenticación (resumen)
+## 9) Autenticación (resumen)
 
 | Flujo | Archivos |
 |-------|----------|
@@ -197,7 +252,7 @@ Sesión familiar: `$_SESSION['dni_alumno']`, `nro_familia`, `csrf_token`.
 
 ---
 
-## 9) Modal de pagos
+## 10) Modal de pagos
 
 Requiere en `page-data`: `alumnos`, `saldoTotalFamiliar`, `nroFamilia`.
 
@@ -205,7 +260,7 @@ HTML: `#overlay`, `#modalPago`. Lógica: `ui/paymentModal.js`.
 
 ---
 
-## 10) Endpoints AJAX (lista completa)
+## 11) Endpoints AJAX (lista completa)
 
 **Pagos / cuenta**
 
@@ -223,7 +278,7 @@ HTML: `#overlay`, `#modalPago`. Lógica: `ui/paymentModal.js`.
 
 ---
 
-## 11) Checklist: nueva página dashboard
+## 12) Checklist: nueva página dashboard
 
 1. Vista PHP + `data-page`.
 2. `frontend/js/pages/nuevaPage.js` con `initNuevaPage(data)`.
@@ -234,17 +289,19 @@ HTML: `#overlay`, `#modalPago`. Lógica: `ui/paymentModal.js`.
 
 ---
 
-## 12) Reglas para no romper producción
+## 13) Reglas para no romper producción
 
 - Rutas AJAX solo vía `apiEndpoints.js`.
 - No duplicar lógica del modal de pagos.
 - Contratos: no reintroducir tabla `contracts`; usar `contratos_instituciones`.
+- Reglas de ingresantes EX*: solo en `ingresantes_externos_2027.php` (no hardcodear cursos EX* en vistas).
+- “Cuota futura” / liquidación: siempre pasar `$curso` a `cuota_es_futura_para_curso` (o wrappers).
 - Tras cambiar plantilla HTML o márgenes PDF, los SHA de PDFs viejos cambian si se regeneran.
 - `backend/lib/contract_institution.php` debe cargarse solo o antes que `contract_render.php` (institution no depende de render).
 
 ---
 
-## 13) Debug rápido
+## 14) Debug rápido
 
 | Síntoma | Revisar |
 |---------|---------|
@@ -252,9 +309,11 @@ HTML: `#overlay`, `#modalPago`. Lógica: `ui/paymentModal.js`.
 | 403 AJAX | Sesión / CSRF |
 | Contrato “no configurado” | `contratos_instituciones.contrato_activo = 1`, fila del `codigo` |
 | Error estado contrato (500) | Log PHP; funciones en `contract_institution.php` |
+| Firma bloqueada (ingresante) | Cuota 10 pagada; curso en lista EX*; `firma_habilitada` en status |
+| Ingresante ve cuotas 1–9 / 11–12 | Import/liquidación: solo cuota 10; `cuota_es_futura_para_curso` |
 | PDF no genera | `contrato_pdf_diagnostico.php`, `vendor/`, permisos `storage/` |
 | SHA no coincide | Ver `docs/contrato-sha256-verificacion.md` |
 
 ---
 
-*Última actualización: junio 2026 — esquema contratos unificado en `contratos_instituciones`.*
+*Última actualización: septiembre 2026 — ingresantes externos 2027 (cursos EX*, cuota 10 / firma).*

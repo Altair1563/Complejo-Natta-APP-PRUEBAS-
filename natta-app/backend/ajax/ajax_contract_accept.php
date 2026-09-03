@@ -93,8 +93,8 @@ if ($esInactivo) {
     exit;
 }
 
-if (!contrato_alumno_noviembre_abonado($conn, $nroLegajo, $cursoAlumno)) {
-    echo json_encode(['ok' => false, 'msg' => contrato_msg_firma_bloqueada_noviembre()]);
+if (!contrato_alumno_puede_firmar($conn, $nroLegajo, $cursoAlumno)) {
+    echo json_encode(['ok' => false, 'msg' => contrato_msg_firma_bloqueada($cursoAlumno)]);
     $conn->close();
     exit;
 }

@@ -12,13 +12,13 @@ function talon_ctx_build_cuotas_por_alumno(mysqli $conn, int $nroFamilia): array
 {
     $nombresCuotas = [
         1 => 'Marzo', 2 => 'Abril', 3 => 'Mayo', 4 => 'Junio', 5 => 'Julio', 6 => 'Agosto',
-        7 => 'Septiembre', 8 => 'Octubre', 9 => 'Noviembre', 10 => 'Adelanto Reserva de Vacante',
+        7 => 'Septiembre', 8 => 'Octubre', 9 => 'Noviembre', 10 => 'Adelanto de Reserva de vacante (2027)',
         11 => 'Resto Reserva de Vacante', 12 => 'Reserva de Vacante 2026',
     ];
 
     $cuotasPorAlumno = [];
     $stmt = $conn->prepare(
-        'SELECT nro_legajo FROM legajos WHERE nro_familia = ? ORDER BY apellido_alumno, nombre_alumno'
+        'SELECT nro_legajo, curso FROM legajos WHERE nro_familia = ? ORDER BY apellido_alumno, nombre_alumno'
     );
     if (!$stmt) {
         return [];
@@ -30,6 +30,7 @@ function talon_ctx_build_cuotas_por_alumno(mysqli $conn, int $nroFamilia): array
 
     foreach ($alumnos as $alumno) {
         $legajo = (string)($alumno['nro_legajo'] ?? '');
+        $curso = (string)($alumno['curso'] ?? '');
         if ($legajo === '') {
             continue;
         }
@@ -58,10 +59,15 @@ function talon_ctx_build_cuotas_por_alumno(mysqli $conn, int $nroFamilia): array
         foreach ($cuotas as &$cuota) {
             $cuota['pagada'] = ((float)($cuota['diferencia'] ?? 0)) <= 0;
             $num = (int)($cuota['numero_cuota'] ?? 0);
-            $cuota['descripcion'] = $nombresCuotas[$num] ?? ('Cuota ' . $num);
+            $cuota['descripcion'] = cuota_nombre_para_curso($num, $curso, $nombresCuotas[$num] ?? null);
             $cuota['monto'] = $cuota['monto_facturado'];
         }
         unset($cuota);
+        if (curso_es_ingresante_externo_2027($curso)) {
+            $cuotas = array_values(array_filter($cuotas, static function ($cuota) {
+                return (int)($cuota['numero_cuota'] ?? 0) === ingresante_externo_2027_numero_cuota();
+            }));
+        }
         $cuotasPorAlumno[$legajo] = $cuotas;
     }
 

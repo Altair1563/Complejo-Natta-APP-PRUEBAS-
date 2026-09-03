@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenidos al Complejo Natta</title>
+    <style>
+        /* RESET Y ESTILOS BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f6fa;
+            padding: 20px 0;
+            margin: 0;
+        }
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            padding: 40px 36px;
+            border: 1px solid #e9edf4;
+        }
+
+        /* ENCABEZADO */
+        .header {
+            text-align: left;
+            border-bottom: 3px solid #1a3b5d;
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3b5d;
+            letter-spacing: -0.3px;
+            margin: 0;
+        }
+        .header h1 span {
+            font-weight: 300;
+            color: #4a6f8f;
+        }
+
+        /* TEXTO GENERAL */
+        p,
+        li,
+        .texto {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1e2a3a;
+            margin-bottom: 16px;
+        }
+        .intro {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #1e2a3a;
+            margin-bottom: 24px;
+        }
+
+        /* TÍTULOS DE SECCIÓN */
+        .seccion-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a3b5d;
+            margin-top: 30px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .seccion-titulo .emoji {
+            font-size: 22px;
+        }
+
+        /* CAJAS DESTACADAS */
+        .destacado {
+            background-color: #f0f4fb;
+            border-left: 4px solid #1a3b5d;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 16px 0 20px 0;
+        }
+        .destacado p {
+            margin-bottom: 4px;
+        }
+
+        .caja-importante {
+            background-color: #fff7e6;
+            border-left: 4px solid #d48c2c;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .caja-importante p {
+            margin-bottom: 4px;
+            color: #3d2e1a;
+        }
+
+        /* LISTAS */
+        ul {
+            padding-left: 24px;
+            margin: 12px 0 18px 0;
+        }
+        ul li {
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        /* ENLACES Y BOTONES */
+        .enlace-boton {
+            display: inline-block;
+            background-color: #1a3b5d;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            margin: 6px 0 12px 0;
+            transition: background 0.2s;
+            border: none;
+        }
+        .enlace-boton:hover {
+            background-color: #0f2a44;
+        }
+
+        .enlace-texto {
+            color: #1a3b5d;
+            font-weight: 600;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .enlace-texto:hover {
+            color: #0f2a44;
+        }
+
+        /* CORREOS Y DATOS */
+        .correo {
+            background-color: #eef2f7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a3b5d;
+            display: inline-block;
+        }
+
+        /* SEPARADOR */
+        .separador {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 30px 0 20px 0;
+        }
+
+        /* PIE DE PÁGINA */
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 2px solid #e9edf4;
+            font-size: 14px;
+            color: #4f5f73;
+            text-align: left;
+        }
+        .footer p {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .footer strong {
+            color: #1a3b5d;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .seccion-titulo {
+                font-size: 17px;
+            }
+            .enlace-boton {
+                padding: 10px 20px;
+                font-size: 15px;
+                display: block;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Complejo Educativo <span>Natta</span></h1>
+        </div>
+
+        <!-- INTRO -->
+        <p class="intro">
+            <strong>¡Buenos días!</strong><br><br>
+            Bienvenidos al Complejo Educativo Pbro. Eliseo Esteban Natta. Agradecemos profundamente la confianza depositada en nuestra institución para acompañar la formación de sus hijos.
+        </p>
+
+        <!-- SECCIÓN: ADELANTO RV 2027 -->
+        <div class="seccion-titulo">
+            <span class="emoji">💳</span> Adelanto – Reserva de Vacante 2027
+        </div>
+        <p>
+            Adjuntamos el talón de pago correspondiente al <strong>ADELANTO de la Reserva de Vacante 2027</strong>. Los talones de pago a nombre de cada alumno les llegarán siempre por este medio.
+        </p>
+
+        <p><strong>Medios de pago habilitados:</strong></p>
+        <ul>
+            <li><strong>Transferencia bancaria</strong> – al CBU indicado en el talón, con referencia: <strong>DNI del alumno</strong>.</li>
+            <li><strong>Red Link</strong> – ingresando el código de pago (DNI del alumno) y el número de referencia que figura en el talón.</li>
+            <li><strong>Efectivo</strong> – en el Banco Nación de Tristán Suárez (25 de Mayo 54), por caja, con el código de barras de la boleta a nombre del DNI del alumno.</li>
+        </ul>
+
+        <div class="destacado">
+            <p>📍 El <strong>RESTO</strong> para completar la Reserva de Vacante 2027 les será enviado en el mes de diciembre, una vez definidos los aranceles correspondientes.</p>
+        </div>
+
+        <!-- SECCIÓN: ENVÍO DE COMPROBANTES -->
+        <div class="seccion-titulo">
+            <span class="emoji">📤</span> Envío de comprobantes – Requisito obligatorio
+        </div>
+        <p>
+            Luego de abonar, deberán enviar el <strong>comprobante de pago completo</strong> al correo de administración:<br>
+            <span class="correo">complejo_natta@yahoo.com.ar</span>
+        </p>
+        <p>
+            Sin este envío, el pago <strong>no podrá ser acreditado</strong> en nuestro sistema administrativo de cobranzas. Este es el canal exclusivo para consultas administrativas y envío de documentación.
+        </p>
+
+        <!-- SECCIÓN: NATTA-APP -->
+        <div class="seccion-titulo">
+            <span class="emoji">📲</span> Acceso a NATTA-APP – Portal Familiar
+        </div>
+        <p>
+            Ya hemos registrado al <strong>alumno ingresante</strong> en nuestro sistema institucional. A partir de este momento, podrán visualizar toda su información administrativa a través de nuestra aplicación web <strong>NATTA-APP</strong>.
+        </p>
+
+        <ul>
+            <li><strong>Si ya poseen un acceso previo</strong> (por tener otros hijos en el Complejo): al ingresar con sus credenciales habituales, podrán visualizar automáticamente los datos del nuevo alumno dentro de su grupo familiar, sin necesidad de realizar ningún trámite adicional.</li>
+            <li><strong>Si es la primera vez que acceden a la plataforma:</strong> deberán realizar el procedimiento de <strong>"PRIMER INGRESO"</strong> utilizando el correo electrónico al que recibieron esta comunicación y el DNI del alumno ingresante. Luego, deberán crear una contraseña personal. A partir de ese momento, podrán consultar toda la información vinculada a su grupo familiar.</li>
+        </ul>
+
+        <p><strong>🔗 Acceso:</strong></p>
+        <p>
+            Ingresando a nuestra página web <strong>complejonatta.com</strong> y tocando el botón <strong>"NATTA-APP"</strong>, o directamente a través del siguiente enlace:
+        </p>
+        <p style="margin: 8px 0 16px 0;">
+            <a href="http://complejonatta.com/natta-app/primer-ingreso" class="enlace-boton" target="_blank">Ir a NATTA-APP</a>
+        </p>
+        <p>
+            🎥 <strong>Video tutorial:</strong><br>
+            <a href="https://youtu.be/rh-HSD1FvjI" class="enlace-texto" target="_blank">https://youtu.be/rh-HSD1FvjI</a>
+        </p>
+        <p>
+            En caso de presentar problemas con el ingreso, pueden comunicarse con nuestro equipo de soporte técnico:<br>
+            <span class="correo">soporte@complejonatta.com</span>
+        </p>
+
+        <!-- SECCIÓN: FIRMA DE CONTRATO -->
+        <div class="seccion-titulo">
+            <span class="emoji">📄</span> Firma de Contrato 2027 – Condiciones
+        </div>
+
+        <ul>
+            <li><strong>Para el alumno ingresante:</strong> La opción de firma de contrato 2027 se habilitará en NATTA-APP <strong>únicamente una vez que se abone el Adelanto de Reserva de Vacante 2027</strong> y el pago sea acreditado en nuestro sistema.</li>
+            <li><strong>Para alumnos regulares</strong> (que ya pertenecen al Complejo): La firma de contrato 2027 estará disponible <strong>una vez que se abone el mes de noviembre</strong> y el sistema verifique dicha cancelación.</li>
+        </ul>
+
+        <div class="destacado">
+            <p>En ambos casos, el contrato tendrá validez <strong>solo cuando se cumplan la totalidad de los requisitos establecidos</strong> en la comunicación oficial.</p>
+        </div>
+
+        <!-- IMPORTANTE FINAL -->
+        <div class="caja-importante">
+            <p>⚠️ <strong>IMPORTANTE:</strong> No responder a este correo, ya que es un envío automático del sistema. Para cualquier consulta, deben comunicarse exclusivamente a:</p>
+            <p><span class="correo">complejo_natta@yahoo.com.ar</span></p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Quedamos a su disposición ante cualquier inquietud. ¡Muchas gracias por confiar en nosotros!</p>
+            <br>
+            <p><strong>Saludos cordiales,</strong></p>
+            <p><strong>Complejo Educativo Pbro. Eliseo Esteban Natta</strong></p>
+        </div>
+
+    </div>
+</body>
+</html>

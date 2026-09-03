@@ -20,6 +20,7 @@ if (!isset($_SESSION['dni_alumno']) || !isset($_SESSION['nro_familia'])) {
 // ============================================
 define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conn->connect_error) {
@@ -140,13 +141,9 @@ $csrf_token = $_SESSION['csrf_token'];
 // ============================================
 //  DATOS PARA MODAL DE PAGO (misma lógica home)
 // ============================================
-function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $alumnosConSaldo = [];
@@ -200,7 +197,7 @@ if (!$error_conexion) {
 
         $saldoVigente = 0.0;
         foreach ($rowsSaldo as $rowSaldo) {
-            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual)) {
+            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual, (string)($alumno['curso'] ?? ''))) {
                 $saldoVigente += (float)($rowSaldo['diferencia'] ?? 0);
             }
         }

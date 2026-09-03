@@ -25,7 +25,7 @@ function nombreMesCuota($n) {
         7  => 'SEPTIEMBRE',
         8  => 'OCTUBRE',
         9  => 'NOVIEMBRE',
-        10 => 'ADELANTO RV',
+        10 => 'ADELANTO RV 2027',
         11 => 'RESTO RV',
         12 => 'RV COMPLETA'
     ];
