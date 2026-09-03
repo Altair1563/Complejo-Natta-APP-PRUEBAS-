@@ -1,0 +1,5 @@
+# Denegar acceso a todos los archivos
+<FilesMatch "\.(csv|xls|xlsx)$">
+    Require all denied
+    Deny from all
+</FilesMatch>

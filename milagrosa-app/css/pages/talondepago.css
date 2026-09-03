@@ -1,0 +1,240 @@
+#notificacionesPanel {
+    display: none;
+    position: absolute;
+    right: 18px;
+    top: 60px;
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 12px 10px rgba(0, 0, 0, 1);
+    z-index: 200;
+    padding: 12px;
+}
+
+#notificacionesPanel h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #082359;
+}
+
+.notif-item {
+    padding: 8px;
+    border-radius: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.notif-empty {
+    padding: 8px;
+    color: #666;
+    text-align: center;
+}
+
+.notif-item-new {
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+#Dialog-Help{
+    display:none;
+    position:fixed;
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    max-width:800px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:100;
+}
+
+.alumno-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 12px 10px rgba(0,0,0,1);
+    margin-bottom: 20px;
+}
+
+.alumno-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.alumno-nombre {
+    margin: 0;
+    color: #0c3484;
+}
+
+.solicitud-badge {
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ffeeba;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancelar-solicitud {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-cancelar-solicitud:hover {
+    background: #c82333;
+}
+
+.mensaje-alumno {
+    background: #d4edda;
+    color: #155724;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #c3e6cb;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mensaje-error {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.mensaje-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.cuota-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-start;
+}
+
+.cuota-item {
+    flex: 1 0 auto;
+    padding: 5px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cuota-pagada {
+    background-color: #d4edda;
+    border: 2px solid #c3e6cb;
+    color: #155724;
+}
+
+.cuota-impaga {
+    background-color: #f8d7da;
+    border: 2px solid #f5c6cb;
+    color: #721c24;
+}
+
+.cuota-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.cuota-seleccionada {
+    border: 3px solid #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+}
+
+.cuota-deshabilitada {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.cuota {
+    transition: 0.18s ease;
+    cursor: pointer;
+}
+
+.cuota.hover-actual {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,.18);
+}
+
+.cuota.hover-previa {
+    background: #dbeafe;
+    color: black;
+}
+
+.btn-solicitar {
+    background: #0c3484;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-solicitar:hover {
+    background: #082359;
+}
+
+.btn-solicitar:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.btn-todos {
+    background: #28a745;
+    margin-top: 15px;
+    width: 30%;
+    padding: 12px;
+    font-size: 16px;
+}
+
+.btn-todos:hover {
+    background: #218838;
+}
+
+#mensajeContainer {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .btn-todos {
+        width: 99%;
+    }
+}

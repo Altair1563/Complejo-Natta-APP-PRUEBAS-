@@ -1,0 +1,8 @@
+{
+    "calibri": {
+        "normal": "\/home\/u207063327\/domains\/complejonatta.com\/public_html\/natta-app\/vendor\/dompdf\/dompdf\/lib\/fonts\/calibri_normal_1fc819e55e9a0f9815e2c4ad21d0ba82",
+        "bold": "\/home\/u207063327\/domains\/complejonatta.com\/public_html\/natta-app\/vendor\/dompdf\/dompdf\/lib\/fonts\/calibri_bold_8d3213d28b4c2ba52d0d5c669f5a1cc7",
+        "italic": "\/home\/u207063327\/domains\/complejonatta.com\/public_html\/natta-app\/vendor\/dompdf\/dompdf\/lib\/fonts\/calibri_italic_63d9bc7a7b6e63293912df7c29592042",
+        "bold_italic": "calibri_bold_italic_53d713151eeb685742ceb13caee0c115"
+    }
+}

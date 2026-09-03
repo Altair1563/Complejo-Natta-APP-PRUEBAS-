@@ -1,0 +1,355 @@
+/* Información general — tema oscuro (panel interno) */
+:root {
+    --ig-bg: #0b0e14;
+    --ig-surface: #151a24;
+    --ig-surface-2: #1c2330;
+    --ig-border: rgba(255, 255, 255, 0.07);
+    --ig-text: #f0f4f8;
+    --ig-muted: #ffffff;
+    --ig-accent: #7c8aff;
+    --ig-accent-soft: rgba(1, 1, 2, 0.12);
+    --ig-success: #4ade80;
+    --ig-warning: #fbbf24;
+    --ig-danger: #f87171;
+    --ig-radius: 14px;
+    --ig-radius-sm: 9px;
+    --ig-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --ig-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.3);
+}
+
+.ig-page {
+    min-height: 100vh;
+    background-color: var(--ig-bg);
+    background-image:
+        radial-gradient(ellipse 90% 60% at 50% -15%, rgba(124, 138, 255, 0.09), transparent 55%),
+        radial-gradient(ellipse 50% 40% at 100% 80%, rgba(78, 201, 168, 0.05), transparent 50%);
+    color: var(--ig-text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Embebido en el panel admin (pestaña Sistema) */
+.informacion-general-admin {
+    color: var(--ig-text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.informacion-general-admin .ig-shell {
+    max-width: 100%;
+    padding: 0.5rem 0 1.5rem;
+}
+
+.ig-shell {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 3rem;
+}
+
+.ig-hero {
+    background: var(--ig-surface);
+    border-radius: var(--ig-radius);
+    padding: 1.75rem 1.75rem 1.5rem;
+    box-shadow: var(--ig-shadow-lg);
+    border: 1px solid var(--ig-border);
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.ig-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ig-accent), #a5b4fc);
+}
+
+.ig-hero-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--ig-text);
+}
+
+.ig-hero-lead {
+    color: var(--ig-muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 58ch;
+}
+
+.ig-section {
+    margin-bottom: 1.5rem;
+}
+
+.ig-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ig-muted);
+    margin: 0 0 0.65rem;
+}
+
+.ig-card {
+    background: var(--ig-surface);
+    border-radius: var(--ig-radius);
+    border: 1px solid var(--ig-border);
+    box-shadow: var(--ig-shadow);
+    overflow: hidden;
+}
+
+.ig-card-header {
+    padding: 0.85rem 1.15rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--ig-border);
+    background: var(--ig-surface-2);
+    color: var(--ig-text);
+}
+
+.ig-card-body {
+    padding: 1rem 1.15rem;
+}
+
+.ig-card-body--flush {
+    padding: 0;
+}
+
+.ig-kpi-xl {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ig-text);
+}
+
+.ig-kpi-label {
+    font-size: 0.8rem;
+    color: var(--ig-muted);
+    margin-bottom: 0.35rem;
+}
+
+.ig-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.ig-stat-tile {
+    background: var(--ig-surface);
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius-sm);
+    padding: 1rem 1.1rem;
+    box-shadow: var(--ig-shadow);
+}
+
+.ig-stat-tile .ig-kpi-xl {
+    font-size: 1.65rem;
+}
+
+.ig-table {
+    width: 100%;
+    font-size: 0.875rem;
+    border-collapse: collapse;
+}
+
+.ig-table th,
+.ig-table td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--ig-border);
+    text-align: left;
+}
+
+.ig-table th {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ig-muted);
+    font-weight: 600;
+    background: var(--ig-surface-2);
+}
+
+.ig-table td.num,
+.ig-table th.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.ig-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ig-tabs-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid var(--ig-border);
+    background: var(--ig-surface-2);
+}
+
+.ig-tabs-scroll .nav-tabs {
+    flex-wrap: nowrap;
+    border-bottom: none;
+    gap: 0.15rem;
+    padding: 0.5rem 0.5rem 0;
+    min-height: 48px;
+}
+
+.ig-tabs-scroll .nav-link {
+    border: 1px solid transparent;
+    border-radius: var(--ig-radius-sm) var(--ig-radius-sm) 0 0;
+    color: var(--ig-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 0.45rem 0.9rem;
+}
+
+.ig-tabs-scroll .nav-link:hover {
+    color: var(--ig-accent);
+    border-color: var(--ig-border) var(--ig-border) transparent;
+    background: var(--ig-surface);
+}
+
+.ig-tabs-scroll .nav-link.active {
+    color: var(--ig-accent);
+    background: var(--ig-surface);
+    border-color: var(--ig-border) var(--ig-border) var(--ig-surface);
+    font-weight: 600;
+}
+
+.ig-tab-pane-inner {
+    max-height: 380px;
+    overflow: auto;
+    padding: 0;
+}
+
+/* Pestañas internas (por escuela) sin interferir con las del dashboard */
+.informacion-general-admin #igCursosTabContent > .ig-school-pane {
+    display: none;
+}
+
+.informacion-general-admin #igCursosTabContent > .ig-school-pane.active {
+    display: block;
+}
+
+.ig-callout {
+    border-radius: var(--ig-radius-sm);
+    padding: 1rem 1.1rem;
+    background: var(--ig-accent-soft);
+    border: 1px solid rgba(126, 184, 218, 0.25);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ig-text);
+}
+
+.ig-callout strong {
+    color: var(--ig-accent);
+}
+
+.ig-callout ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.15rem;
+}
+
+.ig-metric-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    margin-top: 1rem;
+}
+
+.ig-metric {
+    flex: 1 1 140px;
+}
+
+.ig-metric-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.ig-metric-label {
+    font-size: 0.75rem;
+    color: var(--ig-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.ig-progress-wrap {
+    margin-top: 1rem;
+}
+
+.ig-progress {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--ig-surface-2);
+    overflow: hidden;
+}
+
+.ig-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--ig-success), #34d399);
+    transition: width 0.35s ease;
+}
+
+.ig-progress-bar--over {
+    background: linear-gradient(90deg, var(--ig-warning), var(--ig-danger));
+}
+
+.ig-pill-muted {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--ig-surface-2);
+    color: var(--ig-muted);
+}
+
+.ig-section--cutoff {
+    background: var(--ig-surface);
+    border: 1px solid var(--ig-border);
+    border-radius: var(--ig-radius);
+    padding: 1.25rem 1.25rem 1.1rem;
+    box-shadow: var(--ig-shadow);
+}
+
+.ig-cutoff-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.ig-footer-nav {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ig-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.ig-footer-nav a {
+    color: var(--ig-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.ig-footer-nav a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+    .ig-shell {
+        padding: 1rem 0.85rem 2rem;
+    }
+    .ig-kpi-xl {
+        font-size: 1.85rem;
+    }
+}

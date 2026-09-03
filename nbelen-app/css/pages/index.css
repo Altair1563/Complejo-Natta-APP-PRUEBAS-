@@ -1,0 +1,18 @@
+.fade-out {
+    transition: opacity 1s ease;
+    opacity: 0;
+}
+
+.login-brand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.login-logo {
+    display: block;
+    max-height: 135px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+}

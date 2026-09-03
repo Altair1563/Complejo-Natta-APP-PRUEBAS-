@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de Servicio Educativo 2027 - Instituto Manuel Belgrano</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #e9ecef;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.45;
+        }
+        .contract-page {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+            padding: 2.2rem 2.5rem;
+            border-radius: 4px;
+        }
+        .contract-doc-logos {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+            margin: 0 0 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .contract-doc-logos__images {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-shrink: 0;
+        }
+        .contract-doc-logos__info {
+            flex: 1;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #2c3e50;
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.45;
+        }
+        .contract-doc-logo {
+            display: block;
+            max-height: 110px;
+            max-width: 170px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        .contract-doc-logo--natta { max-width: 195px; }
+        .institution-header {
+            text-align: center;
+            border-bottom: 2px solid #1e466e;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+        }
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 0.5rem 0 0.25rem;
+            color: #1e466e;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .family-data-block {
+            background: #f8f9fc;
+            border-left: 6px solid #1e466e;
+            padding: 1rem 1.5rem;
+            margin: 1.2rem 0 1.8rem 0;
+            border-radius: 0 12px 12px 0;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        .family-data-block p { margin: 0.3rem 0; }
+        .family-data-block .entre-partes {
+            text-align: justify;
+            line-height: 1.65;
+        }
+        .clause { margin: 1.1rem 0; text-align: justify; }
+        .clause-list { margin: 0.8rem 0 0.8rem 1.8rem; }
+        .indent-list { list-style-type: none; counter-reset: legal-list; }
+        .indent-list li { counter-increment: legal-list; margin-bottom: 0.45rem; }
+        .indent-list li::before {
+            content: counter(legal-list, upper-roman) ") ";
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .digital-acceptance-section {
+            margin-top: 2rem;
+            border-top: 2px solid #1e466e;
+            padding-top: 1.5rem;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #222;
+        }
+        .digital-acceptance-section h3 {
+            font-size: 1.05rem;
+            color: #1e466e;
+            margin: 1.25rem 0 0.65rem;
+        }
+        .digital-acceptance-section h3:first-child {
+            margin-top: 0;
+        }
+        .digital-acceptance-section p {
+            margin: 0 0 0.85rem;
+            text-align: justify;
+        }
+        .digital-acceptance-meta {
+            margin: 1rem 0 0;
+            padding-top: 0.85rem;
+            border-top: 1px solid #d0d7e2;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: left;
+        }
+        .verification-code {
+            font-family: monospace;
+            background: #f1f3f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            word-break: break-all;
+        }
+        .bold { font-weight: 700; }
+        .italic { font-style: italic; }
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .contract-page { box-shadow: none; padding: 0.7in; max-width: 100%; }
+            .digital-acceptance-section, .family-data-block { break-inside: avoid; }
+            .no-break { break-inside: avoid; }
+            .contract-doc-logos { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+<div class="contract-page" id="contractContainer">
+
+    {{LOGOS_HEADER}}
+
+    <div class="institution-header">
+        <h1>CONTRATO DE SERVICIO - CICLO LECTIVO 2027</h1>
+    </div>
+
+    <div class="family-data-block">
+        <p class="entre-partes">
+            <strong>ENTRE:</strong> el/la Sr./Sra. <span class="bold">{{NOMBRE_RESPONSABLE}}</span>, con DNI N° <span class="bold">{{DNI_RESPONSABLE}}</span>, con domicilio real en <span class="bold">{{DOMICILIO}}</span>, localidad de <span class="bold">{{LOCALIDAD}}</span>, en adelante «<strong>LA FAMILIA</strong>»; y {{FRAGMENTO_INSTITUCION}}, en adelante «<strong>ESTABLECIMIENTO EDUCATIVO</strong>», celebran el presente contrato de servicios educativos sujeto a las siguientes cláusulas:
+        </p>
+    </div>
+
+    <div class="no-break">
+        <p class="clause"><strong>•</strong> Nuestra institución ha resuelto iniciar el proceso de inscripción de nuestros alumnos para el año 2027. Este proceso se regirá por las normas que a continuación se establecen, considerándose totalmente aceptadas por cada alumno y sus responsables padre, madre y/o tutores, con la firma del mismo.</p>
+
+        <p class="clause"><strong>•</strong> De acuerdo a la facultad conferida a los institutos privados por la legislación vigente, el ESTABLECIMIENTO EDUCATIVO se reserva el derecho de matriculación y admisión de los alumnos inscriptos el año anterior o nuevos, por lo cual se tomarán en cuenta: estado de deuda de aranceles con la institución, identificación institucional de la familia con el ideario del colegio, aceptación del reglamento interno, acuerdo de convivencia y del proyecto educativo institucional, el cumplimiento de los requisitos de admisión y documentación que fijan las reglas escolares vigentes, debiendo cumplimentar el pago correspondiente a la reserva de vacante.</p>
+
+        <p class="clause"><strong>•</strong> El alumno deberá indefectiblemente cumplir con los requisitos pedagógicos según la normativa vigente, para poder acceder al año inmediato superior. En los casos en que los mismos deban rendir alguna materia / área o cumplir con algún período de recuperación, la reinscripción podrá realizarse, pero la misma se llevará a cabo en forma provisoria.</p>
+
+        <p class="clause"><strong>•</strong> El no pago de la reserva de vacante (total o del adelanto resto de la misma) y/o la no entrega de la documentación requerida por el ESTABLECIMIENTO EDUCATIVO significan la caducidad automática de la matriculación del alumno, no encontrándose por lo tanto inscripto en el establecimiento; dando lugar al ESTABLECIMIENTO EDUCATIVO a disponer de la vacante en atención a los pedidos existentes para aquellos nuevos solicitantes.</p>
+
+        <p class="clause"><strong>•</strong> Ningún padre, madre, tutor o responsable del menor podrá abonar el total o alguna cuota de la reserva de vacante del alumno, si mantuviera deudas con la institución por aranceles educativos y/u otros conceptos tanto de ese alumno como de cualquier miembro del legajo familiar. Así mismo se notifica que generándose deuda a posteriori del pago parcial de la reserva de vacante, éste se imputará en forma directa a dicha deuda, prestándose la conformidad en tal sentido. Por lo tanto, el ESTABLECIMIENTO EDUCATIVO podrá transitoriamente no aceptar el pago de la reserva de vacante y/o cuota a aquellos alumnos, cuya reinscripción pudiera estar en duda en virtud de los lineamientos básicos contenidos en este contrato.</p>
+
+        <p class="clause"><strong>•</strong> El establecimiento notificará a los padres, madres, tutores o responsables del menor antes del 31 de octubre del corriente año si va a rescindir a los alumnos impedidos de hacerlo en los plazos indicados en la presente. La reserva de vacante podrá ser rescindida tanto por los mismos, como por el ESTABLECIMIENTO EDUCATIVO, en forma unilateral. Si la rescisión fuera voluntad de los padres, madres, tutores, representantes y la misma fuera exteriorizada fehacientemente a la institución por escrito, antes del 15 de diciembre del 2025 el colegio reintegrará el valor pagado en forma íntegra, excepto que existiera deuda pendiente., siendo de aplicación en este caso lo dispuesto en la cláusula anterior. Vencida la fecha indicada no se devolverá importe alguno. Si la rescisión fuera voluntad unilateral del ESTABLECIMIENTO EDUCATIVO, se devolverá el dinero abonado, cualquiera fuera la fecha de rescisión, sin aplicar en ambos casos interés alguno.</p>
+
+        <p class="clause"><strong>•</strong> El contrato de enseñanza quedará perfeccionado y el alumno matriculado definitivamente el 31 de diciembre del año 2026 siempre que no se den algunas de las siguientes situaciones:</p>
+
+        <ul class="clause-list indent-list">
+            <li>Notificación del ESTABLECIMIENTO EDUCATIVO donde se manifieste que no se aceptará al alumno para el año siguiente</li>
+            <li>Deuda pendiente por cuotas.</li>
+            <li>No haber pagado la reserva en forma total a la fecha indicada.</li>
+            <li>No aceptación por parte de los padres y/o representantes de los alumnos de las pautas arancelarias fijadas o por fijarse por el ESTABLECIMIENTO EDUCATIVO para el año lectivo 2027.</li>
+            <li>No aceptación del reglamento interno, acuerdos de convivencia y/o proyecto educativo institucional.</li>
+            <li>No cumplimiento de los requisitos de admisión y documentación que fijan las reglas escolares vigentes.</li>
+            <li>Incumplimiento de entrega de documentación personal necesaria para la inscripción.</li>
+            <li>No aprobación del curso inmediato anterior.</li>
+            <li>No prestar conformidad mediante firma suscripta en el contrato educativo y entrega del mismo al ESTABLECIMIENTO EDUCATIVO.</li>
+        </ul>
+
+        <p class="clause">El ESTABLECIMIENTO EDUCATIVO se obliga a impartir al alumno/a la enseñanza correspondiente al nivel, modalidad, año y división según los planes oficiales, como así también la enseñanza extra programática.</p>
+
+        <h3 style="margin-top: 1.4rem; font-size: 1.2rem;">a) Arancel.</h3>
+
+        <p class="clause">1. El arancel es anual, decidiendo el ESTABLECIMIENTO EDUCATIVO prorratear su cobro en 9 (nueve) cuotas en los meses de marzo a noviembre.</p>
+        <p class="clause">2. EL ESTABLECIMIENTO EDUCATIVO se reserva el derecho de modificar el arancel anual y por ende el valor de las cuotas a vencer, de acuerdo a los incrementos autorizados por el gobierno de la provincia de Bs. As. quien determina el monto de los aranceles de enseñanza curricular de las escuelas de gestión privada con aporte estatal.</p>
+        <p class="clause">3. La mora en el pago operará en forma automática, y por el sólo vencimiento de los plazos establecidos, sin necesidad de notificación previa. Las cuotas atrasadas se cobrarán al valor establecido con más los intereses fijados por la autoridad competente. Sólo podrá acreditarse el pago mediante el envío del comprobante de pago bancario a la dirección de correo electrónico oficial de administración (complejo_natta@yahoo.com.ar). LA FAMILIA del alumno deberá conservar los comprobantes que acrediten su pago durante todo el ciclo lectivo, en caso contrario no se reconocerá pago alguno sin el correspondiente respaldo documental. El atraso en el pago de las cuotas sin el correspondiente aviso y justificación ante la administración del colegio dejará sin efecto las becas otorgadas. La observación de un comportamiento cumplidor de los tiempos y formas de pago será especialmente tenida en cuenta para evaluar la matriculación para el próximo ciclo lectivo.</p>
+        <p class="clause">4. Se deja constancia que los valores y distribución de conceptos que se informan y corresponderán con los lineamientos trazados por las autoridades de educación de la Provincia de Buenos Aires.</p>
+        <p class="clause">5. El ESTABLECIMIENTO EDUCATIVO se reserva el derecho de modificar los aranceles (arancel curricular, arancel extracurricular, matrícula, mantenimiento, otros conceptos), de acuerdo a los incrementos que se produzcan tanto en la estructura de costos, como por la imposición de impuestos sobre la actividad educativa, previa autorización de las autoridades jurisdiccionales. Asimismo, el ESTABLECIMIENTO EDUCATIVO se reserva el derecho de incluir cuotas complementarias a las informadas, con la previa autorización de la autoridad competente.</p>
+        <p class="clause">6. El servicio educativo estipulado en el presente contrato es indivisible y anual, por lo que los aranceles fijados por los servicios prestados son estimados teniendo en cuenta el receso escolar, feriados, etc. Por este mismo motivo, es que en caso de inasistencia por cualquier índole, se deberá abonar igualmente el arancel mensual correspondiente.</p>
+        <p class="clause">7. El costo de las salidas educativas, útiles escolares, etc. no se encuentran contempladas en el arancel.</p>
+        <p class="clause">8. Habida cuenta que el Instituto percibe sus aranceles por transferencia y/o depósito bancario, la fecha de vencimiento de los mismos no se postergará por caer en día inhábil.</p>
+        <p class="clause">9. En caso de pago por adelantado de cuotas del año, no existirá descuento alguno y, de producirse variaciones en las mismas en el transcurso del año, se deberá abonar la diferencia resultante.</p>
+
+        <p class="clause"><strong>b)</strong> El Reglamento Interno, las Normas de Convivencia y los Acuerdos Institucionales de Convivencia forman parte indivisible de este contrato.</p>
+        <p class="clause"><strong>c) "IMAGEN Y SONIDO".</strong> Sabiendo que el Colegio elabora frecuentemente distintas piezas de comunicación a fin de dar publicidad a sus actividades desarrolladas en la comunidad educativa, autorizamos a que nuestro/a hijo/a sea retratado en fotografías, audios, videos y demás material de uso institucional. Esta autorización comprende además el permiso para que las imágenes sean reproducidas por medios gráficos o fílmicos en papelería, catálogos, cartillas de prensa, afiches, folletos, películas, páginas web, redes sociales y todo otro medio público, gráfico o electrónico que el Colegio utilice para su difusión institucional.</p>
+        <p class="clause"><strong>d)</strong> El titular de los dispositivos empleados en las redes sociales es el responsable de su utilización y de todo lo que se genere por el mal uso de los mismos, de acuerdo a los art. 51 y 52 del Código Civil y Comercial los cuales transcribimos:</p>
+        <p class="clause"><em>Artículo 51: Inviolabilidad de la persona humana:</em> La persona humana es inviolable y en cualquier circunstancia tiene derecho al reconocimiento y respeto a su dignidad.</p>
+        <p class="clause"><em>Artículo 52: Afectaciones a la dignidad:</em> La persona humana lesionada en su intimidad personal o familiar, honra o reputación, imagen o identidad, o que de cualquier modo resultare menoscabada en su dignidad personal, puede reclamar la prevención y reparación de los daños sufridos, conforme a lo dispuesto en el Libro Tercero, Título V, capítulo 1.</p>
+        <p class="clause"><strong>e) Notificaciones. Domicilios.</strong> Las partes otorgan a los correos electrónicos brindados al pie del presente contrato el carácter de domicilio especial en los términos del art. 75 CC y CN en los que se tendrán por eficaces todas las notificaciones, comunicaciones y emplazamientos que allí se dirijan.</p>
+
+        <p class="clause italic">"Me notifico, tomo conocimiento y presto conformidad al presente Contrato Educativo. La caducidad en el pago de una de las cuotas generará el cobro ejecutivo de lo adeudado. Recibo copia del mismo".</p>
+    </div>
+
+        {{BLOQUE_ACEPTACION_DIGITAL}}
+
+</div>
+</body>
+</html>

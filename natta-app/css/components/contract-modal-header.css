@@ -1,0 +1,257 @@
+.contract-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.contract-modal-header__logos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.contract-modal-header__logo {
+    display: block;
+    max-height: 85px;
+    max-width: 110px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.contract-modal-header__logo--natta {
+    max-height: 85px;
+    max-width: 130px;
+}
+
+.contract-modal-header__title {
+    margin: 0;
+    color: #0c3484;
+    font-size: 2.35rem;
+    line-height: 1.25;
+    text-align: center;
+    flex: 1 1 auto;
+}
+
+.swal2-modal .swal2-title:empty,
+.swal2-popup .swal2-title:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 520px) {
+    .contract-modal-header {
+        flex-wrap: wrap;
+    }
+
+    .contract-modal-header__title {
+        width: 100%;
+        text-align: left;
+    }
+}
+
+/* Mobile L — 425px */
+@media (max-width: 425px) {
+    .swal2-container {
+        padding: 6px;
+        align-items: flex-start;
+    }
+
+    .swal2-modal,
+    .swal2-popup {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto;
+        padding: 12px 10px 14px;
+        max-height: calc(100vh - 12px);
+        overflow-y: auto;
+    }
+
+    .swal2-modal .swal2-content,
+    .swal2-popup .swal2-html-container {
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .swal2-modal .swal2-styled,
+    .swal2-popup .swal2-styled {
+        display: block;
+        width: 100%;
+        margin: 6px 0 0;
+        padding: 11px 16px;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    .swal2-modal .swal2-input,
+    .swal2-popup .swal2-input {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 8px 0 0 !important;
+        box-sizing: border-box;
+    }
+
+    .contract-modal-header {
+        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+    }
+
+    .contract-modal-header__logo {
+        max-height: 58px;
+        max-width: 72px;
+    }
+
+    .contract-modal-header__logo--natta {
+        max-height: 58px;
+        max-width: 88px;
+    }
+
+    .contract-modal-header__title {
+        font-size: 1.45rem;
+    }
+
+    .contract-modal-body {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .contract-modal-body > p {
+        margin: 0 0 8px;
+        word-break: break-word;
+    }
+
+    .contract-modal-info-dni-curso .contract-modal-info-curso {
+        display: block;
+        margin-top: 4px;
+    }
+
+    .contract-modal-links {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        text-align: center !important;
+    }
+
+    .contract-modal-links__item {
+        display: block;
+        width: 100%;
+    }
+
+    .contract-modal-links__sep {
+        display: none;
+    }
+
+    .contract-modal-links a {
+        display: block;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: #eef4fc;
+        color: #0c3484;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .contract-modal-links a:hover {
+        background: #dce9fa;
+    }
+
+    .contract-preamble {
+        padding: 10px 12px !important;
+    }
+
+    .contract-preamble p {
+        text-align: left !important;
+        line-height: 1.55 !important;
+    }
+
+    .contract-preamble input {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 6px 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .contract-modal-checkbox-box {
+        padding: 12px !important;
+    }
+
+    .contract-modal-checkbox-box label {
+        font-size: 13px !important;
+    }
+
+    .contract-fallback-modal {
+        top: 4px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: calc(100% - 8px) !important;
+        max-width: none !important;
+        max-height: calc(100vh - 8px) !important;
+        padding: 12px 10px !important;
+    }
+
+    .contract-fallback-actions {
+        flex-direction: column !important;
+    }
+
+    .contract-fallback-actions button {
+        width: 100%;
+    }
+}
+
+/* Mobile M — 370px */
+@media (max-width: 370px) {
+    .swal2-container {
+        padding: 4px;
+    }
+
+    .swal2-modal,
+    .swal2-popup {
+        padding: 10px 8px 12px;
+    }
+
+    .contract-modal-header__logo {
+        max-height: 48px;
+        max-width: 60px;
+    }
+
+    .contract-modal-header__logo--natta {
+        max-height: 48px;
+        max-width: 72px;
+    }
+
+    .contract-modal-header__logos {
+        gap: 8px;
+    }
+
+    .contract-modal-header__title {
+        font-size: 1.25rem;
+    }
+
+    .contract-modal-body {
+        font-size: 13px;
+    }
+
+    .contract-modal-links a {
+        font-size: 13px;
+        padding: 7px 8px;
+    }
+
+    .contract-preamble p {
+        font-size: 13px !important;
+    }
+
+    .swal2-modal .swal2-styled,
+    .swal2-popup .swal2-styled {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}

@@ -1,0 +1,333 @@
+.alumnos-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-alumno {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 14px;
+    cursor: pointer;
+    background: #00032b;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+    transition: .2s transform, .2s opacity, .2s background-color;
+}
+
+.btn-alumno .btn-spinner {
+    display: none;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: home-btn-spin 0.85s linear infinite;
+}
+
+.btn-alumno.is-loading .btn-spinner {
+    display: inline-block;
+}
+
+.btn-alumno.is-loading {
+    opacity: 0.85;
+    cursor: progress;
+    pointer-events: none;
+}
+
+@keyframes home-btn-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.btn-alumno:hover {
+    transform: translateY(-1px);
+    opacity: .95;
+}
+
+.btn-alumno.active {
+    background: #36beff;
+}
+
+.badge-legajo {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 16px;
+    min-width: 130px;
+    text-align: center;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #082359;
+    border: 1px solid #e5e7eb;
+}
+
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity .25s ease-in;
+}
+
+.cuota-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.cuota-pagada {
+    background-color: #d4edda;
+    border: 2px solid #c3e6cb;
+    color: #155724;
+}
+
+.cuota-parcial {
+    background-color: #ffeaa7;
+    border: 2px solid #fdcb6e;
+    color: #856404;
+}
+
+.cuota-pendiente {
+    background-color: #f8d7da;
+    border: 2px solid #f5c6cb;
+    color: #721c24;
+}
+
+.cuota-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuota-seleccionada {
+    border: 3px solid #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.modal-section {
+    display: none;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    border-left: 4px solid #0c3484;
+}
+
+.alumno-selector {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.resumen-pago {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+}
+
+.total-final {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #0c3484;
+    border-top: 2px solid #0c3484;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.row-mediosdepago {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.col-mediosdepago {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px;
+    text-align: -webkit-center;
+}
+
+.banco-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.btn-contrato {
+    margin-left: 8px;
+    border: none;
+    border-radius: 10px;
+    padding: 3px 12px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-contrato:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+    filter: brightness(1.06);
+    color: deepskyblue;
+}
+
+.btn-contrato:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-contrato:disabled {
+    opacity: 0.92;
+    cursor: default;
+    box-shadow: none;
+}
+
+.btn-contract-pending {
+    background: #a31b1b;
+}
+
+.btn-contract-review {
+    background: linear-gradient(180deg, #f4a024 0%, #e67e22 100%);
+    color: #fff;
+}
+
+.btn-contract-signed {
+    background: #1f8f2c;
+}
+
+.contrato-link-home {
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+    text-decoration: none;
+}
+
+.alumno-info {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Mobile L — 425px */
+@media (max-width: 425px) {
+    .contrato-link-home {
+        display: block;
+        width: 100%;
+        margin: 0px auto 0;
+        padding: 6px 10px;
+        font-size: 13px;
+        box-sizing: border-box;
+    }
+}
+
+/* Mobile M — 370px */
+@media (max-width: 370px) {
+    .contrato-link-home {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+}
+
+#notificacionesPanel {
+    display: none;
+    position: absolute;
+    right: 18px;
+    top: 60px;
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    z-index: 200;
+    padding: 12px;
+}
+
+#notificacionesPanel h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #082359;
+}
+
+.notification-status-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    width: auto !important;
+    padding-right: 0px !important;
+}
+
+.dashboard-Navbar > ul > li.notification-status-item > a.btn-Notifications-area {
+    width: 50px;
+    flex: 0 0 50px;
+}
+
+.system-last-update {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: #f2f6ff;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.system-last-update-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #23c552;
+    box-shadow: 0 0 0 2px rgba(35, 197, 82, 0.28);
+}
+
+.notif-item {
+    padding: 8px;
+    border-radius: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.notif-empty {
+    padding: 8px;
+    color: #666;
+    text-align: center;
+}
+
+.notif-item-new {
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+#Dialog-Help{
+    display:none;
+    position:fixed;
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    max-width:800px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:100;
+}

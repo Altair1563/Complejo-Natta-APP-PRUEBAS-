@@ -1,0 +1,73 @@
+.alumnos-nuevos-admin.alumnos-nuevos-alta .aan-shell {
+    background: var(--admin-card-bg, #2c3448);
+    border: 1px solid var(--admin-border, rgba(148, 163, 184, 0.16));
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 10px;
+    box-shadow: var(--admin-shadow, 0 8px 28px rgba(0, 0, 0, 0.35));
+    color: var(--admin-text, #eef4fc);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .aan-title,
+.alumnos-nuevos-admin.alumnos-nuevos-alta h4 {
+    font-weight: 700;
+    color: var(--admin-primary-hover, #8ec8ff);
+    margin-bottom: 20px;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .aan-section {
+    margin-bottom: 35px;
+    padding: 15px;
+    border-left: 4px solid var(--admin-card-accent, #5a6a82);
+    border-radius: 8px;
+    background: var(--admin-card-bg-2, #343d52);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta label {
+    font-weight: 600;
+    color: var(--admin-text-soft, #c8daf0);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .table {
+    color: var(--admin-text, #eef4fc);
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--admin-text, #eef4fc);
+    --bs-table-border-color: var(--admin-border, rgba(148, 163, 184, 0.16));
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .table td,
+.alumnos-nuevos-admin.alumnos-nuevos-alta .table th {
+    vertical-align: middle;
+    font-size: 15px;
+    border-color: var(--admin-border, rgba(148, 163, 184, 0.16));
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .table thead th {
+    background: var(--admin-card-bg-2, #343d52);
+    color: var(--admin-text, #eef4fc);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .datos-alumno {
+    color: #8ec8ff;
+    font-weight: 600;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .datos-responsable {
+    color: #7edfc4;
+    font-weight: 600;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-alta .datos-fecha {
+    color: var(--admin-muted, #8fafd4);
+    font-weight: 500;
+}
+
+.alumnos-nuevos-admin .uppercase {
+    text-transform: uppercase;
+}
+
+.alumnos-nuevos-admin .lowercase {
+    text-transform: lowercase;
+}

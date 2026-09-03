@@ -1,0 +1,68 @@
+.alumnos-nuevos-admin.alumnos-nuevos-lista .aan-lista-shell {
+    max-width: 1200px;
+    margin-top: 10px;
+    background: var(--admin-card-bg, #2c3448);
+    border: 1px solid var(--admin-border, rgba(148, 163, 184, 0.16));
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: var(--admin-shadow, 0 8px 28px rgba(0, 0, 0, 0.35));
+    color: var(--admin-text, #eef4fc);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .aan-lista-title {
+    font-weight: 700;
+    color: var(--admin-primary-hover, #8ec8ff);
+    margin-bottom: 20px;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table {
+    color: var(--admin-text, #eef4fc);
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--admin-text, #eef4fc);
+    --bs-table-border-color: var(--admin-border, rgba(148, 163, 184, 0.16));
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table td,
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table th {
+    vertical-align: middle;
+    border-color: var(--admin-border, rgba(148, 163, 184, 0.16));
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table thead th {
+    background: var(--admin-card-bg-2, #343d52);
+    color: var(--admin-text, #eef4fc);
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .alumno-info {
+    background-color: rgba(106, 179, 255, 0.16);
+    color: #8ec8ff;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .resp1-info {
+    background-color: rgba(167, 139, 250, 0.14);
+    color: #c4b0f8;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .fecha-info {
+    background-color: rgba(94, 201, 176, 0.14);
+    color: #7edfc4;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table thead th {
+    text-align: center;
+}
+
+.alumnos-nuevos-admin.alumnos-nuevos-lista .table td {
+    text-align: center;
+}

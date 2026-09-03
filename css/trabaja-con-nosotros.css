@@ -1,0 +1,255 @@
+/* Solo estilos del formulario de postulación */
+
+.contact_form-container .trabaja_form .form-field {
+  margin-bottom: 18px;
+}
+
+.contact_form-container .trabaja_form label.field-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 8px;
+}
+
+.contact_form-container .trabaja_form .input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.contact_form-container .trabaja_form .input-icon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: #007dbd;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.contact_form-container .trabaja_form .input-wrap input,
+.contact_form-container .trabaja_form .input-wrap select,
+.contact_form-container .trabaja_form .input-wrap textarea {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  outline: none;
+  background-color: #fcfcfc;
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.contact_form-container .trabaja_form .input-wrap select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23007dbd' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.contact_form-container .trabaja_form .input-wrap input:focus,
+.contact_form-container .trabaja_form .input-wrap select:focus,
+.contact_form-container .trabaja_form .input-wrap textarea:focus {
+  border-color: #0a0057;
+  box-shadow: 0 0 0 3px rgba(10, 0, 87, 0.12);
+}
+
+.contact_form-container .trabaja_form .input-wrap input::placeholder,
+.contact_form-container .trabaja_form .input-wrap textarea::placeholder {
+  color: #aaa;
+}
+
+.contact_form-container .trabaja_form .input-wrap--message {
+  align-items: flex-start;
+}
+
+.contact_form-container .trabaja_form .input-icon--message {
+  top: 14px;
+}
+
+.contact_form-container .trabaja_form .input-wrap textarea {
+  min-height: 110px;
+  padding-top: 14px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.contact_form-container .trabaja_form .requisitos-suplencias {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.contact_form-container .trabaja_form .requisitos-suplencias__titulo {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.contact_form-container .trabaja_form .requisitos-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.contact_form-container .trabaja_form .requisitos-check:last-of-type {
+  margin-bottom: 0;
+}
+
+.contact_form-container .trabaja_form .requisitos-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #0a0057;
+  cursor: pointer;
+}
+
+.contact_form-container .trabaja_form .requisitos-check .req-asterisk {
+  color: #ffb4b4;
+  font-weight: 700;
+}
+
+.contact_form-container .trabaja_form .requisitos-suplencias__error {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: #ffb4b4;
+  font-weight: 600;
+}
+
+.contact_form-container .trabaja_form .file-field {
+  margin-bottom: 24px;
+}
+
+.contact_form-container .trabaja_form .file-upload-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 28px 20px;
+  border: 2px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  text-align: center;
+}
+
+.contact_form-container .trabaja_form .file-upload-zone:hover,
+.contact_form-container .trabaja_form .file-upload-zone.has-file {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
+
+.contact_form-container .trabaja_form .file-upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.contact_form-container .trabaja_form .file-upload-icon {
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.contact_form-container .trabaja_form .file-upload-text {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.contact_form-container .trabaja_form .file-upload-hint {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8rem;
+}
+
+.contact_form-container .trabaja_form .file-name-display {
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.contact_form-container .trabaja_form .file-name-display:empty {
+  display: none;
+}
+
+.contact_form-container .trabaja_form .btn-enviar-trabaja {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  padding: 14px 32px;
+  background-color: #0a0057;
+  color: #fff;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgba(10, 0, 87, 0.35);
+  margin-top: 8px;
+}
+
+.contact_form-container .trabaja_form .btn-enviar-trabaja svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.contact_form-container .trabaja_form .btn-enviar-trabaja:hover {
+  background-color: #15008a;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(10, 0, 87, 0.4);
+}
+
+.contact_form-container .trabaja_form .btn-enviar-trabaja:hover svg {
+  transform: translateX(4px);
+}
+
+.contact_form-container .trabaja_form .btn-enviar-trabaja:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact_form-container .trabaja_alert {
+  position: static;
+  margin-top: 16px;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+@media (max-width: 576px) {
+  .contact_form-container .trabaja_form .btn-enviar-trabaja {
+    width: 100%;
+    justify-content: center;
+  }
+}

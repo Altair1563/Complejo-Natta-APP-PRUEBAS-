@@ -1,0 +1,844 @@
+@import url('talondepago.css');
+
+.modal-section {
+    display: none;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    border-left: 4px solid #0c3484;
+}
+
+.alumno-selector {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.resumen-pago {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+}
+
+.banco-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.contratos-hero {
+    background-color: #0c3484e8;
+    color: #fff;
+    border-radius: 20px;
+    padding: 20px 22px;
+    box-shadow: 0 8px 7px rgba(0, 0, 0, 0.9);
+    margin-bottom: 20px;
+}
+
+.contratos-hero-lead {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.55;
+    opacity: 0.95;
+}
+
+.contratos-info-box {
+    background: #d4e7ff;
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: 0 12px 10px rgba(0, 0, 0, 1);
+    margin-bottom: 22px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.contratos-info-box p {
+    margin: 0 0 10px;
+}
+
+.contratos-info-box p:last-child {
+    margin-bottom: 0;
+}
+
+.contratos-estados-leyenda {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 12px;
+    border: 1px solid rgba(12, 52, 132, 0.18);
+}
+
+.contratos-estados-leyenda-title {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #082359;
+}
+
+.contratos-estados-leyenda-list {
+    margin: 0;
+    padding: 0 0 0 4px;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1a2b45;
+}
+
+.contratos-estados-leyenda-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.leyenda-emoji {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+    width: 1.5rem;
+    text-align: center;
+}
+
+.contratos-info-subtitle {
+    margin: 4px 0 8px !important;
+}
+
+.contratos-intro-list {
+    margin: 0 0 14px;
+    padding-left: 1.35rem;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+.contratos-intro-list li {
+    margin-bottom: 6px;
+}
+
+.contratos-info-importante {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fff8e6;
+    border: 2px solid #e6a817;
+    border-left-width: 5px;
+    box-shadow: 0 2px 6px rgba(180, 120, 0, 0.12);
+}
+
+.contratos-info-importante p {
+    color: #5c4200;
+}
+
+.contratos-info-importante-title {
+    margin: 0 0 6px !important;
+    color: #4a3800;
+}
+
+.contratos-condiciones-list {
+    margin-bottom: 0 !important;
+    color: #5c4200;
+}
+
+.contratos-aviso-noviembre {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #fdecea;
+    border: 2px solid #a31b1b;
+    border-left-width: 5px;
+    box-shadow: 0 2px 6px rgba(163, 27, 27, 0.12);
+}
+
+.contratos-aviso-noviembre p {
+    margin: 0;
+    color: #6e1212;
+}
+
+.contratos-aviso-noviembre-title {
+    margin: 0 0 6px !important;
+    color: #5c0e0e;
+}
+
+.contratos-seguridad-aviso {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: #e8f2ff;
+    border: 2px solid #0c3484;
+    border-left-width: 5px;
+    box-shadow: 0 2px 6px rgba(12, 52, 132, 0.1);
+}
+
+.contratos-seguridad-aviso p {
+    margin: 0;
+    color: #082359;
+    font-weight: 500;
+}
+
+.leyenda-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    margin-top: 3px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.leyenda-swatch--pendiente {
+    background: linear-gradient(135deg, #8b1515, #c62828);
+}
+
+.leyenda-swatch--revision {
+    background: linear-gradient(135deg, #e67e22, #f4a024);
+}
+
+.leyenda-swatch--aprobado {
+    background: linear-gradient(135deg, #1f8f2c, #3cb54a);
+}
+
+.leyenda-label--pendiente {
+    color: #0c3484;
+}
+
+.leyenda-label--revision {
+    color: #c45c00;
+}
+
+.leyenda-label--aprobado {
+    color: #1b6f24;
+}
+
+.contratos-alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.contratos-alert-error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.contratos-empty-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
+}
+
+body[data-page="contratos"] .alumnos-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+body[data-page="contratos"] .contrato-alumno-card.alumno-card {
+    width: 33%;
+    flex: 0 0 33%;
+    box-sizing: border-box;
+    margin-bottom: 0;
+}
+
+.contrato-alumno-card .contrato-alumno-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-direction: row-reverse;
+}
+
+.contrato-alumno-card--con-requisitos .contrato-alumno-header {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.contrato-alumno-card--con-requisitos .contrato-alumno-actions {
+    display: none;
+}
+
+.contrato-alumno-identidad {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.contrato-alumno-card .alumno-nombre {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #082359;
+}
+
+.contrato-alumno-meta {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+}
+
+.contrato-badge-inactivo {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.contrato-alumno-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    min-width: min(100%, 260px);
+}
+
+a.btn-contrato-download {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #1b5e20;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+a.btn-contrato-download:hover {
+    background: #2e7d32;
+    text-decoration: none;
+}
+
+.contrato-estado-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 15px;
+    font-weight: 600;
+    color: #082359;
+    text-align: right;
+    max-width: 100%;
+    min-height: 1.5em;
+}
+
+.contrato-estado-msg {
+    text-align: right;
+    line-height: 1.45;
+}
+
+.contrato-estado-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(12, 52, 132, 0.22);
+    border-top-color: #0c3484;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: contrato-estado-spin 0.72s linear infinite;
+}
+
+@keyframes contrato-estado-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.contrato-estado--loading .contrato-estado-msg {
+    color: #082359;
+    font-weight: 600;
+}
+
+.contrato-estado--pendiente_firma .contrato-estado-msg {
+    color: #a31b1b;
+    font-weight: 700;
+}
+
+.contrato-estado--firma_bloqueada_noviembre .contrato-estado-msg {
+    color: #8a5200;
+    font-weight: 700;
+}
+
+.contrato-estado--pendiente_aprobacion .contrato-estado-msg {
+    color: #c45c00;
+    font-weight: 700;
+}
+
+.contrato-estado--aprobado .contrato-estado-msg {
+    color: #1b6f24;
+    font-weight: 700;
+}
+
+.contrato-estado--error .contrato-estado-msg {
+    color: #a32020;
+    font-weight: 600;
+}
+
+.contrato-estado--inactivo_sin_firma .contrato-estado-msg {
+    color: #5c6570;
+    font-weight: 600;
+}
+
+/* Card de requisitos (debajo del alumno, ancho completo) */
+.contrato-requisitos-card {
+    margin-top: 14px;
+    width: 100%;
+}
+
+.contrato-requisitos-card-inner {
+    border-radius: 12px;
+    border: 1px solid rgba(12, 52, 132, 0.16);
+    background: #f7faff;
+    box-shadow: 0 4px 14px rgba(12, 52, 132, 0.08);
+    overflow: hidden;
+}
+
+.contrato-requisitos-card-inner--pendiente {
+    border-left: 4px solid #e67e22;
+}
+
+.contrato-requisitos-card-inner--aprobado {
+    border-left: 4px solid #1f8f2c;
+    background: #f4fbf5;
+}
+
+.contrato-requisitos-card-header {
+    padding: 14px 16px 12px;
+    background: rgba(255, 255, 255, 0.72);
+    border-bottom: 1px solid rgba(12, 52, 132, 0.1);
+}
+
+.contrato-requisitos-card-title {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #082359;
+}
+
+.contrato-requisitos-card-title strong {
+    font-weight: 800;
+    color: #082359;
+}
+
+.contrato-requisitos-card-inner--pendiente .contrato-requisitos-card-title {
+    color: #1a2b45;
+}
+
+.contrato-requisitos-card-inner--aprobado .contrato-requisitos-card-title {
+    color: #1b6f24;
+}
+
+.contrato-requisitos-card-lead {
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #1a2b45;
+}
+
+.contrato-requisitos-card-lead strong {
+    font-weight: 700;
+    color: #082359;
+}
+
+.contrato-requisitos-card-aviso {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fff8e6;
+    border: 1px solid #e6c878;
+}
+
+.contrato-requisitos-card-aviso p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #5c4200;
+}
+
+.contrato-requisitos-card-aviso strong {
+    font-weight: 700;
+    color: #4a3800;
+}
+
+.contrato-requisitos {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.contrato-req {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(12, 52, 132, 0.08);
+    background: transparent;
+}
+
+.contrato-req:last-child {
+    border-bottom: none;
+}
+
+.contrato-req-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.contrato-req--ok .contrato-req-icon {
+    background: #e8f5e9;
+    color: #1b6f24;
+}
+
+.contrato-req--pending .contrato-req-icon {
+    background: #fff3e0;
+    color: #c45c00;
+}
+
+.contrato-req-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.contrato-req-label {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #1a2b45;
+}
+
+.contrato-req-label strong {
+    font-weight: 700;
+}
+
+.contrato-req-nota {
+    font-style: italic;
+    font-weight: 400;
+    color: #5c6570;
+    font-size: 12px;
+}
+
+.contrato-req-nota--block {
+    display: block;
+    margin-top: 4px;
+}
+
+.contrato-req-estado {
+    display: block;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.contrato-req--ok .contrato-req-estado {
+    color: #1b6f24;
+}
+
+.contrato-req--pending .contrato-req-estado {
+    color: #c45c00;
+}
+
+.contrato-requisitos-card-footer {
+    padding: 12px 16px 14px;
+    background: rgba(255, 255, 255, 0.72);
+    border-top: 1px solid rgba(12, 52, 132, 0.1);
+}
+
+.contrato-requisitos-card-footer .btn-contrato-download,
+a.btn-contrato-download.btn-contrato-download--footer {
+    width: auto;
+    display: inline-block;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #0c3484 !important;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    box-shadow: none;
+}
+
+.contrato-requisitos-card-footer .btn-contrato-download:hover,
+a.btn-contrato-download.btn-contrato-download--footer:hover {
+    background: transparent;
+    color: #082359 !important;
+    text-decoration: underline;
+}
+
+.contrato-alumno-actions .btn-contrato {
+    margin-left: 0;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 15px;
+    width: 100%;
+    max-width: 280px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.contrato-alumno-actions .btn-contrato:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    filter: brightness(1.06);
+}
+
+.contrato-alumno-actions .btn-contrato:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.contrato-alumno-actions .btn-contrato:disabled {
+    opacity: 0.92;
+    cursor: default;
+    box-shadow: none;
+}
+
+.btn-contract-pending {
+    background: #a31b1b;
+}
+
+.btn-contract-review {
+    background: linear-gradient(180deg, #f4a024 0%, #e67e22 100%);
+    color: #fff;
+}
+
+.btn-contract-signed {
+    background: #1f8f2c;
+}
+
+.btn-contract-blocked {
+    background: #5c6570;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    body[data-page="contratos"] .contrato-alumno-card.alumno-card {
+        width: 100%;
+        flex: 0 0 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .contrato-alumno-actions {
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .contrato-estado-text {
+        text-align: left;
+        justify-content: flex-start;
+    }
+
+    .contrato-estado-msg {
+        text-align: left;
+    }
+
+    .contrato-alumno-actions .btn-contrato {
+        max-width: none;
+    }
+
+    .contrato-alumno-header {
+        flex-direction: column;
+    }
+}
+
+/* Mobile L — 425px */
+@media (max-width: 425px) {
+    body[data-page="contratos"] .dashboard-contentPage .container-fluid {
+        margin-top: 16px !important;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .contratos-hero {
+        padding: 16px 14px;
+        border-radius: 14px;
+        margin-bottom: 16px;
+    }
+
+    .contratos-hero-lead {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .contratos-info-box {
+        padding: 16px 14px;
+        border-radius: 12px;
+        font-size: 15px;
+        margin-bottom: 16px;
+    }
+
+    .contratos-estados-leyenda {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .contratos-estados-leyenda-title {
+        font-size: 14px;
+    }
+
+    .contratos-estados-leyenda-list {
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    .contratos-intro-list {
+        font-size: 14px;
+        padding-left: 1.1rem;
+    }
+
+    .contratos-info-importante,
+    .contratos-aviso-noviembre,
+    .contratos-seguridad-aviso {
+        padding: 10px 12px;
+    }
+
+    .contrato-alumno-card.alumno-card {
+        padding: 14px;
+        border-radius: 12px;
+        margin-bottom: 14px;
+    }
+
+    .contrato-alumno-meta {
+        font-size: 13px;
+        word-break: break-word;
+    }
+
+    .alumno-nombre {
+        font-size: 1.05rem;
+        line-height: 1.35;
+    }
+
+    a.btn-contrato-download {
+        white-space: normal;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 1.35;
+    }
+
+    .contrato-estado-text {
+        font-size: 14px;
+    }
+
+    .contrato-requisitos-card {
+        margin-top: 12px;
+    }
+
+    .contrato-requisitos-card-header,
+    .contrato-requisitos-card-footer {
+        padding: 10px 12px;
+    }
+
+    .contrato-requisitos-card-title {
+        font-size: 13px;
+    }
+
+    .contrato-requisitos-card-lead,
+    .contrato-requisitos-card-aviso p {
+        font-size: 12px;
+    }
+
+    .contrato-req {
+        padding: 9px 12px;
+    }
+
+    .contrato-req-label {
+        font-size: 12.5px;
+    }
+
+    .contrato-alumno-actions .btn-contrato {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+
+    .contratos-empty-card {
+        padding: 18px 14px;
+    }
+}
+
+/* Mobile M — 370px */
+@media (max-width: 370px) {
+    body[data-page="contratos"] .dashboard-contentPage .container-fluid {
+        margin-top: 12px !important;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .contratos-hero {
+        padding: 14px 12px;
+        border-radius: 12px;
+    }
+
+    .contratos-hero .text-titles {
+        font-size: 1.35rem;
+    }
+
+    .contratos-hero-lead {
+        font-size: 14px;
+    }
+
+    .contratos-info-box {
+        padding: 14px 12px;
+        font-size: 14px;
+    }
+
+    .contratos-estados-leyenda-title {
+        font-size: 13px;
+    }
+
+    .contratos-estados-leyenda-list {
+        font-size: 12px;
+    }
+
+    .leyenda-emoji {
+        width: 1.25rem;
+        font-size: 1rem;
+    }
+
+    .contrato-alumno-card.alumno-card {
+        padding: 12px;
+    }
+
+    .contrato-estado-text {
+        font-size: 13px;
+    }
+
+    .contrato-alumno-actions .btn-contrato {
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+
+    a.btn-contrato-download {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+}

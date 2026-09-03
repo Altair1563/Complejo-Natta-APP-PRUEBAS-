@@ -1,0 +1,122 @@
+#notificacionesPanel {
+    display: none;
+    position: absolute;
+    right: 18px;
+    top: 60px;
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 12px 10px rgba(0,0,0,1);
+    z-index: 200;
+    padding: 12px;
+}
+
+#notificacionesPanel h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #082359;
+}
+
+.notif-item {
+    padding: 8px;
+    border-radius: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.notif-empty {
+    padding: 8px;
+    color: #666;
+    text-align: center;
+}
+
+.notif-item-new {
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+#Dialog-Help{
+    display:none;
+    position:fixed;
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    max-width:800px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:100;
+}
+
+.form-sugerencia {
+    background: #d4e7ff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 12px 10px rgba(0,0,0,1);
+    border-left: 6px solid #0c3484;
+    margin-top: 25px;
+}
+
+.form-sugerencia label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #0c3484;
+}
+
+.form-sugerencia textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.btn-enviar {
+    background: #0c3484;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-enviar:hover {
+    background: #082359;
+}
+
+.mensaje-exito {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+}
+
+.mensaje-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+@media (min-width: 315px) and (max-width: 991px) {
+    
+    flex-direction:column;
+    
+}

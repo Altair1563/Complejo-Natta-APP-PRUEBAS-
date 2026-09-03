@@ -1,0 +1,55 @@
+#notificacionesPanel{
+    display:none;
+    position:absolute;
+    right:18px;
+    top:60px;
+    width:320px;
+    max-height:420px;
+    overflow-y:auto;
+    background:white;
+    border-radius:12px;
+    box-shadow: 0 12px 10px rgba(0,0,0,1);
+    z-index:200;
+    padding:12px;
+}
+
+#notificacionesPanel h4 {
+    margin:0 0 8px 0;
+    font-size:16px;
+    color:#082359;
+}
+
+.notif-item {
+    padding:8px;
+    border-radius:8px;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+}
+
+.notif-empty {
+    padding:8px;
+    color:#666;
+    text-align:center;
+}
+
+#Dialog-Help{
+    display:none;
+    position:fixed;
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    max-width:800px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:100;
+}
+
+@media (max-width:768px) {
+    .contacto-subtitulo {
+        margin: 30px 12px 15px;
+    }
+}

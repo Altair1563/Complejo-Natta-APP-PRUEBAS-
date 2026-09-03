@@ -1,0 +1,148 @@
+# =============================================
+# .htaccess - SEGURIDAD Y OPTIMIZACIÓN
+# Complejo Educativo Pbro. Eliseo Esteban Natta
+# Versión final (formulario, mapa y Bootstrap funcionales)
+# =============================================
+
+# =============================================
+# .htaccess - SEGURIDAD Y OPTIMIZACIÓN (MEJORADO)
+# =============================================
+
+RewriteEngine On
+RewriteBase /
+
+# ------------------------------------------------------------
+# 1. FORZAR HTTPS (SIN WWW)
+# ------------------------------------------------------------
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\.complejonatta\.com [NC]
+RewriteRule ^(.*)$ https://complejonatta.com/$1 [L,R=301]
+
+# ------------------------------------------------------------
+# 2. SEGURIDAD DEL SERVIDOR
+# ------------------------------------------------------------
+Options -Indexes
+
+# Proteger archivos ocultos (.htaccess, .env, etc.)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Bloquear archivos sensibles
+<FilesMatch "^(\.htaccess|\.htpasswd|\.env|config\.php|composer\.(json|lock)|package\.json|error_log|php\.ini|.*\.(bak|old|sql|log|inc))$">
+    Require all denied
+</FilesMatch>
+
+# Permitir explícitamente contacto.php
+<Files "contacto.php">
+    Require all granted
+</Files>
+
+# Evitar ejecución de PHP en carpetas públicas
+RewriteCond %{REQUEST_URI} ^/(images|css|js|uploads)/.*\.(php|phtml|php[0-9]?|phps)$ [NC]
+RewriteRule .* - [F,L]
+
+# ------------------------------------------------------------
+# 3. CABECERAS DE SEGURIDAD HTTP
+# ------------------------------------------------------------
+<IfModule mod_headers.c>
+
+    # Protección básica
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Referrer más moderno
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permisos del navegador
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+
+    # HSTS (HTTPS obligatorio)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+</IfModule>
+
+# ------------------------------------------------------------
+# 4. CONTENT SECURITY POLICY (CSP) - SEGURA Y COMPATIBLE
+# ------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set Content-Security-Policy " \
+        default-src 'self'; \
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' \
+            https://unpkg.com \
+            https://cdnjs.cloudflare.com \
+            https://cdn.jsdelivr.net \
+            https://maps.googleapis.com \
+            https://*.googleapis.com \
+            https://*.gstatic.com \
+            https://www.google.com \
+            https://www.googletagmanager.com; \
+        style-src 'self' 'unsafe-inline' \
+            https://unpkg.com \
+            https://cdnjs.cloudflare.com \
+            https://cdn.jsdelivr.net \
+            https://fonts.googleapis.com \
+            https://*.googleapis.com; \
+        img-src 'self' data: \
+            https://maps.google.com \
+            https://maps.gstatic.com \
+            https://*.googleapis.com \
+            https://*.gstatic.com; \
+        font-src 'self' \
+            https://fonts.gstatic.com \
+            https://cdnjs.cloudflare.com; \
+        connect-src 'self' \
+            https://www.google-analytics.com \
+            https://maps.googleapis.com \
+            https://*.googleapis.com; \
+        frame-src 'self' \
+            https://www.google.com \
+            https://maps.google.com; \
+        frame-ancestors 'self'; \
+        object-src 'none'; \
+        base-uri 'self'; \
+        form-action 'self'; \
+        upgrade-insecure-requests;"
+</IfModule>
+
+# ------------------------------------------------------------
+# 5. BLOQUEO DE BOTS MALICIOSOS
+# ------------------------------------------------------------
+RewriteCond %{HTTP_USER_AGENT} (acunetix|blexbot|binary\ssuite|casper|checkprivacy|clshttp|cmsworldmap|comodo|diavol|dotbot|email|extractor|feedfinder|flicky|grabber|gnu\swget|grub|heritrix|httrack|ia_archiver|jakarta|kmccrew|libweb|libwww|linkextractor|links|magpie|mass\sdownload|majestic|morfeus\sddd|nameprotect|navroad|nearsite|netmech|netmechanic|netresearchserver|newspaper|nicerspro|nikto|nutch|octopus|pagegrabber|paros|pcbrowser|planetwork|postrank|proximic|psbot|purebot|pycurl|python|queryn\smeter|reedes|retriever|siphon|slysearch|spaziodati|spider|sqlmap|squid|teleport|telesoft|true_robot|turingos|turnit|urlcontrol|vampire|voideye|webalta|webauto|webbandit|webcollector|webcopier|webcruncher|webdatacc|webdownloader|webdup|webemailextrac|webfetch|webgo\sis|webinator|web-leacher|weblinker|webmirror|webreaper|websauger|webscanner|webspider|webster|webstripper|webvac|webviewer|webwhacker|webzip|wget|widows|wooter|wwwcollector|wwwcollector-e) [NC]
+RewriteRule ^.* - [F,L]
+
+# ------------------------------------------------------------
+# 6. PÁGINAS DE ERROR PERSONALIZADAS
+# ------------------------------------------------------------
+ErrorDocument 400 /400.html
+ErrorDocument 401 /401.html
+ErrorDocument 403 /403.html
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+ErrorDocument 502 /502.html
+ErrorDocument 504 /504.html
+
+# ------------------------------------------------------------
+# 7. COMPRESIÓN Y CACHÉ
+# ------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-opentype image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresDefault "access plus 2 days"
+</IfModule>

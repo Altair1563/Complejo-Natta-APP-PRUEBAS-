@@ -1,0 +1,209 @@
+#notificacionesPanel {
+    display: none;
+    position: absolute;
+    right: 18px;
+    top: 60px;
+    width: 320px;
+    max-height: 420px;
+    overflow-y: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 12px 10px rgba(0, 0, 0, 1);
+    z-index: 200;
+    padding: 12px;
+}
+
+#notificacionesPanel h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #082359;
+}
+
+.notif-item {
+    padding: 8px;
+    border-radius: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.notif-empty {
+    padding: 8px;
+    color: #666;
+    text-align: center;
+}
+
+.notif-item-new {
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+#Dialog-Help{
+    display:none;
+    position:fixed;
+    top:3%;
+    left:50%;
+    transform:translateX(-50%);
+    width:95%;
+    max-width:800px;
+    max-height:92vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    z-index:100;
+}
+
+.email-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    gap: 10px;
+}
+
+.email-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.vacio {
+    color: #999;
+    font-style: italic;
+}
+
+.btn-mail {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all .3s ease;
+}
+
+.btn-agregar {
+    background: #0c3484;
+    color: white;
+}
+
+.btn-cambiar {
+    background: #f9a825;
+    color: #000;
+}
+
+.btn-mail:hover {
+    opacity: 0.85;
+}
+
+.btn-mail:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.solicitud-badge {
+    background: #fff3cd;
+    color: #856404;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ffeeba;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-cancelar-solicitud {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-cancelar-solicitud:hover {
+    background: #c82333;
+}
+
+#modalEmail {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 12px 10px rgba(0, 0, 0, 1);
+    z-index: 150;
+}
+
+#modalEmail h3 {
+    margin-top: 0;
+    color: #0c3484;
+}
+
+#modalEmail input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+#modalEmail button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+#modalEmail .guardar {
+    background: #0c3484;
+    color: white;
+    margin-right: 10px;
+}
+
+#modalEmail .guardar:hover {
+    background: #082359;
+}
+
+#modalEmail .cancelar {
+    background: #f1f1f1;
+    color: #333;
+}
+
+#modalEmail .cancelar:hover {
+    background: #ddd;
+}
+
+.mensaje-alumno {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
