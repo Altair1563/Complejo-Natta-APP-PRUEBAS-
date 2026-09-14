@@ -27,6 +27,6 @@ export const CONTRATO_DOCUMENTO_FIRMADO_URL = 'contrato_documento_firmado.php';
 
 /** PDF del reglamento institucional 2027 (fallback si el backend no envía URL). */
 export const REGLEMENTO_INSTITUCIONAL_2027_PDF_URL =
-  './docs/reglamento-institucional/' + encodeURIComponent('Reglamento CPEEN 2027 - Jardin de Infantes La Milagrosa.pdf');
+  './docs/reglamento-institucional/' + encodeURIComponent('REGLAMENTO CPEEN 2027 - La Milagrosa.pdf');
 
 export const PHP_LOGOUT = 'php/logout.php';

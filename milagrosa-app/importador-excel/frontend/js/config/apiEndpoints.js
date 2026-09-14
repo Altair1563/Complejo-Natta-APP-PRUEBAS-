@@ -16,7 +16,8 @@ export const AJAX_CONTRACT_STATUS = AJAX_BASE + 'ajax_contract_status.php';
 export const AJAX_CONTRACT_GET = AJAX_BASE + 'ajax_contract_get.php';
 export const AJAX_CONTRACT_ACCEPT = AJAX_BASE + 'ajax_contract_accept.php';
 
-/** PDF del reglamento institucional 2027 (ruta pública respecto al sitio). Ajustar si el archivo está en otra carpeta. */
-export const REGLEMENTO_INSTITUCIONAL_2027_PDF_URL = '/documentos/REGLAMENTO_INSTITUCIONAL_2027.pdf';
+/** PDF del reglamento institucional 2027 (fallback si el backend no envía URL). */
+export const REGLEMENTO_INSTITUCIONAL_2027_PDF_URL =
+  './docs/reglamento-institucional/' + encodeURIComponent('REGLAMENTO CPEEN 2027 - La Milagrosa.pdf');
 
 export const PHP_LOGOUT = 'php/logout.php';

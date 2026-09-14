@@ -327,8 +327,8 @@ function contrato_reglamento_info_desde_codigo(string $codigo): array
     // Un único reglamento para CI / RI / VI / UI (Jardin de Infantes La Milagrosa).
     return [
         'modal_link_label' => 'Leer REGLAMENTO INSTITUCIONAL 2027',
-        'email_link_label' => 'Reglamento institucional 2027',
-        'filename' => 'Reglamento CPEEN 2027 - Jardin de Infantes La Milagrosa.pdf',
+        'email_link_label' => 'Reglamento CPEEN 2027',
+        'filename' => 'REGLAMENTO CPEEN 2027 - La Milagrosa.pdf',
     ];
 }
 
