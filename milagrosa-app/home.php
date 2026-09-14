@@ -478,8 +478,8 @@ $conn->close();
                             <div class="full-box tile-title text-center text-titles text-uppercase">Cuota Vigente - 2026</div>
                             <div class="full-box tile-icon text-center"><i class="zmdi zmdi-calendar-note"></i></div>
 
-                            <!-- Monto + estado + vencimiento (un solo bloque para alinear) -->
-                            <div class="full-box tile-number text-titles tile-cuota-values">
+                            <!-- TOTAL A PAGAR (solo cuotas vigentes) -->
+                            <div class="full-box tile-number text-titles">
                                 <?php if ($mostrarTotalesPago): ?>
                                     <p class="alumno-saldo"><b>$<?= number_format((float)$saldoParaTile, 2, ',', '.'); ?></b></p>
                                 <?php elseif ($inactivoSinCuotas): ?>
@@ -487,19 +487,23 @@ $conn->close();
                                 <?php else: ?>
                                     <p class="alumno-saldo"><b>$---</b></p>
                                 <?php endif; ?>
+                            </div>
 
-                                <p class="tile-cuota-rango">
-                                    <b>
+                            <!-- RANGO DE MESES O "Alumno INACTIVO" -->
+                            <div class="full-box tile-number text-titles">
+                                <p class=""><b style="font-size: 14px; top: 50px; position: relative; right: 15px;">
                                         <?php if ($mostrarTotalesPago): ?>
                                             <?= htmlspecialchars($rangoMeses) ?>
                                         <?php else: ?>
                                             Alumno INACTIVO
                                         <?php endif; ?>
-                                    </b>
-                                </p>
+                                    </b></p>
+                            </div>
 
-                                <?php if (!$inactivoSinCuotas): ?>
-                                <p class="alumno-saldo tile-cuota-vencimiento">
+                            <?php if (!$inactivoSinCuotas): ?>
+                            <!-- FECHA DE VENCIMIENTO O "--/--/--" -->
+                            <div class="full-box tile-number text-titles"><br><br>
+                                <p class="alumno-saldo">
                                     <b>
                                         <?php if ($mostrarTotalesPago): ?>
                                             <?= $ultimo_dia_mes ?>
@@ -508,8 +512,8 @@ $conn->close();
                                         <?php endif; ?>
                                     </b>
                                 </p>
-                                <?php endif; ?>
                             </div>
+                            <?php endif; ?>
                         </article>
                     </div>
                 <?php $i++;
