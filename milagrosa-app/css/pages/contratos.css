@@ -366,7 +366,8 @@ a.btn-contrato-download:hover {
     font-weight: 700;
 }
 
-.contrato-estado--firma_bloqueada_noviembre .contrato-estado-msg {
+.contrato-estado--firma_bloqueada_noviembre .contrato-estado-msg,
+.contrato-estado--firma_bloqueada_adelanto_rv .contrato-estado-msg {
     color: #8a5200;
     font-weight: 700;
 }

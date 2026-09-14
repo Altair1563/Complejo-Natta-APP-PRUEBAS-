@@ -3,6 +3,8 @@
  * Contexto financiero de la familia para el frontend (vía AJAX, no en DOM).
  */
 
+require_once __DIR__ . '/ingresantes_externos_2027.php';
+
 function familia_ctx_fetch_all_from_stmt(mysqli_stmt $stmt): array
 {
     if (function_exists('fetchAllFromStmt')) {
@@ -42,13 +44,9 @@ function familia_ctx_fetch_all_from_stmt(mysqli_stmt $stmt): array
     return $rows;
 }
 
-function familia_ctx_es_cuota_futura(int $numCuota, int $cuotaVigente, int $mesActual): bool
+function familia_ctx_es_cuota_futura(int $numCuota, int $cuotaVigente, int $mesActual, string $curso = ''): bool
 {
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso($numCuota, $cuotaVigente, $mesActual, $curso);
 }
 
 function familia_ctx_cuota_vigente(mysqli $conn): int
@@ -116,7 +114,7 @@ function familia_ctx_build(mysqli $conn, int $nroFamilia): array
                 $stmtCuotas->bind_param('s', $legajo);
                 $stmtCuotas->execute();
                 foreach (familia_ctx_fetch_all_from_stmt($stmtCuotas) as $c) {
-                    if (!familia_ctx_es_cuota_futura((int)$c['numero_cuota'], $cuotaVigente, $mesActual)) {
+                    if (!familia_ctx_es_cuota_futura((int)$c['numero_cuota'], $cuotaVigente, $mesActual, (string)($alumno['curso'] ?? ''))) {
                         $saldoVigente += (float)$c['diferencia'];
                     }
                 }

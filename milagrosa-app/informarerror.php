@@ -26,6 +26,7 @@ $csrf_token = $_SESSION['csrf_token'];
 // ============================================
 define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conn->connect_error) {
@@ -66,14 +67,9 @@ function fetch_all_from_stmt($stmt) {
     return $rows;
 }
 
-function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-    // Cuotas de reserva (10,11,12): futuras solo antes de marzo
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $nro_familia_raw = $_SESSION['nro_familia'];
@@ -160,7 +156,7 @@ if (!$error_conexion) {
 
         $saldoVigente = 0.0;
         foreach ($rowsSaldo as $rowSaldo) {
-            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual)) {
+            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual, (string)($alumno['curso'] ?? ''))) {
                 $saldoVigente += (float)($rowSaldo['diferencia'] ?? 0);
             }
         }

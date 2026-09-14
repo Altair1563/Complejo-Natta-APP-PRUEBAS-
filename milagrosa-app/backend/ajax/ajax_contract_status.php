@@ -152,16 +152,20 @@ foreach ($statusByStudent as $dni => &$st) {
         $restoRv,
         $sinDeudasFamilia
     );
-    $st['noviembre_abonado'] = contrato_alumno_noviembre_abonado(
+    $st['es_ingresante_externo'] = curso_es_ingresante_externo_2027($curso);
+    $st['firma_habilitada'] = contrato_alumno_puede_firmar(
         $conn,
         (string)($st['nro_legajo'] ?? ''),
         $curso
     );
+    $st['noviembre_abonado'] = $st['firma_habilitada'];
 
     if ($st['es_inactivo'] && !$st['signed']) {
         $st['estado_flujo'] = 'inactivo_sin_firma';
-    } elseif (!$st['signed'] && !$st['noviembre_abonado']) {
-        $st['estado_flujo'] = 'firma_bloqueada_noviembre';
+    } elseif (!$st['signed'] && !$st['firma_habilitada']) {
+        $st['estado_flujo'] = !empty($st['es_ingresante_externo'])
+            ? 'firma_bloqueada_adelanto_rv'
+            : 'firma_bloqueada_noviembre';
     } elseif ($expectedVersion === '') {
         $st['estado_flujo'] = 'pendiente_firma';
     } elseif (!$st['signed']) {

@@ -590,7 +590,7 @@ foreach ($legajosData as $leg => $info) {
     $curso       = $info['curso'];
     $escuela     = obtenerEscuelaDesdeCurso($curso);
 
-    $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false);
+    $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false, (string)$curso);
     $deudaHastaMes = (float)($ventana['deuda_impaga'] ?? $ventana['deuda_neta']);
     $primerMesImpagoLogic = $ventana['primer_mes_impago'];
     $ultimoMesImpagoLogic = $ventana['ultimo_mes_impago'];

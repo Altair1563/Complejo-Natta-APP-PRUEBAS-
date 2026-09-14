@@ -27,6 +27,7 @@ if (!isset($_POST['legajo']) || empty($_POST['legajo'])) {
 // ============================================
 define('_ACCESS', true);
 require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../lib/ingresantes_externos_2027.php';
 
 try {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -46,17 +47,19 @@ $nro_familia = $_SESSION['nro_familia'];
 // ============================================
 //  VERIFICAR QUE EL LEGAJO PERTENECE A LA FAMILIA
 // ============================================
-$stmt = $conn->prepare("SELECT 1 FROM legajos WHERE nro_legajo = ? AND nro_familia = ?
+$stmt = $conn->prepare("SELECT curso FROM legajos WHERE nro_legajo = ? AND nro_familia = ?
                         UNION
-                        SELECT 1 FROM legajos_inactivos WHERE nro_legajo = ? AND nro_familia = ?");
+                        SELECT curso FROM legajos_inactivos WHERE nro_legajo = ? AND nro_familia = ?");
 $stmt->bind_param("ssss", $nro_legajo, $nro_familia, $nro_legajo, $nro_familia);
 $stmt->execute();
 $res = $stmt->get_result();
-if ($res->fetch_row() === null) {
+$alumnoCuotas = $res ? $res->fetch_assoc() : null;
+if ($alumnoCuotas === null) {
     http_response_code(403);
     exit(json_encode(['error' => 'Alumno no pertenece a esta familia']));
 }
 $stmt->close();
+$cursoAlumno = (string)($alumnoCuotas['curso'] ?? '');
 
 // ============================================
 //  OBTENER CUOTA VIGENTE DESDE CONFIGURACIÓN
@@ -76,15 +79,9 @@ $mesActual = (int)date('n');
 // ============================================
 //  FUNCIÓN PARA DETERMINAR SI UNA CUOTA ES FUTURA
 // ============================================
-function esCuotaFutura($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFutura($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    } else {
-        // Cuotas de reserva (10,11,12): futuras solo antes de marzo
-        return $mesActual < 3;
-    }
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 // ============================================
@@ -102,7 +99,7 @@ $cuotas = [];
 while ($row = $result->fetch_assoc()) {
     $numCuota = (int)$row['numero_cuota'];
     // Filtrar: solo incluir cuotas NO futuras
-    if (!esCuotaFutura($numCuota, $cuota_vigente, $mesActual)) {
+    if (!esCuotaFutura($numCuota, $cuota_vigente, $mesActual, $cursoAlumno)) {
         // Agregar descripción del mes
         $meses = [
             1  => 'MARZO',
@@ -114,11 +111,11 @@ while ($row = $result->fetch_assoc()) {
             7  => 'SEPTIEMBRE',
             8  => 'OCTUBRE',
             9  => 'NOVIEMBRE',
-            10 => 'ADELANTO RV',
+            10 => 'ADELANTO RV 2027',
             11 => 'RESTO RV',
             12 => 'RV COMPLETA'
         ];
-        $row['descripcion'] = $meses[$numCuota] ?? 'Desconocido';
+        $row['descripcion'] = cuota_nombre_para_curso($numCuota, $cursoAlumno, $meses[$numCuota] ?? null);
         $row['pendiente'] = (float)$row['diferencia'];
         $row['monto'] = (float)$row['monto_facturado'];
         $row['pagado'] = (float)$row['monto_ingresado'];

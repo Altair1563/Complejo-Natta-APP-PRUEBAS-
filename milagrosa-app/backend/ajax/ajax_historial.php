@@ -37,6 +37,7 @@ if (!isset($_POST['legajo']) || empty($_POST['legajo'])) {
 define('_ACCESS', true);
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/cuota-vigente.php';
+require_once __DIR__ . '/../lib/ingresantes_externos_2027.php';
 
 try {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -55,9 +56,9 @@ $nro_familia = $_SESSION['nro_familia'];
 // ============================================
 //  VERIFICAR QUE EL LEGAJO PERTENECE A LA FAMILIA
 // ============================================
-$stmt = $conn->prepare("SELECT 1 FROM legajos WHERE nro_legajo = ? AND nro_familia = ?
+$stmt = $conn->prepare("SELECT curso FROM legajos WHERE nro_legajo = ? AND nro_familia = ?
                         UNION
-                        SELECT 1 FROM legajos_inactivos WHERE nro_legajo = ? AND nro_familia = ?");
+                        SELECT curso FROM legajos_inactivos WHERE nro_legajo = ? AND nro_familia = ?");
 $stmt->bind_param("ssss", $nro_legajo, $nro_familia, $nro_legajo, $nro_familia);
 $stmt->execute();
 $res = $stmt->get_result();
@@ -68,6 +69,7 @@ if (!$alumno) {
     http_response_code(403);
     exit("Alumno no pertenece a esta familia");
 }
+$cursoAlumno = (string)($alumno['curso'] ?? '');
 
 // ============================================
 //  OBTENER CUOTAS DEL ALUMNO
@@ -110,16 +112,9 @@ $cuotaVigente = (int)getConfig('cuota_vigente', 1);
 $mesActual = (int)date('n'); // 1=enero ... 12=diciembre
 
 // Función para determinar si una cuota es futura
-function esCuotaFutura($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFutura($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    // Cuotas normales (1-9)
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    } else {
-        // Cuotas de reserva (10,11,12): futuras solo antes de marzo
-        return $mesActual < 3;
-    }
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 // ============================================
@@ -131,7 +126,10 @@ if (empty($cuotas)): ?>
     <section id="cd-timeline" class="cd-container">
         <?php foreach ($cuotas as $cuota):
             $numCuota = (int)$cuota['numero_cuota'];
-            $mes = isset($meses[$numCuota]) ? $meses[$numCuota] : 'Mes Desconocido';
+            if (curso_es_ingresante_externo_2027($cursoAlumno) && $numCuota !== ingresante_externo_2027_numero_cuota()) {
+                continue;
+            }
+            $mes = cuota_nombre_para_curso($numCuota, $cursoAlumno, $meses[$numCuota] ?? null);
             $ano = (int)date('Y');
 
             // Fecha de vencimiento estimada (30 del mes correspondiente)
@@ -143,17 +141,20 @@ if (empty($cuotas)): ?>
             $montoIngresado = isset($cuota['monto_ingresado']) ? (float)$cuota['monto_ingresado'] : 0;
             $fechaPago = !empty($cuota['fecha_pago']) ? date('d/m/Y', strtotime($cuota['fecha_pago'])) : '';
 
-            $esFutura = esCuotaFutura($numCuota, $cuotaVigente, $mesActual);
+            $esFutura = esCuotaFutura($numCuota, $cuotaVigente, $mesActual, $cursoAlumno);
 
             $iconVenc = '<i class="zmdi zmdi-timer zmdi-hc-fw"></i>';
             $iconAbonado = '<i class="zmdi zmdi-money zmdi-hc-fw"></i>';
             $iconPendiente = '<i class="zmdi zmdi-alert-circle zmdi-hc-fw"></i>';
 
+            // Cuotas 10–12 (Reserva de Vacante) se refieren al ciclo 2027: no agregar el año del ciclo actual.
+            $tituloMes = ($numCuota >= 10 && $numCuota <= 12) ? $mes : "$mes ($ano)";
+
             // Título de la cuota
             if ($esFutura) {
-                $titulo = "Cuota $numCuota - $mes ($ano) - MONTO SUJETO A AUMENTO";
+                $titulo = "Cuota $numCuota - $tituloMes - MONTO SUJETO A AUMENTO";
             } else {
-                $titulo = "Cuota $numCuota - $mes ($ano) - $ " . number_format($montoFacturado, 2, ',', '.');
+                $titulo = "Cuota $numCuota - $tituloMes - $ " . number_format($montoFacturado, 2, ',', '.');
             }
 
             // Monto abonado formateado
