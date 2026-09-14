@@ -106,10 +106,13 @@ if (!function_exists('admin_cuota_es_en_ventana')) {
 if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
     /**
      * Acumula deuda y montos de un legajo dentro de la ventana [1..mesSeleccionado].
+     * La mora se basa en cuotas con diferencia > umbral (igual que el portal familia),
+     * sin que créditos/negativos anulen meses impagos.
      *
      * @param array<int, array{numero_cuota:int, diferencia:float, monto_facturado?:float, monto_ingresado?:float}> $cuotas
      * @return array{
      *   deuda_neta: float,
+     *   deuda_impaga: float,
      *   deuda_reportada: float,
      *   moroso: bool,
      *   slots_total: int,
@@ -117,19 +120,22 @@ if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
      *   monto_facturado: float,
      *   monto_ingresado: float,
      *   primer_mes_impago: int|null,
-     *   ultimo_mes_impago: int|null
+     *   ultimo_mes_impago: int|null,
+     *   meses_impagos: list<int>
      * }
      */
     function admin_cuota_acumular_ventana_legajo(array $cuotas, string $escuela, int $mesSeleccionado, bool $incluirMontos = false): array
     {
         $umbral = admin_cuota_umbral_al_dia();
         $deudaNeta = 0.0;
+        $deudaImpaga = 0.0;
         $montoFacturado = 0.0;
         $montoIngresado = 0.0;
         $slotsTotal = 0;
         $slotsAbonadas = 0;
         $primerMesImpago = null;
         $ultimoMesImpago = null;
+        $mesesImpagos = [];
 
         foreach ($cuotas as $cuota) {
             $numeroCuota = (int)($cuota['numero_cuota'] ?? 0);
@@ -152,6 +158,8 @@ if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
 
             $mesLogico = cuotaANumeroMesLogico($numeroCuota, $escuela);
             if ($mesLogico !== null && $dif > $umbral) {
+                $deudaImpaga += $dif;
+                $mesesImpagos[] = (int)$mesLogico;
                 if ($primerMesImpago === null || $mesLogico < $primerMesImpago) {
                     $primerMesImpago = $mesLogico;
                 }
@@ -161,18 +169,73 @@ if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
             }
         }
 
-        $deudaReportada = $deudaNeta > $umbral ? $deudaNeta : 0.0;
+        $mesesImpagos = array_values(array_unique($mesesImpagos));
+        sort($mesesImpagos, SORT_NUMERIC);
+
+        $deudaReportada = $deudaImpaga > $umbral ? $deudaImpaga : 0.0;
 
         return [
             'deuda_neta' => $deudaNeta,
+            'deuda_impaga' => $deudaImpaga,
             'deuda_reportada' => $deudaReportada,
-            'moroso' => $deudaNeta > $umbral,
+            'moroso' => $deudaImpaga > $umbral,
             'slots_total' => $slotsTotal,
             'slots_abonadas' => $slotsAbonadas,
             'monto_facturado' => $montoFacturado,
             'monto_ingresado' => $montoIngresado,
             'primer_mes_impago' => $primerMesImpago,
             'ultimo_mes_impago' => $ultimoMesImpago,
+            'meses_impagos' => $mesesImpagos,
         ];
+    }
+}
+
+if (!function_exists('admin_cuota_formato_meses_impagos')) {
+    /**
+     * Formato de rango: "ABRIL – JUNIO" (solo primer y último mes adeudado).
+     *
+     * @param list<int>|null $mesesImpagos
+     */
+    function admin_cuota_formato_meses_impagos($mesesImpagos, $primerMes = null, $ultimoMes = null): string
+    {
+        $desde = null;
+        $hasta = null;
+
+        if (is_array($mesesImpagos) && $mesesImpagos !== []) {
+            $meses = [];
+            foreach ($mesesImpagos as $m) {
+                $m = (int)$m;
+                if ($m >= 1 && $m <= 12) {
+                    $meses[] = $m;
+                }
+            }
+            if ($meses !== []) {
+                $desde = min($meses);
+                $hasta = max($meses);
+            }
+        }
+
+        if ($desde === null && $primerMes !== null) {
+            $desde = (int)$primerMes;
+            $hasta = $ultimoMes !== null ? (int)$ultimoMes : $desde;
+        }
+
+        if ($desde === null || $desde < 1 || $desde > 12) {
+            return '';
+        }
+        if ($hasta === null || $hasta < 1 || $hasta > 12) {
+            $hasta = $desde;
+        }
+
+        $desdeTxt = admin_cuota_nombre_mes($desde);
+        if ($desdeTxt === '') {
+            return '';
+        }
+        if ($hasta === $desde) {
+            return $desdeTxt;
+        }
+
+        $hastaTxt = admin_cuota_nombre_mes($hasta);
+        return $hastaTxt !== '' ? ($desdeTxt . ' – ' . $hastaTxt) : $desdeTxt;
     }
 }

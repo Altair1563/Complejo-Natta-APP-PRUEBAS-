@@ -7,6 +7,7 @@
  */
 $h = 'estado_alumno_h';
 $mesSeleccionado = (int)$filtrosCuenta['mes'];
+$cursoFiltro = (string)$filtrosCuenta['curso'];
 $buscar = (string)$filtrosCuenta['buscar'];
 $estadoFiltro = (string)$filtrosCuenta['estado'];
 $becaFiltro = (string)$filtrosCuenta['beca'];
@@ -34,6 +35,19 @@ $ambitoLabel = $mostrarColEscuela
                         <?php echo $i . ' - ' . $h(admin_cuota_nombre_mes($i)); ?>
                     </option>
                 <?php endfor; ?>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="curso_cuenta" class="form-label">Curso</label>
+            <select name="curso" id="curso_cuenta" class="form-select">
+                <option value="" <?php echo $cursoFiltro === '' ? 'selected' : ''; ?>>Todos los cursos</option>
+                <?php foreach ($cursosEscuelaActiva as $curso): ?>
+                    <?php $cursoValor = mb_strtoupper(trim((string)$curso), 'UTF-8'); ?>
+                    <option value="<?php echo $h($cursoValor); ?>" <?php echo $cursoFiltro === $cursoValor ? 'selected' : ''; ?>>
+                        <?php echo $h($cursoValor); ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
         </div>
 
@@ -95,11 +109,11 @@ $ambitoLabel = $mostrarColEscuela
     <div class="no-data">
         Seleccioná el <strong>mes de corte</strong> y presioná <strong>Consultar</strong>
         para ver el estado de cuenta de <?php echo $h($ambitoLabel); ?>.
-        Estado de pago, beca y búsqueda son opcionales.
+        Curso, estado de pago, beca y búsqueda son opcionales.
     </div>
 <?php elseif ((int)$resumenCuenta['total'] === 0): ?>
     <div class="no-data">
-        No se encontraron alumnos para los filtros seleccionados. Probá ajustar la búsqueda o los filtros de deuda/beca.
+        No se encontraron alumnos para los filtros seleccionados. Probá ajustar el curso, la búsqueda o los filtros de deuda/beca.
     </div>
 <?php else: ?>
     <div class="resumen-wrapper">
@@ -147,19 +161,43 @@ $ambitoLabel = $mostrarColEscuela
                         $alDia = !empty($alumno['al_dia']);
                         $deuda = (float)($alumno['deuda_hasta_mes'] ?? 0);
                         $pctBeca = (int)($alumno['porcentaje_descuento'] ?? 0);
+                        $esInactivo = !empty($alumno['es_inactivo']);
                         $rowClass = $alDia ? 'row-al-dia' : 'row-debe';
+                        if ($esInactivo) {
+                            $rowClass = 'row-inactivo';
+                        }
                         $pm = $alumno['primer_mes_impago'] ?? null;
                         $um = $alumno['ultimo_mes_impago'] ?? null;
+                        $mesesTxt = admin_cuota_formato_meses_impagos(
+                            $alumno['meses_impagos'] ?? [],
+                            $pm,
+                            $um
+                        );
                     ?>
                     <tr class="<?php echo $h($rowClass); ?>">
                         <td class="col-numero"><?php echo (int)$indice + 1; ?></td>
                         <td><?php echo $h(trim(($alumno['apellido_alumno'] ?? '') . ', ' . ($alumno['nombre_alumno'] ?? ''), ', ')); ?></td>
-                        <td><?php echo $h($alumno['nro_legajo'] ?? ''); ?></td>
-                        <td><?php echo $h($alumno['dni_alumno'] ?? ''); ?></td>
-                        <td><?php echo $h($alumno['curso'] ?? ''); ?></td>
                         <td>
-                            <?php if ($alDia): ?>
+                            <?php echo $h($alumno['nro_legajo'] ?? ''); ?>
+                            <?php if ($esInactivo): ?>
+                                <span class="chip-inactivo" style="margin-left:4px;">INACTIVO</span>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $h($alumno['dni_alumno'] ?? ''); ?></td>
+                        <td>
+                            <?php if ($esInactivo): ?>
+                                <span class="chip-inactivo">INACTIVO / BAJA</span>
+                            <?php else: ?>
+                                <?php echo $h($alumno['curso'] ?? ''); ?>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($alDia && $esInactivo): ?>
+                                <span class="chip-al-dia">Inactivo al día</span>
+                            <?php elseif ($alDia): ?>
                                 <span class="chip-al-dia">Al día</span>
+                            <?php elseif ($esInactivo): ?>
+                                <span class="chip-deuda">Deudor (inactivo)</span>
                             <?php else: ?>
                                 <span class="chip-deuda">Con deuda</span>
                             <?php endif; ?>
@@ -172,17 +210,8 @@ $ambitoLabel = $mostrarColEscuela
                             <?php endif; ?>
                         </td>
                         <td class="col-meses">
-                            <?php if (!$alDia && $pm !== null): ?>
-                                <?php
-                                    $desdeTxt = admin_cuota_nombre_mes((int)$pm);
-                                    $hastaTxt = ($um !== null && (int)$um !== (int)$pm)
-                                        ? admin_cuota_nombre_mes((int)$um)
-                                        : null;
-                                    echo $h($desdeTxt);
-                                    if ($hastaTxt !== null) {
-                                        echo ' – ' . $h($hastaTxt);
-                                    }
-                                ?>
+                            <?php if (!$alDia && $mesesTxt !== ''): ?>
+                                <?php echo $h($mesesTxt); ?>
                             <?php else: ?>
                                 <span class="text-muted">—</span>
                             <?php endif; ?>

@@ -256,7 +256,7 @@ $nombreMesFn = static function (int $mes): string {
                                     </td>
                                     <td><?php echo $lfH($alumno['dni_alumno'] ?? ''); ?></td>
                                     <td>
-                                        <?php if ($isInactivo && $deudaAlumno > 0.01): ?>
+                                        <?php if (($isInactivo || $isBaja) && $deudaAlumno > 0.01): ?>
                                             <span class="estado-alumno-pill debe">MOROSO</span>
                                         <?php elseif ($isInactivo): ?>
                                             <span class="estado-alumno-pill al-dia">Inactivo</span>
@@ -271,15 +271,12 @@ $nombreMesFn = static function (int $mes): string {
                                     </td>
                                     <td>
                                         <?php
-                                            if (!is_null($pmA)) {
-                                                $desdeA = $nombreMesFn((int)$pmA);
-                                                $hastaA = (!is_null($umA) && $umA != $pmA)
-                                                    ? $nombreMesFn((int)$umA)
-                                                    : null;
-                                                echo $lfH($hastaA !== null ? ($desdeA . ' - ' . $hastaA) : $desdeA);
-                                            } else {
-                                                echo '-';
-                                            }
+                                            $mesesTxtA = admin_cuota_formato_meses_impagos(
+                                                $alumno['meses_impagos'] ?? [],
+                                                $pmA,
+                                                $umA
+                                            );
+                                            echo $mesesTxtA !== '' ? $lfH($mesesTxtA) : '-';
                                         ?>
                                     </td>
                                 </tr>

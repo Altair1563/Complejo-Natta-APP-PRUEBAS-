@@ -1583,22 +1583,6 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
         }
     }
 
-    $sql = "SELECT
-                l.nro_legajo,
-                l.apellido_alumno,
-                l.nombre_alumno,
-                l.curso,
-                l.dni_alumno,
-                l.nro_familia,
-                l.porcentaje_descuento,
-                l.codigo_descuento,
-                c.numero_cuota,
-                COALESCE(c.diferencia, 0) AS diferencia
-            FROM legajos l
-            LEFT JOIN cuotas c
-                ON c.nro_legajo COLLATE utf8mb4_unicode_ci = l.nro_legajo COLLATE utf8mb4_unicode_ci
-               AND c.numero_cuota <= 12";
-
     $where = [];
     $types = '';
     $params = [];
@@ -1615,14 +1599,49 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
         $params[] = $cursoFiltro;
     }
 
-    if (!empty($where)) {
-        $sql .= ' WHERE ' . implode(' AND ', $where);
-    }
+    $whereSql = !empty($where) ? (' WHERE ' . implode(' AND ', $where)) : '';
 
-    $sql .= ' ORDER BY l.apellido_alumno ASC, l.nombre_alumno ASC, l.nro_legajo ASC, c.numero_cuota ASC';
+    $sqlPlantilla = "SELECT
+                l.nro_legajo,
+                l.apellido_alumno,
+                l.nombre_alumno,
+                l.curso,
+                l.dni_alumno,
+                l.nro_familia,
+                l.porcentaje_descuento,
+                l.codigo_descuento,
+                COALESCE(l.saldo_total, 0) AS saldo_total,
+                c.numero_cuota,
+                COALESCE(c.diferencia, 0) AS diferencia
+            FROM {TABLA} l
+            LEFT JOIN cuotas c
+                ON c.nro_legajo COLLATE utf8mb4_unicode_ci = l.nro_legajo COLLATE utf8mb4_unicode_ci
+               AND c.numero_cuota <= 12
+            {$whereSql}
+            ORDER BY l.apellido_alumno ASC, l.nombre_alumno ASC, l.nro_legajo ASC, c.numero_cuota ASC";
 
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
+    $cargarFilasTabla = static function (mysqli $conn, string $tabla, string $types, array $params) use ($sqlPlantilla): array {
+        if (!in_array($tabla, ['legajos', 'legajos_inactivos'], true)) {
+            return [];
+        }
+        $sql = str_replace('{TABLA}', $tabla, $sqlPlantilla);
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            return [];
+        }
+        if ($types !== '') {
+            estado_alumno_stmt_bind($stmt, $types, $params);
+        }
+        $stmt->execute();
+        $filas = estado_alumno_fetch_all_from_stmt($stmt);
+        $stmt->close();
+        return $filas;
+    };
+
+    $filasActivos = $cargarFilasTabla($conn, 'legajos', $types, $params);
+    $sqlCheck = str_replace('{TABLA}', 'legajos', $sqlPlantilla);
+    $stmtCheck = $conn->prepare($sqlCheck);
+    if ($stmtCheck === false) {
         return [
             'alumnos'         => [],
             'resumen'         => ['total' => 0, 'al_dia' => 0, 'con_deuda' => 0, 'becados' => 0],
@@ -1631,42 +1650,47 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
             'error'           => 'No se pudo preparar la consulta de alumnos.',
         ];
     }
+    $stmtCheck->close();
+    $filasInactivos = $cargarFilasTabla($conn, 'legajos_inactivos', $types, $params);
 
-    if ($types !== '') {
-        estado_alumno_stmt_bind($stmt, $types, $params);
-    }
-    $stmt->execute();
-    $filas = estado_alumno_fetch_all_from_stmt($stmt);
-    $stmt->close();
+    $agregarFilas = static function (array &$legajosData, array $filas, bool $esInactivo): void {
+        foreach ($filas as $fila) {
+            $leg = trim((string)($fila['nro_legajo'] ?? ''));
+            if ($leg === '' || $leg === 'INACTIVO') {
+                continue;
+            }
+            if ($esInactivo && isset($legajosData[$leg])) {
+                continue;
+            }
+
+            if (!isset($legajosData[$leg])) {
+                $legajosData[$leg] = [
+                    'nro_legajo'           => $leg,
+                    'apellido_alumno'       => $fila['apellido_alumno'] ?? '',
+                    'nombre_alumno'         => $fila['nombre_alumno'] ?? '',
+                    'curso'                 => $fila['curso'] ?? '',
+                    'dni_alumno'            => $fila['dni_alumno'] ?? '',
+                    'nro_familia'           => $fila['nro_familia'] ?? '',
+                    'porcentaje_descuento'  => (int)($fila['porcentaje_descuento'] ?? 0),
+                    'codigo_descuento'      => $fila['codigo_descuento'] ?? '',
+                    'saldo_total'           => (float)($fila['saldo_total'] ?? 0),
+                    'es_inactivo'           => $esInactivo,
+                    'cuotas'                => [],
+                ];
+            }
+
+            if (!is_null($fila['numero_cuota'])) {
+                $legajosData[$leg]['cuotas'][] = [
+                    'numero_cuota' => (int)$fila['numero_cuota'],
+                    'diferencia'   => (float)$fila['diferencia'],
+                ];
+            }
+        }
+    };
 
     $legajosData = [];
-    foreach ($filas as $fila) {
-        $leg = trim((string)($fila['nro_legajo'] ?? ''));
-        if ($leg === '' || $leg === 'INACTIVO') {
-            continue;
-        }
-
-        if (!isset($legajosData[$leg])) {
-            $legajosData[$leg] = [
-                'nro_legajo'           => $leg,
-                'apellido_alumno'       => $fila['apellido_alumno'] ?? '',
-                'nombre_alumno'         => $fila['nombre_alumno'] ?? '',
-                'curso'                 => $fila['curso'] ?? '',
-                'dni_alumno'            => $fila['dni_alumno'] ?? '',
-                'nro_familia'           => $fila['nro_familia'] ?? '',
-                'porcentaje_descuento'  => (int)($fila['porcentaje_descuento'] ?? 0),
-                'codigo_descuento'      => $fila['codigo_descuento'] ?? '',
-                'cuotas'                => [],
-            ];
-        }
-
-        if (!is_null($fila['numero_cuota'])) {
-            $legajosData[$leg]['cuotas'][] = [
-                'numero_cuota' => (int)$fila['numero_cuota'],
-                'diferencia'   => (float)$fila['diferencia'],
-            ];
-        }
-    }
+    $agregarFilas($legajosData, $filasActivos, false);
+    $agregarFilas($legajosData, $filasInactivos, true);
 
     $buscarNorm = mb_strtoupper((string)$filtros['buscar'], 'UTF-8');
     $estadoFiltro = (string)$filtros['estado'];
@@ -1679,9 +1703,15 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
         $curso = trim((string)($info['curso'] ?? ''));
         $escuela = estado_alumno_obtener_escuela_desde_curso($curso);
         $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false, $curso);
-        $deuda = (float)$ventana['deuda_neta'];
+        $deuda = (float)($ventana['deuda_impaga'] ?? $ventana['deuda_neta']);
+        $mesesImpagos = $ventana['meses_impagos'] ?? [];
+        $saldoTotalLegajo = (float)($info['saldo_total'] ?? 0);
+        if ($deuda <= $umbral && $saldoTotalLegajo > $umbral) {
+            $deuda = $saldoTotalLegajo;
+        }
         $alDia = $deuda <= $umbral;
         $pctBeca = (int)($info['porcentaje_descuento'] ?? 0);
+        $esInactivo = !empty($info['es_inactivo']);
 
         if ($cursoFiltro !== '' && mb_strtoupper(trim($curso), 'UTF-8') !== $cursoFiltro) {
             continue;
@@ -1711,7 +1741,8 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
                 ($info['nombre_alumno'] ?? '') . ' ' .
                 ($info['nro_legajo'] ?? '') . ' ' .
                 ($info['dni_alumno'] ?? '') . ' ' .
-                ($info['curso'] ?? ''),
+                ($info['curso'] ?? '') . ' ' .
+                ($esInactivo ? 'INACTIVO BAJA' : ''),
                 'UTF-8'
             );
             if (mb_strpos($texto, $buscarNorm, 0, 'UTF-8') === false) {
@@ -1732,6 +1763,8 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
             'deuda_hasta_mes'      => $deuda,
             'primer_mes_impago'    => $ventana['primer_mes_impago'],
             'ultimo_mes_impago'    => $ventana['ultimo_mes_impago'],
+            'meses_impagos'        => $mesesImpagos,
+            'es_inactivo'          => $esInactivo,
             'al_dia'               => $alDia,
         ];
     }

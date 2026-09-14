@@ -249,7 +249,7 @@ if ($lfLoadError === null) {
                                     </td>
                                     <td><?php echo $lfH($alumno['dni_alumno'] ?? ''); ?></td>
                                     <td>
-                                        <?php if ($isInactivo && $deudaAlumno > 0.01): ?>
+                                        <?php if (($isInactivo || $isBaja) && $deudaAlumno > 0.01): ?>
                                             <span class="estado-alumno-pill debe">MOROSO</span>
                                         <?php elseif ($isInactivo): ?>
                                             <span class="estado-alumno-pill al-dia">Inactivo</span>
@@ -264,19 +264,12 @@ if ($lfLoadError === null) {
                                     </td>
                                     <td>
                                         <?php
-                                            if (!is_null($pmA)) {
-                                                $desdeA = admin_lf_nombreMesCuota($pmA);
-                                                $hastaA = (!is_null($umA) && $umA != $pmA)
-                                                    ? admin_lf_nombreMesCuota($umA)
-                                                    : null;
-                                                if ($hastaA !== null) {
-                                                    echo $desdeA . " - " . $hastaA;
-                                                } else {
-                                                    echo $desdeA;
-                                                }
-                                            } else {
-                                                echo "-";
-                                            }
+                                            $mesesTxtA = admin_cuota_formato_meses_impagos(
+                                                $alumno['meses_impagos'] ?? [],
+                                                $pmA,
+                                                $umA
+                                            );
+                                            echo $mesesTxtA !== '' ? $lfH($mesesTxtA) : '-';
                                         ?>
                                     </td>
                                 </tr>

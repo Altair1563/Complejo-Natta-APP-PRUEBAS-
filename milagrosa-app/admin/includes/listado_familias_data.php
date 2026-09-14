@@ -139,6 +139,7 @@ function admin_lf_sql_legajos_cuotas(string $tablaLegajos, string $whereExtra = 
             l.nombre_alumno,
             l.curso,
             l.dni_alumno,
+            COALESCE(l.saldo_total, 0) AS saldo_total,
             c.numero_cuota,
             COALESCE(c.diferencia, 0) AS diferencia
         FROM {$tablaLegajos} l
@@ -207,6 +208,7 @@ function admin_lf_agregar_filas_a_legajos(array &$legajosData, array $filas, boo
                 'nombre_alumno'   => $row['nombre_alumno'],
                 'curso'           => $row['curso'],
                 'dni_alumno'      => $row['dni_alumno'],
+                'saldo_total'     => (float)($row['saldo_total'] ?? 0),
                 'es_inactivo'     => $esInactivo,
                 'cuotas'          => [],
             ];
@@ -589,9 +591,16 @@ foreach ($legajosData as $leg => $info) {
     $escuela     = obtenerEscuelaDesdeCurso($curso);
 
     $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false);
-    $deudaHastaMes = $ventana['deuda_neta'];
+    $deudaHastaMes = (float)($ventana['deuda_impaga'] ?? $ventana['deuda_neta']);
     $primerMesImpagoLogic = $ventana['primer_mes_impago'];
     $ultimoMesImpagoLogic = $ventana['ultimo_mes_impago'];
+    $mesesImpagos = $ventana['meses_impagos'] ?? [];
+
+    // Si no hay detalle de cuotas impagas pero el legajo (p.ej. baja/inactivo) trae saldo_total > 0, usarlo.
+    $saldoTotalLegajo = (float)($info['saldo_total'] ?? 0);
+    if ($deudaHastaMes <= admin_cuota_umbral_al_dia() && $saldoTotalLegajo > admin_cuota_umbral_al_dia()) {
+        $deudaHastaMes = $saldoTotalLegajo;
+    }
 
     // Construimos estructura de familias
     if (!isset($familias[$nro_familia])) {
@@ -613,6 +622,7 @@ foreach ($legajosData as $leg => $info) {
         'deuda_hasta_mes'   => $deudaHastaMes,
         'primer_mes_impago' => $primerMesImpagoLogic,
         'ultimo_mes_impago' => $ultimoMesImpagoLogic,
+        'meses_impagos'     => $mesesImpagos,
         'escuela'           => $escuela,
         'es_inactivo'       => !empty($info['es_inactivo']),
     ];
