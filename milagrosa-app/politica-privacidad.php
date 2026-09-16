@@ -192,14 +192,9 @@ $effective_label = $policy_meta && !empty($policy_meta['effective_at'])
 
             <h2>1. Identificación completa del responsable del tratamiento (art. 5 Ley 25.326)</h2>
             <p>
-                El <strong>responsable</strong> del archivo, banco de datos o tratamiento de datos personales es el titular de la base que define las finalidades y medios del tratamiento. A los fines de esta Política, el responsable es el <strong>Jardín de Infantes La Milagrosa</strong> (en adelante, “Jardín de Infantes La Milagrosa” o “el Establecimiento”), perteneciente al <strong>Obispado de Lomas de Zamora</strong>, con las siguientes salas/unidades educativas:
+                El <strong>responsable</strong> del archivo, banco de datos o tratamiento de datos personales es el titular de la base que define las finalidades y medios del tratamiento. A los fines de esta Política, el responsable es el <strong>Jardín de Infantes La Milagrosa</strong> (en adelante, “Jardín de Infantes La Milagrosa” o “el Establecimiento”), perteneciente al <strong>Obispado de Lomas de Zamora</strong>.
             </p>
-            <ul>
-                <li>Sala Celeste Inicial</li>
-                <li>Sala Roja Inicial</li>
-                <li>Sala Verde Inicial</li>
-                <li>Nuevos Inicial</li>
-            </ul>
+
             <p>Datos de identificación del responsable:</p>
             <ul>
                 <li><strong>Razón social / denominación legal:</strong> Jardín de Infantes La Milagrosa.</li>

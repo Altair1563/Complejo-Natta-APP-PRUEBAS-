@@ -938,7 +938,10 @@ html {
 	  border-radius: 30px;
       padding: 5px;
 	}
-
+	
+	.cover {
+    background-size: initial;
+	}
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {

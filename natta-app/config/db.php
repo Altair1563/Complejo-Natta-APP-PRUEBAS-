@@ -11,9 +11,9 @@ if (!defined('_ACCESS')) {
 }
 
 define('DB_HOST', '127.0.0.1:3306');
-define('DB_USER', 'u694426208_admin');
-define('DB_PASS', '9b^0i4+njS#');
-define('DB_NAME', 'u694426208_test_natta');
+define('DB_USER', 'u207063327_Elias2');
+define('DB_PASS', 'QZdBxxPqCs8PN?$');
+define('DB_NAME', 'u207063327_contactos_db');
 
 // Opcional: zona horaria y charset
 date_default_timezone_set('America/Argentina/Buenos_Aires');

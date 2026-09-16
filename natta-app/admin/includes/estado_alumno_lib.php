@@ -1705,8 +1705,10 @@ function estado_alumno_cargar_estado_cuenta_alumnos(
         $ventana = admin_cuota_acumular_ventana_legajo($info['cuotas'], $escuela, $mesSeleccionado, false, $curso);
         $deuda = (float)($ventana['deuda_impaga'] ?? $ventana['deuda_neta']);
         $mesesImpagos = $ventana['meses_impagos'] ?? [];
+        // saldo_total no distingue meses: solo sirve como respaldo cuando el legajo
+        // (p.ej. baja/inactivo) no tiene ninguna cuota cargada.
         $saldoTotalLegajo = (float)($info['saldo_total'] ?? 0);
-        if ($deuda <= $umbral && $saldoTotalLegajo > $umbral) {
+        if (empty($info['cuotas']) && $saldoTotalLegajo > $umbral) {
             $deuda = $saldoTotalLegajo;
         }
         $alDia = $deuda <= $umbral;

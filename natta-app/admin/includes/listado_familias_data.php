@@ -366,9 +366,10 @@ foreach ($legajosData as $leg => $info) {
     $ultimoMesImpagoLogic = $ventana['ultimo_mes_impago'];
     $mesesImpagos = $ventana['meses_impagos'] ?? [];
 
-    // Si no hay detalle de cuotas impagas pero el legajo (p.ej. baja/inactivo) trae saldo_total > 0, usarlo.
+    // saldo_total no distingue meses: solo sirve como respaldo cuando el legajo
+    // (p.ej. baja/inactivo) no tiene ninguna cuota cargada.
     $saldoTotalLegajo = (float)($info['saldo_total'] ?? 0);
-    if ($deudaHastaMes <= admin_cuota_umbral_al_dia() && $saldoTotalLegajo > admin_cuota_umbral_al_dia()) {
+    if (empty($info['cuotas']) && $saldoTotalLegajo > admin_cuota_umbral_al_dia()) {
         $deudaHastaMes = $saldoTotalLegajo;
     }
 
