@@ -478,7 +478,7 @@ function contrato_build_confirmation_email(array $data): array
         . $field('Fecha y hora de registro:', $acceptedAtUtc)
         . $field('Dirección IP registrada:', $ip)
         . $field('Huella SHA-256 (archivo PDF depositado):', $contractHash)
-        . '<p style="margin:0 0 14px;font-size:13px;color:#555;text-align:justify;">La huella identifica el PDF íntegro aceptado y resguardado por el establecimiento. Permite verificar que el archivo no fue alterado; no equivale a firma digital certificada.</p>'
+        . '<p style="margin:0 0 14px;font-size:13px;color:#555;text-align:justify;">La huella identifica el PDF íntegro aceptado y resguardado por el establecimiento. Permite verificar que el archivo no fue alterado.</p>'
         . '<h3 style="margin:22px 0 10px;font-size:15px;color:#0c3484;">Declaración de conformidad</h3>'
         . '<p style="margin:0 0 14px;text-align:justify;">El responsable mencionado precedentemente declara haber leído y aceptado el '
         . '<strong>Contrato de Servicios Educativos</strong> correspondiente al ciclo lectivo 2027, así como también el '
@@ -510,7 +510,7 @@ function contrato_build_confirmation_email(array $data): array
         . "Fecha y hora de registro:\n{$acceptedAtUtc}\n\n"
         . "Dirección IP registrada:\n{$ip}\n\n"
         . "Huella SHA-256 (archivo PDF depositado):\n{$contractHash}\n"
-        . "(Permite verificar integridad del PDF; no equivale a firma digital certificada.)\n\n"
+        . "(Permite verificar integridad del PDF.)\n\n"
         . "Declaración de conformidad\n\n"
         . "El responsable mencionado precedentemente declara haber leído y aceptado el Contrato de Servicios Educativos "
         . "correspondiente al ciclo lectivo 2027, así como también el Reglamento Interno Institucional.\n\n"
