@@ -20,7 +20,7 @@ return [
     'slug' => 'milagrosa-app',
     'name' => 'Jardin de Infantes La Milagrosa',
     'name_short' => 'Milagrosa',
-    'name_legal' => 'Instituto Jardin de Infantes La Milagrosa',
+    'name_legal' => 'Jardin de Infantes La Milagrosa',
     'public_url_fallback' => 'https://complejonatta.com/milagrosa-app/index.php',
 
     /** Jardin de Infantes La Milagrosa es una única institución; las salas son cursos/filtros internos. */
@@ -64,7 +64,7 @@ return [
         'app_share_title' => 'App Jardin de Infantes La Milagrosa',
         'app_share_text' => 'Accedé a la APP de Jardin de Infantes La Milagrosa',
         'qr_modal_title' => 'Compartir la APP Jardin de Infantes La Milagrosa',
-        'contract_logo_alt' => 'Instituto Jardin de Infantes La Milagrosa',
+        'contract_logo_alt' => 'Jardin de Infantes La Milagrosa',
         'email_from_name' => 'Jardin de Infantes La Milagrosa',
         'logo_file' => 'LogoMilagrosa.png',
     ],

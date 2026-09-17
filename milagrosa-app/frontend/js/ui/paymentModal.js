@@ -308,7 +308,7 @@ export function initPaymentModal({ alumnos = [], saldoTotalFamiliar = 0, nroFami
 
   function copiarCBU() {
     const cbuEl = document.getElementById('cbuText');
-    const CBU = cbuEl ? cbuEl.textContent.trim() : '0110661520066100245226';
+    const CBU = cbuEl ? cbuEl.textContent.trim() : '0140058801500100639139';
     if (!navigator.clipboard) {
       const tempInput = document.createElement('input');
       tempInput.value = CBU;

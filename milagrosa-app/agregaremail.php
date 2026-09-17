@@ -242,7 +242,7 @@ if ($conn && !$conn->connect_error) {
             <figure class="full-box">
                 <img src="./assets/img/LogoMilagrosa.png" alt="UserIcon" />
                 <figcaption class="text-center text-titles">
-                    <b>Instituto Jardin de Infantes La Milagrosa</b>
+                    <b>Jardin de Infantes La Milagrosa</b>
                 </figcaption>
             </figure>
             <ul class="full-box list-unstyled text-center">
@@ -472,10 +472,10 @@ if ($conn && !$conn->connect_error) {
                     <div class="banco-info">
                         <h5>🏛️ Datos del Beneficiario:</h5>
                         <div>
-                            <p><strong>Titular:</strong> Instituto Jardin de Infantes La Milagrosa</p>
-                            <p><strong>CBU:</strong> <span id="cbuText">0110661520066100245226</span> <button id="btnCopiarCBU" style="margin-left:8px;padding:4px 8px;border:1px solid #0c3484;border-radius:4px;background:#fff;cursor:pointer">📋 Copiar</button></p>
-                            <p><strong>Banco:</strong> Banco Nación</p>
-                            <p><strong>CUIT:</strong> 30-67618077-6</p>
+                            <p><strong>Titular:</strong> Jardin de Infantes La Milagrosa</p>
+                            <p><strong>CBU:</strong> <span id="cbuText">0140058801500100639139</span> <button id="btnCopiarCBU" style="margin-left:8px;padding:4px 8px;border:1px solid #0c3484;border-radius:4px;background:#fff;cursor:pointer">📋 Copiar</button></p>
+                            <p><strong>Banco:</strong> Banco Provincia Bs. As.</p>
+                            <p><strong>CUIT:</strong> 30-68509781-4</p>
                         </div>
                         <p style="margin-top:10px;font-size:13px;color:#555;">Copiá el CBU y pegalo en tu homebanking. En concepto/observaciones colocá la <strong>referencia</strong> indicada arriba para que podamos identificar el pago.</p>
                         <p style="margin-top:4px;font-size:12px;color:#777;">Recordá que si tenés cuotas anteriores impagas, el pago de una cuota específica puede incluir el arrastre de saldos pendientes.</p>

@@ -29,7 +29,7 @@ function htmlContractModalHeader() {
   return `
 <div class="contract-modal-header">
   <div class="contract-modal-header__logos">
-    <img src="./assets/img/LogoMilagrosa.png" alt="Instituto Jardin de Infantes La Milagrosa" class="contract-modal-header__logo contract-modal-header__logo--natta" />
+    <img src="./assets/img/LogoMilagrosa.png" alt="Jardin de Infantes La Milagrosa" class="contract-modal-header__logo contract-modal-header__logo--natta" />
   </div>
   <h3 class="contract-modal-header__title">Firma de contrato</h3>
 </div>`;

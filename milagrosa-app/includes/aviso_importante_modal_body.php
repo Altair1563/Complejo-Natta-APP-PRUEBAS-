@@ -5,7 +5,7 @@
     <b>Referencias y medios de pago</b><br>
     Para asegurar la correcta imputación de los pagos, es obligatorio colocar el DNI del alumno como referencia en cualquier medio de pago utilizado. Antes de realizar la operación, verifique que el número de referencia y/o código de barras coincida con el talón correspondiente.<br><br>
     <b>Envío de comprobantes</b><br>
-    Todo pago deberá ser informado enviando el comprobante completo y legible al correo oficial de Administración: recibos.lamilagrosa@gmail.com<br><br>
+    Todo pago deberá ser informado enviando el comprobante completo y legible al correo oficial de Administración: jardindeinfanteslamilagrosa@hotmail.com<br><br>
     El comprobante deberá incluir:<br>
     • Monto abonado.<br>
     • Fecha de la operación.<br>
@@ -20,7 +20,7 @@
     • Que el grupo familiar no registre deudas pendientes al finalizar el ciclo lectivo 2026.<br>
     • El cumplimiento de los requisitos académicos y administrativos establecidos por la institución.<br><br>
     <b>Canales de contacto</b><br>
-    Todas las consultas administrativas deberán realizarse exclusivamente al correo oficial: recibos.lamilagrosa@gmail.com<br><br>
+    Todas las consultas administrativas deberán realizarse exclusivamente al correo oficial: jardindeinfanteslamilagrosa@hotmail.com<br><br>
     <b>Importante:</b><br>
     No responder a los correos automáticos enviados por el sistema, ya que dichas casillas no reciben respuestas.<br><br>
 </p>

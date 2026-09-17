@@ -30,7 +30,7 @@ if (!app_is_maintenance_mode()) {
             Disculpen las molestias. En breve estaremos nuevamente operativos.
         </p>
         <div class="footer">
-            Instituto Jardin de Infantes La Milagrosa
+            Jardin de Infantes La Milagrosa
         </div>
     </div>
 </body>

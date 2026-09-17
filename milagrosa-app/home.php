@@ -372,7 +372,7 @@ $conn->close();
                 <p style="font-size:18px;">
                     Estimadas familias:<br>
                     Esta aplicación está diseñada para que puedan consultar el estado de cuenta de sus hijos y acceder a información importante de la administración de forma rápida y segura, desde cualquier dispositivo.<br><br>
-                    Para que sus pagos se acrediten correctamente, una vez realizado el pago es indispensable enviar el comprobante descargado completo (donde debe figurar fecha, importe, número de transacción, cuenta emisora y CBU destinatario) al correo:<strong>📧 recibos.lamilagrosa@gmail.com</strong><br><br>
+                    Para que sus pagos se acrediten correctamente, una vez realizado el pago es indispensable enviar el comprobante descargado completo (donde debe figurar fecha, importe, número de transacción, cuenta emisora y CBU destinatario) al correo:<strong>📧 jardindeinfanteslamilagrosa@hotmail.com</strong><br><br>
                     <strong>🚨 Importante:</strong> Los pagos pueden demorar hasta <strong>72 horas hábiles</strong> en reflejarse en el sistema.<br>
                     <strong>⚠️ Atencion:</strong> Todas las cuotas <strong>estan sujetas a la aplicacion de intereses</strong> pasado un mes de su fecha de vencimiento.
 
@@ -385,8 +385,8 @@ $conn->close();
                     <div class="row-mediosdepago">
                         <div class="col-mediosdepago">
                             <u><b>Transferencia Bancaria</b></u><br>
-                            * TITULAR: Complejo Educ.pbro.e.e natta.<br>
-                            * CBU: 0110661520066100245226<br>
+                            * TITULAR: Jardin de Infantes La Milagrosa<br>
+                            * CBU: 0140058801500100639139<br>
                             * Referencia: Nº de legajo o DNI del alumno
                         </div>
                         <div class="col-mediosdepago">
@@ -396,7 +396,7 @@ $conn->close();
                         </div>
                         <div class="col-mediosdepago">
                             <u><b>Efectivo</b></u><br>
-                            * En cualquier Banco Nación, por caja.<br>
+                            * En cualquier Banco Provincia Bs. As., por caja.<br>
                             * Presentar el código de barras de la boleta de pago. (impresa en impresora laser)
                         </div>
                     </div>
@@ -645,13 +645,13 @@ $conn->close();
                             <h5>🏛️ Datos del Beneficiario:</h5>
                             <div>
                                 <div>
-                                    <p><strong>Titular:</strong> Instituto Jardin de Infantes La Milagrosa</p>
+                                    <p><strong>Titular:</strong> Jardin de Infantes La Milagrosa</p>
                                     <p><strong>CBU:</strong>
-                                        <span id="cbuText">0110661520066100245226</span>
+                                        <span id="cbuText">0140058801500100639139</span>
                                         <button id="btnCopiarCBU" style="margin-left:8px;padding:4px 8px;border:1px solid #0c3484;border-radius:4px;background:#fff;cursor:pointer">📋 Copiar</button>
                                     </p>
-                                    <p><strong>Banco:</strong> Banco Nación</p>
-                                    <p><strong>CUIT:</strong> 30-67618077-6</p>
+                                    <p><strong>Banco:</strong> Banco Provincia Bs. As.</p>
+                                    <p><strong>CUIT:</strong> 30-68509781-4</p>
                                 </div>
                             </div>
                             <p style="margin-top:10px;font-size:13px;color:#555;">

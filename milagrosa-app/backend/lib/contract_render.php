@@ -414,7 +414,7 @@ function contrato_html_logos_header(array $data): string
     return '<div class="contract-doc-logos">'
         . '<div class="contract-doc-logos__images">'
         . '<img src="' . htmlspecialchars($logoSrc, ENT_QUOTES, 'UTF-8')
-        . '" alt="Instituto Jardin de Infantes La Milagrosa" class="contract-doc-logo contract-doc-logo--natta" />'
+        . '" alt="Jardin de Infantes La Milagrosa" class="contract-doc-logo contract-doc-logo--natta" />'
         . '</div>'
         . $infoHtml
         . '</div>';

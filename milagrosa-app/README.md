@@ -1,6 +1,6 @@
 # milagrosa-app
 
-Copia de `natta-app` adaptada para **Instituto Jardin de Infantes La Milagrosa**, con multi-tenant por base de datos (una carpeta de código / una MySQL por institución).
+Copia de `natta-app` adaptada para **Jardin de Infantes La Milagrosa**, con multi-tenant por base de datos (una carpeta de código / una MySQL por institución).
 
 ## Tenant
 
