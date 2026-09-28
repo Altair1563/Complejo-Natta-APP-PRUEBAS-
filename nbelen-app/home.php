@@ -30,6 +30,7 @@ if ($conn->connect_error) {
 $conn->set_charset('utf8mb4');
 
 require_once __DIR__ . '/admin/includes/functions.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 // ============================================
 //  OBTENER CUOTA VIGENTE DESDE CONFIGURACIÓN
@@ -109,15 +110,9 @@ function cuotaANumeroMesLogico($numero_cuota, $escuela)
 }
 
 // Función para determinar si una cuota es futura (misma que en ajax_historial)
-function esCuotaFutura($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFutura($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    } else {
-        // Cuotas de reserva (10,11,12): futuras solo antes de marzo
-        return $mesActual < 3;
-    }
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $nro_familia = $_SESSION['nro_familia'];
@@ -174,6 +169,7 @@ $tieneFilasCuotasPorLegajo = []; // algún registro en `cuotas` para ese nro_leg
 
 foreach ($alumnos as $alumno) {
     $legajo = $alumno['nro_legajo'] ?? '';
+    $cursoAlumno = (string)($alumno['curso'] ?? '');
     $esInactivo = (bool)$alumno['es_inactivo'];
 
     if ($legajo !== '') {
@@ -197,7 +193,7 @@ foreach ($alumnos as $alumno) {
     // Calcular saldo vigente (excluyendo futuras)
     $saldoVigente = 0.0;
     foreach ($cuotasAlumno as $c) {
-        if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual)) {
+        if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual, $cursoAlumno)) {
             $saldoVigente += (float)$c['diferencia'];
         }
     }
@@ -224,7 +220,7 @@ foreach ($alumnos as $alumno) {
     $mesesAdeudados = [];
     foreach ($cuotasAlumno as $c) {
         // Solo considerar cuotas NO futuras y con diferencia > 0.01
-        if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual) && $c['diferencia'] > 0.01) {
+        if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual, $cursoAlumno) && $c['diferencia'] > 0.01) {
             $mesLogico = cuotaANumeroMesLogico($c['numero_cuota'], $escuela);
             if ($mesLogico !== null) {
                 $mesesAdeudados[] = $mesLogico;

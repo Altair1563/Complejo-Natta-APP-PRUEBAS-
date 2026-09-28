@@ -26,6 +26,7 @@ $csrf_token = $_SESSION['csrf_token'];
 // ============================================
 define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conn->connect_error) {
@@ -170,13 +171,8 @@ if (!$error_conexion) {
 // ============================================
 //  DATOS DE ALUMNOS (misma lógica que home.php)
 // ============================================
-function esCuotaFutura($numCuota, $cuotaVigente, $mesActual) {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-    // Cuotas de reserva (10,11,12): futuras solo antes de marzo
-    return $mesActual < 3;
+function esCuotaFutura($numCuota, $cuotaVigente, $mesActual, $curso = '') {
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $alumnos = [];
@@ -226,6 +222,7 @@ if (!$error_conexion) {
 
     foreach ($alumnos as $alumno) {
         $legajo = $alumno['nro_legajo'] ?? '';
+        $cursoAlumno = (string)($alumno['curso'] ?? '');
         $esInactivo = (bool)($alumno['es_inactivo'] ?? 0);
 
         $sqlCuotas = "SELECT numero_cuota, diferencia FROM cuotas WHERE nro_legajo = ? AND diferencia > 0";
@@ -242,7 +239,7 @@ if (!$error_conexion) {
         // Solo cuotas vigentes (igual que home.php)
         $saldoVigente = 0.0;
         foreach ($cuotasAlumno as $c) {
-            if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual)) {
+            if (!esCuotaFutura($c['numero_cuota'], $cuota_vigente, $mesActual, $cursoAlumno)) {
                 $saldoVigente += (float)$c['diferencia'];
             }
         }

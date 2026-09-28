@@ -18,6 +18,7 @@ $csrf_token = $_SESSION['csrf_token'];
 
 define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($conn->connect_error) {
@@ -106,13 +107,9 @@ if (!$error_conexion) {
     }
 }
 
-function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual)
+function esCuotaFuturaPago($numCuota, $cuotaVigente, $mesActual, $curso = '')
 {
-    $numCuota = (int)$numCuota;
-    if ($numCuota <= 9) {
-        return $numCuota > $cuotaVigente;
-    }
-    return $mesActual < 3;
+    return cuota_es_futura_para_curso((int)$numCuota, (int)$cuotaVigente, (int)$mesActual, (string)$curso);
 }
 
 $alumnosConSaldo = [];
@@ -133,6 +130,7 @@ if (!$error_conexion && !empty($alumnos)) {
 
     foreach ($alumnos as $alumno) {
         $legajo = $alumno['nro_legajo'] ?? '';
+        $cursoAlumno = (string)($alumno['curso'] ?? '');
         $sqlSaldo = 'SELECT numero_cuota, diferencia FROM cuotas WHERE nro_legajo = ? AND diferencia > 0';
         $stmtSaldo = $conn->prepare($sqlSaldo);
         if (!$stmtSaldo) {
@@ -145,7 +143,7 @@ if (!$error_conexion && !empty($alumnos)) {
 
         $saldoVigente = 0.0;
         foreach ($rowsSaldo as $rowSaldo) {
-            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual)) {
+            if (!esCuotaFuturaPago($rowSaldo['numero_cuota'] ?? 0, $cuota_vigente, $mesActual, $cursoAlumno)) {
                 $saldoVigente += (float)($rowSaldo['diferencia'] ?? 0);
             }
         }
@@ -280,7 +278,12 @@ if ($conn && !$conn->connect_error) {
 
             <div class="contratos-aviso-noviembre" role="note" aria-label="Requisito para habilitar la firma">
                 <p class="contratos-aviso-noviembre-title"><strong>Requisito para habilitar la firma:</strong></p>
-                <p>La firma del contrato estará disponible únicamente para los alumnos que tengan <strong>abonada la cuota de NOVIEMBRE</strong>. Una vez que noviembre figure como abonado, se habilitará la opción de firmar el contrato.</p>
+                <p>La firma del contrato estará disponible cuando se cumpla el requisito de pago correspondiente a cada tipo de alumno.</p>
+                <ul class="contratos-intro-list">
+                    <li>En alumnos regulares se habilita una vez que la cuota de <strong>NOVIEMBRE</strong> se encuentre abonada.</li>
+                    <li>En alumnos <strong>ingresantes 2027</strong> (cursos <strong>EXJ</strong>, <strong>EXP</strong> y <strong>EXS</strong>) se habilita únicamente cuando figure pagado el <strong>ADELANTO RV 2027</strong> (cuota 10, Adelanto de Reserva de vacante).</li>
+                    <li>En alumnos de <strong>3AJ</strong>, <strong>3BJ</strong>, <strong>6AP</strong> y <strong>6BP</strong> se habilita únicamente cuando figure pagada la <strong>CUOTA-15 Adelanto de Reserva de Vacante 2027</strong>.</li>
+                </ul>
             </div>
 
             <p class="contratos-info-subtitle"><strong>Desde esta sección podrá:</strong></p>

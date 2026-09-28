@@ -4,6 +4,8 @@
  * Usada por listado de familias e información general.
  */
 
+require_once dirname(__DIR__, 2) . '/backend/lib/ingresantes_externos_2027.php';
+
 if (!function_exists('admin_cuota_umbral_al_dia')) {
     function admin_cuota_umbral_al_dia(): float
     {
@@ -93,8 +95,16 @@ if (!function_exists('cuotaANumeroMesLogico')) {
 }
 
 if (!function_exists('admin_cuota_es_en_ventana')) {
-    function admin_cuota_es_en_ventana(int $numeroCuota, string $escuela, int $mesSeleccionado): bool
+    function admin_cuota_es_en_ventana(int $numeroCuota, string $escuela, int $mesSeleccionado, string $curso = ''): bool
     {
+        if (curso_es_ingresante_externo_2027($curso)) {
+            return $numeroCuota === ingresante_externo_2027_numero_cuota();
+        }
+        if (curso_es_adelanto_rv_nivel_2027($curso)
+            && ($numeroCuota === adelanto_rv_nivel_2027_numero_cuota() || $numeroCuota === resto_rv_nivel_2027_numero_cuota())
+        ) {
+            return true;
+        }
         if ($mesSeleccionado < 1 || $mesSeleccionado > 12) {
             return false;
         }
@@ -124,7 +134,7 @@ if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
      *   meses_impagos: list<int>
      * }
      */
-    function admin_cuota_acumular_ventana_legajo(array $cuotas, string $escuela, int $mesSeleccionado, bool $incluirMontos = false): array
+    function admin_cuota_acumular_ventana_legajo(array $cuotas, string $escuela, int $mesSeleccionado, bool $incluirMontos = false, string $curso = ''): array
     {
         $umbral = admin_cuota_umbral_al_dia();
         $deudaNeta = 0.0;
@@ -139,7 +149,7 @@ if (!function_exists('admin_cuota_acumular_ventana_legajo')) {
 
         foreach ($cuotas as $cuota) {
             $numeroCuota = (int)($cuota['numero_cuota'] ?? 0);
-            if (!admin_cuota_es_en_ventana($numeroCuota, $escuela, $mesSeleccionado)) {
+            if (!admin_cuota_es_en_ventana($numeroCuota, $escuela, $mesSeleccionado, $curso)) {
                 continue;
             }
 

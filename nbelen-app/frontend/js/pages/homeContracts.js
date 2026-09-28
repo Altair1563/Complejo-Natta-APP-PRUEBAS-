@@ -458,10 +458,17 @@ function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs
   </div>`;
 }
 
+const FIRMA_BLOQUEADA_FLOWS = ['firma_bloqueada_noviembre', 'firma_bloqueada_adelanto_rv'];
+
+function isFirmaBloqueadaFlow(flow) {
+  return FIRMA_BLOQUEADA_FLOWS.includes(flow);
+}
+
 /** Textos de la línea de estado (contratos.php y sincronización visual). */
 const TEXTO_ESTADO_LINEA = {
   pendiente_firma: 'Estado del Contrato 2027: Pendiente de Firmar',
   firma_bloqueada_noviembre: 'Estará disponible una vez abonada la cuota de noviembre',
+  firma_bloqueada_adelanto_rv: 'Estará disponible una vez abonada la CUOTA-10 Adelanto de Reserva de vacante (2027)',
   pendiente_aprobacion: 'Contrato firmado – Requisitos pendientes',
   aprobado: 'Contrato firmado – Aprobado',
   inactivo_sin_firma: 'No aplica (alumno inactivo)',
@@ -469,6 +476,12 @@ const TEXTO_ESTADO_LINEA = {
 };
 
 const REQUISITOS_ITEMS = [
+  {
+    key: 'sin_deudas_familia',
+    label: 'No registrar deudas pendientes correspondientes al ciclo lectivo 2026',
+    note: 'se habilitará una vez que el grupo familiar no registre cuotas pendientes de 2026',
+    nested: true,
+  },
   {
     key: 'firma',
     label: 'Firma y aceptación del Contrato de Servicios Educativos y del Reglamento Institucional vigente',
@@ -478,15 +491,9 @@ const REQUISITOS_ITEMS = [
     label: 'Presentación de la documentación requerida por la institución correspondiente',
   },
   {
-    key: 'sin_deudas_familia',
-    label: 'No registrar deudas pendientes correspondientes al ciclo lectivo 2026',
-    note: 'se habilitará una vez abonado NOVIEMBRE',
-    nested: true,
-  },
-  {
     key: 'reserva_vacante',
     label: 'Pago de la Reserva de Vacante 2027',
-    note: 'Se habilitará una vez definidos los aranceles correspondientes. En el caso de los alumnos ingresantes, la Reserva de Vacante se abonará en dos etapas: Adelanto de Reserva de Vacante y Resto de Reserva de Vacante.',
+    note: 'Se habilitará en el mes de Diciembre una vez definidos los aranceles correspondientes.',
     noteBlock: true,
     rv: true,
   },
@@ -552,6 +559,36 @@ function requisitoVisible(requisitos, key) {
   return nested.aplica !== false;
 }
 
+function requisitosItemsParaAlumno(status) {
+  const byKey = Object.fromEntries(REQUISITOS_ITEMS.map((item) => [item.key, item]));
+  const esIngresante = !!status?.es_ingresante_externo;
+
+  if (esIngresante) {
+    return [
+      {
+        ...byKey.reserva_vacante,
+        label: 'Pago del ADELANTO RV 2027',
+        note: status?.nota_adelanto_rv
+          || 'Ingresantes externos 2027: únicamente CUOTA-10 Adelanto de Reserva de vacante (2027) abonada.',
+      },
+      byKey.firma,
+      byKey.documentacion,
+      {
+        ...byKey.sin_deudas_familia,
+        note: status?.nota_sin_deudas_adelanto
+          || 'se habilitará una vez abonada la CUOTA-11 RESTO DE RV 2027 y que el grupo familiar no registre deuda pendiente',
+      },
+    ];
+  }
+
+  return [
+    byKey.sin_deudas_familia,
+    byKey.firma,
+    byKey.documentacion,
+    byKey.reserva_vacante,
+  ];
+}
+
 function buildContratoRequisitosHtml(flow, status) {
   const requisitos = status?.requisitos;
   const todosCumplidos = !!requisitos?.todos_cumplidos;
@@ -577,7 +614,8 @@ function buildContratoRequisitosHtml(flow, status) {
       + '<strong>El contrato tiene validez.</strong></p>';
   }
 
-  const items = REQUISITOS_ITEMS.filter((item) => requisitoVisible(requisitos, item.key))
+  const items = requisitosItemsParaAlumno(status)
+    .filter((item) => requisitoVisible(requisitos, item.key))
     .map((item) => {
       const ok = requisitoCumplido(requisitos, item.key);
       const estadoTxt = ok ? 'Cumplido' : 'Pendiente';
@@ -642,7 +680,10 @@ function inferEstadoFlujo(s) {
   if (!s || typeof s !== 'object') return 'pendiente_firma';
   if (s.estado_flujo) return s.estado_flujo;
   if (s.es_inactivo && !s.signed) return 'inactivo_sin_firma';
-  if (!s.signed && s.noviembre_abonado === false) return 'firma_bloqueada_noviembre';
+  const firmaHabilitada = s.firma_habilitada !== undefined ? s.firma_habilitada : s.noviembre_abonado;
+  if (!s.signed && firmaHabilitada === false) {
+    return s.es_ingresante_externo ? 'firma_bloqueada_adelanto_rv' : 'firma_bloqueada_noviembre';
+  }
   if (!s.signed) return 'pendiente_firma';
   if (s.requisitos?.todos_cumplidos) return 'aprobado';
   if (!s.admin_aprobado) return 'pendiente_aprobacion';
@@ -658,6 +699,7 @@ function updateContratoEstadoElement(el, opts) {
     'contrato-estado--loading',
     'contrato-estado--pendiente_firma',
     'contrato-estado--firma_bloqueada_noviembre',
+    'contrato-estado--firma_bloqueada_adelanto_rv',
     'contrato-estado--pendiente_aprobacion',
     'contrato-estado--aprobado',
     'contrato-estado--inactivo_sin_firma',
@@ -688,6 +730,9 @@ function updateContratoEstadoElement(el, opts) {
   el.removeAttribute('aria-hidden');
 
   let txt = TEXTO_ESTADO_LINEA[flow] || TEXTO_ESTADO_LINEA.error;
+  if (flow === 'firma_bloqueada_adelanto_rv' && opts.status?.texto_estado_firma) {
+    txt = String(opts.status.texto_estado_firma);
+  }
   if (flow === 'error' && opts.detailMessage) {
     txt = String(opts.detailMessage);
   }
@@ -808,11 +853,14 @@ function applyStatusToContractControl(el, status) {
     el.textContent = el.classList.contains('contrato-link-home') ? 'Contrato: Pendiente' : 'Contrato Pendiente';
     el.classList.add('btn-contract-pending');
     el.title = 'Ir a firmar el contrato de servicios educativos';
-  } else if (flow === 'firma_bloqueada_noviembre') {
+  } else if (isFirmaBloqueadaFlow(flow)) {
     el.dataset.signed = '0';
     el.textContent = 'Contrato 2027';
     el.classList.add('btn-contract-blocked');
-    el.title = 'La firma del contrato se habilita una vez abonada la cuota de NOVIEMBRE.';
+    el.title = flow === 'firma_bloqueada_adelanto_rv'
+      ? (status?.texto_firma_bloqueada
+        || 'La firma del contrato se habilita una vez abonada la CUOTA-10 Adelanto de Reserva de vacante (2027).')
+      : 'La firma del contrato se habilita una vez abonada la cuota de NOVIEMBRE.';
     if (isButton) {
       el.disabled = true;
       el.dataset.disabledByRules = '1';
@@ -1081,7 +1129,7 @@ export async function initContratoEnlacesHome({ csrfToken }) {
         return;
       }
       // Sin noviembre abonado y sin firma: el acceso a firmar sigue bloqueado.
-      if (flow === 'firma_bloqueada_noviembre') {
+      if (isFirmaBloqueadaFlow(flow)) {
         hideLink(a);
         return;
       }
