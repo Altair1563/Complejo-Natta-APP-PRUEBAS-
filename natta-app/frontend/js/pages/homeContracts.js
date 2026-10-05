@@ -443,7 +443,11 @@ function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs
   </div>`;
 }
 
-const FIRMA_BLOQUEADA_FLOWS = ['firma_bloqueada_noviembre', 'firma_bloqueada_adelanto_rv'];
+const FIRMA_BLOQUEADA_FLOWS = [
+  'firma_bloqueada_noviembre',
+  'firma_bloqueada_adelanto_rv',
+  'firma_bloqueada_reubicacion',
+];
 
 function isFirmaBloqueadaFlow(flow) {
   return FIRMA_BLOQUEADA_FLOWS.includes(flow);
@@ -454,6 +458,7 @@ const TEXTO_ESTADO_LINEA = {
   pendiente_firma: 'Estado del Contrato 2027: Pendiente de Firmar',
   firma_bloqueada_noviembre: 'Estará disponible una vez abonada la cuota de noviembre',
   firma_bloqueada_adelanto_rv: 'Estará disponible una vez abonada la CUOTA-10 Adelanto de Reserva de vacante (2027)',
+  firma_bloqueada_reubicacion: 'Los alumnos de este curso podrán firmar el contrato en febrero, una vez que los ubiquemos en su curso correcto.',
   pendiente_aprobacion: 'Contrato firmado – Requisitos pendientes',
   aprobado: 'Contrato firmado – Aprobado',
   inactivo_sin_firma: 'No aplica (alumno inactivo)',
@@ -633,6 +638,11 @@ function buildContratoRequisitosHtml(flow, status) {
   );
 }
 
+function mensajeFirmaReubicacion(status) {
+  const msg = String(status?.firma_bloqueada_mensaje || '').trim();
+  return msg || TEXTO_ESTADO_LINEA.firma_bloqueada_reubicacion;
+}
+
 function hideContratoRequisitosPanel(studentDni) {
   const { card, panelEl } = findContratoCardElements(studentDni);
   if (panelEl) {
@@ -640,7 +650,26 @@ function hideContratoRequisitosPanel(studentDni) {
     panelEl.setAttribute('aria-hidden', 'true');
     panelEl.innerHTML = '';
   }
+  card?.classList.remove('contrato-alumno-card--con-requisitos', 'contrato-alumno-card--reubicacion');
+}
+
+function showContratoReubicacionAviso(studentDni, status) {
+  const { card, estadoEl, panelEl } = findContratoCardElements(studentDni);
+  if (!panelEl) return false;
+
+  const msg = mensajeFirmaReubicacion(status);
+  panelEl.innerHTML = `<div class="contrato-reubicacion-aviso" role="note"><p>${escapeHtml(msg)}</p></div>`;
+  panelEl.hidden = false;
+  panelEl.removeAttribute('aria-hidden');
+  card?.classList.add('contrato-alumno-card--reubicacion');
   card?.classList.remove('contrato-alumno-card--con-requisitos');
+
+  if (estadoEl) {
+    estadoEl.hidden = true;
+    estadoEl.setAttribute('aria-hidden', 'true');
+  }
+
+  return true;
 }
 
 function showContratoRequisitosPanel(studentDni, flow, status) {
@@ -664,6 +693,7 @@ function inferEstadoFlujo(s) {
   if (!s || typeof s !== 'object') return 'pendiente_firma';
   if (s.estado_flujo) return s.estado_flujo;
   if (s.es_inactivo && !s.signed) return 'inactivo_sin_firma';
+  if (!s.signed && s.pendiente_reubicacion) return 'firma_bloqueada_reubicacion';
   const firmaHabilitada = s.firma_habilitada !== undefined ? s.firma_habilitada : s.noviembre_abonado;
   if (!s.signed && firmaHabilitada === false) {
     return s.es_ingresante_externo ? 'firma_bloqueada_adelanto_rv' : 'firma_bloqueada_noviembre';
@@ -684,6 +714,7 @@ function updateContratoEstadoElement(el, opts) {
     'contrato-estado--pendiente_firma',
     'contrato-estado--firma_bloqueada_noviembre',
     'contrato-estado--firma_bloqueada_adelanto_rv',
+    'contrato-estado--firma_bloqueada_reubicacion',
     'contrato-estado--pendiente_aprobacion',
     'contrato-estado--aprobado',
     'contrato-estado--inactivo_sin_firma',
@@ -702,6 +733,13 @@ function updateContratoEstadoElement(el, opts) {
   const dni = el.getAttribute('data-contrato-estado-dni') ?? '';
   if (
     isContratosPage()
+    && flow === 'firma_bloqueada_reubicacion'
+    && showContratoReubicacionAviso(dni, opts.status)
+  ) {
+    return;
+  }
+  if (
+    isContratosPage()
     && (flow === 'pendiente_aprobacion' || flow === 'aprobado')
     && opts.status?.requisitos
     && showContratoRequisitosPanel(dni, flow, opts.status)
@@ -714,7 +752,9 @@ function updateContratoEstadoElement(el, opts) {
   el.removeAttribute('aria-hidden');
 
   let txt = TEXTO_ESTADO_LINEA[flow] || TEXTO_ESTADO_LINEA.error;
-  if (flow === 'error' && opts.detailMessage) {
+  if (flow === 'firma_bloqueada_reubicacion') {
+    txt = mensajeFirmaReubicacion(opts.status);
+  } else if (flow === 'error' && opts.detailMessage) {
     txt = String(opts.detailMessage);
   }
   el.innerHTML = `<span class="contrato-estado-msg">${escapeHtml(txt)}</span>`;
@@ -838,9 +878,13 @@ function applyStatusToContractControl(el, status) {
     el.dataset.signed = '0';
     el.textContent = 'Contrato 2027';
     el.classList.add('btn-contract-blocked');
-    el.title = flow === 'firma_bloqueada_adelanto_rv'
-      ? 'La firma del contrato se habilita una vez abonada la CUOTA-10 Adelanto de Reserva de vacante (2027).'
-      : 'La firma del contrato se habilita una vez abonada la cuota de NOVIEMBRE.';
+    if (flow === 'firma_bloqueada_reubicacion') {
+      el.title = mensajeFirmaReubicacion(status);
+    } else if (flow === 'firma_bloqueada_adelanto_rv') {
+      el.title = 'La firma del contrato se habilita una vez abonada la CUOTA-10 Adelanto de Reserva de vacante (2027).';
+    } else {
+      el.title = 'La firma del contrato se habilita una vez abonada la cuota de NOVIEMBRE.';
+    }
     if (isButton) {
       el.disabled = true;
       el.dataset.disabledByRules = '1';
@@ -1106,6 +1150,18 @@ export async function initContratoEnlacesHome({ csrfToken }) {
 
       if (esInactivo && !signed) {
         hideLink(a);
+        return;
+      }
+      if (flow === 'firma_bloqueada_reubicacion') {
+        const msg = mensajeFirmaReubicacion(status);
+        a.removeAttribute('aria-hidden');
+        a.href = 'contratos.php';
+        a.style.textDecoration = 'none';
+        a.style.display = 'block';
+        a.classList.remove('btn-contract-pending', 'btn-contract-signed', 'btn-contract-review');
+        a.classList.add('btn-contract-blocked', 'contrato-reubicacion-home');
+        a.textContent = msg;
+        a.title = msg;
         return;
       }
       // Sin noviembre abonado y sin firma: el acceso a firmar sigue bloqueado.

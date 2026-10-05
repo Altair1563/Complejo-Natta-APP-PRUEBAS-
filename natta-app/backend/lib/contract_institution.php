@@ -337,6 +337,14 @@ function contrato_reglamento_info_desde_codigo(string $codigo): array
         ];
     }
 
+    if ($codigo === 'SC') {
+        return [
+            'modal_link_label' => 'Leer REGLAMENTO CPEEN 2027',
+            'email_link_label' => 'Reglamento CPEEN 2027 — Instituto Santa Cruz',
+            'filename' => 'Reglamento CPEEN 2027 - Instituto Santa Cruz - Complejo Natta.pdf',
+        ];
+    }
+
     return [
         'modal_link_label' => 'Leer REGLAMENTO INSTITUCIONAL 2027',
         'email_link_label' => 'Reglamento CPEEN 2027',
@@ -607,10 +615,54 @@ function contrato_numero_cuota_noviembre(string $curso): int
 }
 
 /**
+ * Cursos que todavía no están en la institución del ciclo siguiente, o que egresan.
+ * La firma queda cerrada mientras el legajo conserve uno de estos códigos.
+ * Al cambiar el curso, el bloqueo desaparece solo.
+ *
+ * @return list<string>
+ */
+function contrato_cursos_pendientes_reubicacion(): array
+{
+    return [
+        // Jardín, a la espera de primaria.
+        '3ACJ', '3BCJ',
+        '3AHV', '3BHV', '3CHV', '3DHV',
+        '3AJA', '3BJA',
+        // Primaria, a la espera de secundaria.
+        '6AJN', '6CJN', '6DJN', '6EJN',
+        '6ASC', '6BSC',
+        // Egresan de secundaria o superior.
+        '61MB', '62MB', '63MB',
+        '7AET',
+        '4ISU', '4PSU',
+    ];
+}
+
+function contrato_curso_pendiente_reubicacion(?string $curso): bool
+{
+    $c = mb_strtoupper(trim((string)$curso), 'UTF-8');
+
+    return $c !== '' && in_array($c, contrato_cursos_pendientes_reubicacion(), true);
+}
+
+function contrato_msg_firma_bloqueada_reubicacion(string $curso): string
+{
+    $curso = mb_strtoupper(trim($curso), 'UTF-8');
+
+    return 'Los alumnos que se encuentran en el curso ' . $curso
+        . ' podrán firmar el contrato en febrero, una vez que ubiquemos a los alumnos en su curso correcto.';
+}
+
+/**
  * Habilitación de firma: noviembre (ciclo regular) o cuota 10 Adelanto RV 2027 (ingresantes externos).
+ * Los cursos pendientes de reubicación no pueden firmar aunque noviembre esté abonado.
  */
 function contrato_alumno_puede_firmar(mysqli $conn, string $legajo, string $curso): bool
 {
+    if (contrato_curso_pendiente_reubicacion($curso)) {
+        return false;
+    }
+
     if (curso_es_ingresante_externo_2027($curso)) {
         $adelanto = contrato_adelanto_rv_estado($conn, $legajo, $curso);
 
@@ -679,6 +731,10 @@ function contrato_msg_firma_bloqueada_adelanto_rv(): string
 
 function contrato_msg_firma_bloqueada(string $curso): string
 {
+    if (contrato_curso_pendiente_reubicacion($curso)) {
+        return contrato_msg_firma_bloqueada_reubicacion($curso);
+    }
+
     if (curso_es_ingresante_externo_2027($curso)) {
         return contrato_msg_firma_bloqueada_adelanto_rv();
     }

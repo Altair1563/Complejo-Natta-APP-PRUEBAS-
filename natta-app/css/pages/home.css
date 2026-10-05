@@ -220,6 +220,29 @@
     text-decoration: none;
 }
 
+a.contrato-link-home.contrato-reubicacion-home {
+    display: block;
+    margin: 8px auto 0;
+    max-width: 280px;
+    padding: 8px 10px;
+    background: #fff8e8;
+    color: #6b4a00;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: normal;
+    border-radius: 10px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+a.contrato-link-home.contrato-reubicacion-home:hover {
+    color: #6b4a00;
+    filter: none;
+    transform: none;
+    box-shadow: none;
+}
+
 .alumno-info {
     display: inline-block;
     max-width: 100%;

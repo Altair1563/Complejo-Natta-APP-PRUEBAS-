@@ -367,9 +367,27 @@ a.btn-contrato-download:hover {
 }
 
 .contrato-estado--firma_bloqueada_noviembre .contrato-estado-msg,
-.contrato-estado--firma_bloqueada_adelanto_rv .contrato-estado-msg {
+.contrato-estado--firma_bloqueada_adelanto_rv .contrato-estado-msg,
+.contrato-estado--firma_bloqueada_reubicacion .contrato-estado-msg {
     color: #8a5200;
     font-weight: 700;
+}
+
+.contrato-reubicacion-aviso {
+    margin: 4px 0 2px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #fff8e8;
+    border: 1px solid #e6c98a;
+    color: #6b4a00;
+}
+
+.contrato-reubicacion-aviso p {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: left;
 }
 
 .contrato-estado--pendiente_aprobacion .contrato-estado-msg {
