@@ -340,6 +340,35 @@ body.admin-standalone-page {
     border: 1px solid rgba(248,113,113,0.95);
 }
 
+.chip-cd,
+.chip-nf {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+}
+
+.chip-cd {
+    background: rgba(185,28,28,0.28);
+    color: #fee2e2;
+    border: 1px solid rgba(254,202,202,0.95);
+}
+
+.chip-nf {
+    background: rgba(14,116,144,0.35);
+    color: #e0f2fe;
+    border: 1px solid rgba(125,211,252,0.9);
+}
+
+.familia-nf {
+    border-left: 4px solid rgba(125, 211, 252, 0.9);
+    background: linear-gradient(135deg, rgba(20, 45, 62, 0.95), rgba(16, 36, 52, 0.92));
+}
+
 .row-inactivo {
     background: linear-gradient(90deg, #1f2933, #8b4f4f) !important;
     color: #ff000a !important;

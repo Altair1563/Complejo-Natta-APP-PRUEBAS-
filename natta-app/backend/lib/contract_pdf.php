@@ -697,7 +697,7 @@ function contrato_archive_signed_document(string $contractVersion, array $docDat
         return null;
     }
 
-    $acceptedAtUtc = (string)($docData['accepted_at_utc'] ?? date('Y-m-d H:i:s'));
+    $acceptedAtUtc = (string)($docData['accepted_at_utc'] ?? gmdate('Y-m-d H:i:s'));
     $studentDni = (string)($docData['alumno_dni'] ?? '');
     $filename = contrato_signed_pdf_filename($contractVersion, $studentDni, $acceptedAtUtc);
     $subdir = date('Y', strtotime($acceptedAtUtc) ?: time());

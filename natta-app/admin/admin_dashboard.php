@@ -40,6 +40,7 @@ $tabViews = [
     'estado-alumno'            => 'estado-alumno.php',
     'revision-contratos'       => 'revision-contratos.php',
     'alta-alumnos-nuevos'      => 'alta-alumnos-nuevos.php',
+    'cartas-doc'               => 'cartas-doc.php',
     'lista-alumnos-nuevos'     => 'lista-alumnos-nuevos.php',
     'auditoria'                => 'auditoria.php',
     'auditoria-app'            => 'auditoria-app.php',

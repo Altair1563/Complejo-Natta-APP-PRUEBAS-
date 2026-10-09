@@ -58,7 +58,8 @@ $userDni = (string)($_SESSION['dni_alumno'] ?? '');
 $email = trim((string)($_SESSION['email'] ?? ''));
 $ip = substr((string)($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0'), 0, 45);
 $userAgent = substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 1000);
-$acceptedAtUtc = date('Y-m-d H:i:s');
+// Siempre en UTC: contrato_format_fecha_aceptacion() lo convierte a hora Argentina al renderizar.
+$acceptedAtUtc = gmdate('Y-m-d H:i:s');
 
 $sqlStudent = "SELECT nombre_alumno, apellido_alumno, curso, 0 AS es_inactivo
                FROM legajos

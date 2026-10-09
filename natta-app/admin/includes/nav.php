@@ -43,6 +43,7 @@ function admin_nav_groups_definition(): array
                 'configuracion'        => ['label' => 'Configuración', 'icon' => '🔧'],
                 'usuarios'             => ['label' => 'Agregar Usuario', 'icon' => '👥'],
                 'alta-alumnos-nuevos'  => ['label' => 'Alta de Alumnos', 'icon' => '➕'],
+                'cartas-doc'           => ['label' => 'Cartas Doc.', 'icon' => '📄'],
                 'qr-app'               => ['label' => 'QR App familias', 'icon' => '📱'],
                 'auditoria'            => ['label' => 'Auditoría Admin.', 'icon' => '📝'],
                 'auditoria-app'        => ['label' => 'Auditoría App', 'icon' => '🔒'],

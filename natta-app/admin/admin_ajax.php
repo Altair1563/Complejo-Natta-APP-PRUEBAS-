@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tipo'])) {
             'actualizaciones', 'configuracion',
             'informacion-matriculas', 'informacion-ingresado-facturado', 'informacion-app',
             'listado-familias', 'estado-alumno',
-            'alta-alumnos-nuevos', 'lista-alumnos-nuevos', 'auditoria', 'auditoria-app', 'usuarios', 'qr-app',
+            'alta-alumnos-nuevos', 'cartas-doc', 'lista-alumnos-nuevos', 'auditoria', 'auditoria-app', 'usuarios', 'qr-app',
         ];
         if (!in_array($tab, $allowedTabs, true) || !admin_can($tab)) {
             echo json_encode(['ok' => false, 'error' => 'Tab inválido']);
@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['tipo'])) {
             'informacion-app'                 => 'SELECT COUNT(*) AS total, 0 AS ts FROM legajos',
             'listado-familias' => 'SELECT COUNT(DISTINCT nro_familia) AS total, 0 AS ts FROM legajos',
             'alta-alumnos-nuevos' => 'SELECT COUNT(*) AS total, COALESCE(UNIX_TIMESTAMP(MAX(fecha_registro)), 0) AS ts FROM alta_alumnos_nuevos',
+            'cartas-doc' => 'SELECT COUNT(DISTINCT nro_familia) AS total, 0 AS ts FROM legajos',
             'lista-alumnos-nuevos' => 'SELECT COUNT(*) AS total, COALESCE(UNIX_TIMESTAMP(MAX(fecha_registro)), 0) AS ts FROM alta_alumnos_nuevos',
             'auditoria' => "SELECT COUNT(*) AS total, COALESCE(UNIX_TIMESTAMP(MAX(created_at)), 0) AS ts FROM admin_audit_log",
             'auditoria-app' => "SELECT COUNT(*) AS total, COALESCE(UNIX_TIMESTAMP(MAX(created_at)), 0) AS ts FROM app_audit_log",
