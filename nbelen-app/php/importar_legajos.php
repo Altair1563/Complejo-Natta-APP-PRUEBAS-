@@ -49,7 +49,7 @@ if (!isset($_POST['csrf_token'], $_SESSION['csrf_token']) || !hash_equals($_SESS
 // ============================================
 //  CONEXIÓN A LA BASE DE DATOS (SEGURA)
 // ============================================
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión: " . $conn->connect_error);
     die("Error interno del servidor. Intente más tarde.");

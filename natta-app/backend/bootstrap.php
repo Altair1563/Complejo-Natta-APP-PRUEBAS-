@@ -37,17 +37,10 @@ require_once BASE_PATH . '/config/app_audit.php';
  */
 function getDbConnection(): mysqli
 {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         error_log('Error de conexión: ' . $conn->connect_error);
         die('Lo sentimos, no se pudo conectar con la base de datos. Intente más tarde.');
-    }
-    $conn->set_charset('utf8mb4');
-    // Alinea CURRENT_TIMESTAMP y triggers de MySQL al horario de Argentina.
-    try {
-        $conn->query("SET time_zone = '-03:00'");
-    } catch (mysqli_sql_exception $e) {
-        error_log('getDbConnection SET time_zone: ' . $e->getMessage());
     }
     return $conn;
 }

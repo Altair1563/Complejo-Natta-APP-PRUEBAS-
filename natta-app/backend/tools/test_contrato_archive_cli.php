@@ -1,7 +1,10 @@
 <?php
 /**
- * Prueba de archivo PDF firmado con plantilla real (CLI).
+ * Prueba de archivo PDF firmado con plantilla real.
+ * Solo CLI: php backend/tools/test_contrato_archive_cli.php
  */
+require_once __DIR__ . '/_cli_only.php';
+
 define('BASE_PATH', dirname(__DIR__, 2));
 require_once BASE_PATH . '/backend/lib/contract_render.php';
 require_once BASE_PATH . '/backend/lib/contract_pdf.php';

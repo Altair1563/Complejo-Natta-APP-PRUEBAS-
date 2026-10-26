@@ -105,7 +105,7 @@ $avance = [
 ];
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     require_once __DIR__ . '/includes/db_collate.php';
     admin_mysqli_apply_collation($conn);
     if ($escuelaDirectivo !== '' && $escuelaDirectivo !== 'ALL') {

@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../includes/estado_alumno_lib.php';
 require_once __DIR__ . '/../../includes/db_collate.php';
 
 try {
-    $connRc = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $connRc = app_mysqli();
     admin_mysqli_apply_collation($connRc);
     estado_alumno_ensure_contratos_schema($connRc);
     $rcFilas = estado_alumno_cargar_revision_contratos_admin($connRc, $rcSoloErroneos, $rcCurso, $rcBuscar);

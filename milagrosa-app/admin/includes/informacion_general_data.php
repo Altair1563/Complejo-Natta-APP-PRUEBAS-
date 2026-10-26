@@ -183,7 +183,7 @@ function admin_load_informacion_general_data(): array
     require_once NATTA_ROOT . '/backend/lib/contract_institution.php';
 
     try {
-        $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $conn = app_mysqli();
         admin_mysqli_apply_collation($conn);
     } catch (Throwable $e) {
         error_log('admin informacion_general conexión: ' . $e->getMessage());

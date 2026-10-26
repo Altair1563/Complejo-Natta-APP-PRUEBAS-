@@ -47,6 +47,7 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
+    app_db_apply_timezone($pdo);
 } catch (Throwable $e) {
     error_log("Error de conexión en get_notificaciones.php: " . $e->getMessage());
     echo json_encode(['ok' => false, 'error' => 'Error interno del servidor']);

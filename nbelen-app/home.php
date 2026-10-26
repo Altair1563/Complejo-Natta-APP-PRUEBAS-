@@ -22,7 +22,7 @@ $csrf_token = $_SESSION['csrf_token'];
 define('_ACCESS', true); // Permite la inclusión del archivo de configuración
 require_once __DIR__ . '/config/db.php'; // Ajusta la ruta según tu estructura
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión: " . $conn->connect_error);
     die("Lo sentimos, no se pudo conectar con la base de datos. Intente más tarde.");

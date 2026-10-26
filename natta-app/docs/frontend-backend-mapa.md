@@ -52,7 +52,7 @@ natta-app/
 │  ├─ bootstrap.php
 │  ├─ ajax/                       ← 14 endpoints JSON de familias
 │  ├─ lib/                        ← contratos, PDF, ingresantes, familia/talón
-│  └─ tools/                      ← CLI diagnóstico PDF
+│  └─ tools/                      ← CLI only (.htaccess Deny + guard PHP_SAPI)
 ├─ admin/
 │  ├─ admin_dashboard.php         ← pestañas (superadmin / admin)
 │  ├─ estado_alumno.php           ← panel secretaría / directivo
@@ -412,4 +412,4 @@ Nueva pestaña admin: `nav.php` + `admin_dashboard.php` `$tabViews` + `views/tab
 
 ---
 
-*Última actualización: octubre 2026 — admin unificado, privacy gate, cartas documento, reubicación, contexto familiar por AJAX.*
+*Última actualización: octubre 2026 — admin unificado, privacy gate, cartas documento, reubicación, contexto familiar por AJAX, `backend/tools/` solo CLI.*

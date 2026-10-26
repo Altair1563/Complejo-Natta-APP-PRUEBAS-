@@ -241,7 +241,7 @@ function admin_load_listado_familias_data(): array
     require_once NATTA_ROOT . '/config/db.php';
     require_once __DIR__ . '/db_collate.php';
 
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         error_log('admin listado_familias conexión: ' . $conn->connect_error);
         throw new RuntimeException('Error interno del servidor. Intente más tarde.');

@@ -68,7 +68,7 @@ if (!admin_is_logged_in() || !admin_can_access_estado_alumno()) {
 }
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     require_once __DIR__ . '/includes/db_collate.php';
     admin_mysqli_apply_collation($conn);
     estado_alumno_ensure_contratos_schema($conn);

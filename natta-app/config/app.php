@@ -37,7 +37,7 @@ function app_maintenance_state(): array
             define('_ACCESS', true);
         }
         require_once __DIR__ . '/db.php';
-        $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $conn = app_mysqli();
         $conn->set_charset('utf8mb4');
         $sql = "SELECT clave, valor FROM configuracion
                 WHERE clave IN ('modo_mantenimiento', 'modo_mantenimiento_epoch')";

@@ -1,6 +1,10 @@
 <?php
 
 require_once __DIR__ . '/ingresantes_externos_2027.php';
+$appDatetime = dirname(__DIR__, 2) . '/config/app_datetime.php';
+if (is_file($appDatetime)) {
+    require_once $appDatetime;
+}
 
 if (!function_exists('mb_strtoupper')) {
     function mb_strtoupper($string, $encoding = null)
@@ -427,6 +431,9 @@ function contrato_build_confirmation_email(array $data): array
     $documentoVigente = (string)($data['documento_vigente'] ?? '');
     $contractVersion = (string)($data['contract_version'] ?? '');
     $acceptedAtUtc = (string)($data['accepted_at_utc'] ?? '');
+    $acceptedAtDisplay = function_exists('app_datetime_format_from_utc')
+        ? app_datetime_format_from_utc($acceptedAtUtc, 'd/m/Y H:i', true)
+        : $acceptedAtUtc;
     $ip = (string)($data['ip'] ?? '');
     $contractHash = (string)($data['contract_hash'] ?? '');
     $declarantName = (string)($data['declarant_name'] ?? '');
@@ -463,7 +470,7 @@ function contrato_build_confirmation_email(array $data): array
         . '<hr style="border:none;border-top:1px solid #ddd;margin:16px 0;" />'
         . $field('Documento aceptado:', $documentoVigente)
         . $field('Versión del documento:', $contractVersion)
-        . $field('Fecha y hora de registro:', $acceptedAtUtc)
+        . $field('Fecha y hora de registro:', $acceptedAtDisplay)
         . $field('Dirección IP registrada:', $ip)
         . $field('Huella SHA-256 (archivo PDF depositado):', $contractHash)
         . '<p style="margin:0 0 14px;font-size:13px;color:#555;text-align:justify;">La huella identifica el PDF íntegro aceptado y resguardado por el establecimiento. Permite verificar que el archivo no fue alterado.</p>'
@@ -495,7 +502,7 @@ function contrato_build_confirmation_email(array $data): array
         . "Curso: {$curso}\n\n"
         . "Documento aceptado:\n{$documentoVigente}\n\n"
         . "Versión del documento:\n{$contractVersion}\n\n"
-        . "Fecha y hora de registro:\n{$acceptedAtUtc}\n\n"
+        . "Fecha y hora de registro:\n{$acceptedAtDisplay}\n\n"
         . "Dirección IP registrada:\n{$ip}\n\n"
         . "Huella SHA-256 (archivo PDF depositado):\n{$contractHash}\n"
         . "(Permite verificar integridad del PDF.)\n\n"

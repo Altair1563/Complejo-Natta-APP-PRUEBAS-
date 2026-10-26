@@ -1,8 +1,10 @@
 <?php
 /**
  * Regenera PDFs firmados en storage con el render actual (márgenes cero).
- * Uso: php backend/tools/regenerar_pdfs_firmados.php [año]
+ * Solo CLI: php backend/tools/regenerar_pdfs_firmados.php [año]
  */
+require_once __DIR__ . '/_cli_only.php';
+
 define('BASE_PATH', dirname(__DIR__, 2));
 
 if (!defined('_ACCESS')) {
@@ -16,7 +18,7 @@ require_once BASE_PATH . '/backend/lib/contract_pdf.php';
 $year = isset($argv[1]) ? trim($argv[1]) : '2026';
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         throw new RuntimeException('DB: ' . $conn->connect_error);
     }

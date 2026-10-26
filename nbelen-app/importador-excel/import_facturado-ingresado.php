@@ -64,6 +64,7 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
+    app_db_apply_timezone($pdo);
 } catch (Throwable $e) {
     error_log("Error de conexión en import_facturado-ingresado.php: " . $e->getMessage());
     die("Error interno del servidor. Intente más tarde.");

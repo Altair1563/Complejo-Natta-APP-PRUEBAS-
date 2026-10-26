@@ -35,7 +35,7 @@ if (!isset($_SESSION['csrf_token']) || !hash_equals((string)$_SESSION['csrf_toke
 define('_ACCESS', true);
 require_once __DIR__ . '/../../config/db.php';
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión en ajax_notificaciones: " . $conn->connect_error);
     echo json_encode([]);

@@ -24,7 +24,7 @@ require_once __DIR__ . '/config/privacy_policy.php';
 
 mysqli_report(MYSQLI_REPORT_OFF);
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         throw new Exception($conn->connect_error);
     }

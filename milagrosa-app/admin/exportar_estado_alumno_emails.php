@@ -19,7 +19,7 @@ $escuelaActiva = estado_alumno_resolve_escuela_activa($escuelas, (string)($_GET[
 $filtrosEmails = estado_alumno_parse_filtros_emails();
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     require_once __DIR__ . '/includes/db_collate.php';
     admin_mysqli_apply_collation($conn);
 } catch (Throwable $e) {

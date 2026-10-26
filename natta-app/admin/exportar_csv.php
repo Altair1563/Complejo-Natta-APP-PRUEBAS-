@@ -24,6 +24,7 @@ try {
         DB_PASS,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
+    app_db_apply_timezone($pdo);
 } catch (Throwable $e) {
     error_log("Error en exportar_csv.php: " . $e->getMessage());
     die('Error de conexión');

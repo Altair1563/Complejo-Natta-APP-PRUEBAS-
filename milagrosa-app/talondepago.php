@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/config/session.php';
 secure_session_start();
 
@@ -28,7 +28,7 @@ define('_ACCESS', true);
 require_once __DIR__ . '/config/db.php';
 require_once __DIR__ . '/backend/lib/ingresantes_externos_2027.php';
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión en talondepago.php: " . $conn->connect_error);
     $error_conexion = "No se pudo conectar con la base de datos. Intente más tarde.";

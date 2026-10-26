@@ -832,6 +832,9 @@ function estado_alumno_cargar_revision_contratos_admin(
     $joinDni = estado_alumno_sql_join_dni('ca.student_dni', 'l.dni_alumno');
     $hasInfoErronea = contrato_db_column_exists($conn, 'contratos_aceptados', 'info_erronea');
     $infoSelect = $hasInfoErronea ? 'COALESCE(ca.info_erronea, 0) AS info_erronea' : '0 AS info_erronea';
+    $utcSelect = contrato_db_column_exists($conn, 'contratos_aceptados', 'accepted_at_utc')
+        ? 'ca.accepted_at_utc'
+        : 'NULL AS accepted_at_utc';
 
     $where = ["ca.status = 'activo'"];
     $types = '';
@@ -865,6 +868,7 @@ function estado_alumno_cargar_revision_contratos_admin(
                 ca.id AS contrato_id,
                 ca.contract_version,
                 ca.accepted_at,
+                {$utcSelect},
                 ca.accepted_text,
                 {$infoSelect},
                 l.nro_legajo,
@@ -911,10 +915,19 @@ function estado_alumno_cargar_revision_contratos_admin(
             }
         }
 
+        $utcRaw = trim((string)($fila['accepted_at_utc'] ?? ''));
+        if ($utcRaw !== '') {
+            $acceptedAtDisplay = contrato_format_fecha_aceptacion($utcRaw);
+        } elseif (function_exists('app_datetime_format_ar')) {
+            $acceptedAtDisplay = app_datetime_format_ar((string)($fila['accepted_at'] ?? ''), 'd/m/Y H:i');
+        } else {
+            $acceptedAtDisplay = (string)($fila['accepted_at'] ?? '');
+        }
+
         $filasOut[] = [
             'contrato_id' => $fila['contrato_id'] ?? null,
             'contract_version' => (string)($fila['contract_version'] ?? ''),
-            'accepted_at' => (string)($fila['accepted_at'] ?? ''),
+            'accepted_at' => $acceptedAtDisplay,
             'nro_legajo' => $fila['nro_legajo'] ?? '',
             'apellido_alumno' => $fila['apellido_alumno'] ?? '',
             'nombre_alumno' => $fila['nombre_alumno'] ?? '',

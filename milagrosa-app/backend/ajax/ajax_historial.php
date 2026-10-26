@@ -40,7 +40,7 @@ require_once __DIR__ . '/../../config/cuota-vigente.php';
 require_once __DIR__ . '/../lib/ingresantes_externos_2027.php';
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         throw new Exception("Error de conexión a la base de datos");
     }

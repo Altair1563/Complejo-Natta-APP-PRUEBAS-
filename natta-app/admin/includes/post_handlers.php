@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $navResolved = admin_nav_resolve($_GET);
 $active_grupo = $navResolved['grupo'];
 $active_tab = $navResolved['tab'];
@@ -456,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['accion'] ?? '') === 'elimi
     require_once __DIR__ . '/db_collate.php';
 
     try {
-        $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $conn = app_mysqli();
         admin_mysqli_apply_collation($conn);
         $result = estado_alumno_eliminar_contrato_erroneo($conn, $contratoId);
         $conn->close();

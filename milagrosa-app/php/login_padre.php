@@ -17,7 +17,7 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/privacy_policy.php';
 require_once __DIR__ . '/../config/app_audit.php';
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión en login_padre.php: " . $conn->connect_error);
     $_SESSION['error_login'] = "Error interno del servidor. Intente más tarde.";

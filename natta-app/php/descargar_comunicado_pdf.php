@@ -38,6 +38,7 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false,
         ]
     );
+    app_db_apply_timezone($pdo);
 } catch (Throwable $e) {
     error_log('descargar_comunicado_pdf: conexión — ' . $e->getMessage());
     http_response_code(500);

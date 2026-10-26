@@ -14,4 +14,7 @@ function admin_mysqli_apply_collation(mysqli $conn): void
 {
     $conn->set_charset('utf8mb4');
     @$conn->query("SET NAMES utf8mb4 COLLATE '" . ADMIN_DB_COLLATE . "'");
+    if (function_exists('app_db_apply_timezone')) {
+        app_db_apply_timezone($conn);
+    }
 }

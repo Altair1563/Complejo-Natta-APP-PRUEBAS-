@@ -53,7 +53,7 @@ backend/
   bootstrap.php
   ajax/                      # 14 endpoints JSON familias
   lib/                       # Contratos, PDF, ingresantes, familia/talón
-  tools/                     # CLI diagnóstico PDF
+  tools/                     # Solo CLI (HTTP denegado: .htaccess + PHP_SAPI)
 admin/
   admin_dashboard.php        # Pestañas superadmin/admin
   estado_alumno.php          # Panel secretaría/directivo
@@ -275,7 +275,7 @@ Firma: datos del firmante, IP, UA, `contract_hash` / `signed_document_sha256`, `
 hash_file('sha256', $pdfAbsoluto)  ===  contract_hash / signed_document_sha256
 ```
 
-Si se regenera el PDF (plantilla, márgenes, Dompdf), la huella de archivos viejos **cambia**. No regenerar en producción salvo incidente; usar `backend/tools/regenerar_pdfs_firmados.php` con criterio.
+Si se regenera el PDF (plantilla, márgenes, Dompdf), la huella de archivos viejos **cambia**. No regenerar en producción salvo incidente; usar por **CLI** `php backend/tools/regenerar_pdfs_firmados.php` (HTTP está denegado).
 
 ### Cambiar ciclo lectivo
 
@@ -288,6 +288,13 @@ Subir `docs/contratos/Contrato_*_2028_v1.html` **antes** de activar.
 
 ### Herramientas CLI (`backend/tools/`)
 
+**No se sirven por HTTP.** Apache: `backend/tools/.htaccess` (`Require all denied`). PHP: cada script incluye `_cli_only.php` y responde 404 si `PHP_SAPI` no es `cli` / `phpdbg`.
+
+```text
+php backend/tools/contrato_pdf_diagnostico.php
+php backend/tools/regenerar_pdfs_firmados.php 2026
+```
+
 | Script | Uso |
 |--------|-----|
 | `contrato_pdf_diagnostico.php` | Dompdf, extensiones, storage |
@@ -295,7 +302,7 @@ Subir `docs/contratos/Contrato_*_2028_v1.html` **antes** de activar.
 | `regenerar_pdfs_firmados.php` / `regenerar_pdf_local.php` | Regenerar PDFs |
 | `inspect_pdf_margins.php` | Márgenes |
 
-Requisitos servidor: `composer install`, extensiones `dom` + `mbstring`, `storage/contratos_firmados/` escribible.
+Requisitos servidor: `composer install`, extensiones `dom` + `mbstring`, `storage/contratos_firmados/` escribible. SSH/CLI en el hosting; no abrir estas URLs en el navegador.
 
 ---
 
@@ -428,7 +435,7 @@ Hay leftovers en `php/get_notificaciones.php` y `php/publicar_comunicado.php`; e
 - Mes lógico admin: `cuotaANumeroMesLogico` (SU es distinto).
 - Tras cambiar plantilla HTML o márgenes PDF, los SHA de PDFs viejos cambian si se regeneran.
 - `contract_institution.php` debe cargarse solo o antes que `contract_render.php`.
-- No servir `storage/` ni `config/` por HTTP (`.htaccess`).
+- No servir `storage/`, `config/` ni `backend/tools/` por HTTP (`.htaccess`). Los tools solo por CLI.
 - No editar `importador-excel/frontend/js/`; el canónico es `natta-app/frontend/js/`.
 
 ---
@@ -445,7 +452,7 @@ Hay leftovers en `php/get_notificaciones.php` y `php/publicar_comunicado.php`; e
 | Firma bloqueada (ingresante) | Cuota 10 pagada; curso EX*; `firma_habilitada` |
 | Firma bloqueada (febrero) | Curso en lista de reubicación |
 | Ingresante ve cuotas 1–9 / 11–12 | Import: solo cuota 10; `cuota_es_futura_para_curso` |
-| PDF no genera | `contrato_pdf_diagnostico.php`, `vendor/`, permisos `storage/` |
+| PDF no genera | CLI: `php backend/tools/contrato_pdf_diagnostico.php`; `vendor/`; permisos `storage/` |
 | SHA no coincide | PDF regenerado vs huella original |
 | Admin 403 | `admin_can($tab)`, rol, escuela asignada |
 | Secretaría ve dashboard | Debe ir a `estado_alumno.php` (`admin_panel_home`) |
@@ -455,4 +462,4 @@ Hay leftovers en `php/get_notificaciones.php` y `php/publicar_comunicado.php`; e
 
 ---
 
-*Última actualización: octubre 2026 — admin unificado, privacy gate, cartas documento, reubicación, preview de contrato en sesión, contexto familiar por AJAX.*
+*Última actualización: octubre 2026 — admin unificado, privacy gate, cartas documento, reubicación, preview de contrato en sesión, contexto familiar por AJAX, `backend/tools/` solo CLI.*

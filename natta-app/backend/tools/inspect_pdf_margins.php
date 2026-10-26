@@ -1,7 +1,10 @@
 <?php
 /**
  * Extrae y analiza streams FlateDecode de un PDF para medir márgenes de contenido.
+ * Solo CLI: php backend/tools/inspect_pdf_margins.php /ruta/al.pdf
  */
+require_once __DIR__ . '/_cli_only.php';
+
 $path = $argv[1] ?? (dirname(__DIR__, 2) . '/storage/contratos_firmados/2026/Contrato_JN_2027_v1_56182407_20260605110120.pdf');
 $raw = (string) file_get_contents($path);
 

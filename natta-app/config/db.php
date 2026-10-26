@@ -18,3 +18,4 @@ define('DB_NAME', 'u207063327_contactos_db');
 // Opcional: zona horaria y charset
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+require_once __DIR__ . '/app_datetime.php';

@@ -16,7 +16,7 @@ require_once BASE_PATH . '/backend/lib/contract_pdf.php';
 $year = isset($argv[1]) ? trim($argv[1]) : '2026';
 
 try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         throw new RuntimeException('DB: ' . $conn->connect_error);
     }

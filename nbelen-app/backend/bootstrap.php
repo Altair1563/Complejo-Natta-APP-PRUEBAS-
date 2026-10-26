@@ -37,7 +37,7 @@ require_once BASE_PATH . '/config/app_audit.php';
  */
 function getDbConnection(): mysqli
 {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = app_mysqli();
     if ($conn->connect_error) {
         error_log('Error de conexión: ' . $conn->connect_error);
         die('Lo sentimos, no se pudo conectar con la base de datos. Intente más tarde.');

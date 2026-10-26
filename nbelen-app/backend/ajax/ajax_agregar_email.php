@@ -21,7 +21,7 @@ if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $cs
 define('_ACCESS', true);
 require_once __DIR__ . '/../../config/db.php';
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = app_mysqli();
 if ($conn->connect_error) {
     error_log("Error de conexión en ajax_agregar_email: " . $conn->connect_error);
     echo json_encode(["ok" => false, "msg" => "Error de conexión a la base de datos"]);
