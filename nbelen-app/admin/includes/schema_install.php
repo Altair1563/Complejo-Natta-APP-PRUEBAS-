@@ -82,6 +82,14 @@ function admin_ensure_schema(PDO $pdo): void
         // Columna ya existe.
     }
 
+    try {
+        $pdo->exec(
+            'ALTER TABLE notificaciones MODIFY mensaje TEXT NOT NULL'
+        );
+    } catch (PDOException $e) {
+        // Ya migrado o entorno sin permisos ALTER.
+    }
+
     require_once dirname(__DIR__, 2) . '/config/app_audit.php';
     app_ensure_audit_schema($pdo);
 

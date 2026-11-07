@@ -347,7 +347,7 @@ CREATE TABLE `login_attempts` (
 CREATE TABLE `notificaciones` (
   `id` int(11) NOT NULL,
   `nro_familia` int(11) NOT NULL,
-  `mensaje` varchar(255) NOT NULL,
+  `mensaje` text NOT NULL,
   `fecha` datetime DEFAULT current_timestamp(),
   `leido` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -124,11 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['
                 $msgType = 'warning';
             } else {
                 $mensajeNotif = "[Individual] " . $tituloIndividual . ": " . $contenidoIndividual;
-                if (function_exists('mb_substr')) {
-                    $mensajeNotif = mb_substr($mensajeNotif, 0, 255);
-                } else {
-                    $mensajeNotif = substr($mensajeNotif, 0, 255);
-                }
 
                 $stmtNotif = $pdo->prepare("INSERT INTO notificaciones (nro_familia, mensaje, fecha, leido) VALUES (?, ?, NOW(), 0)");
                 $stmtNotif->execute([(int)$nroFamilia, $mensajeNotif]);

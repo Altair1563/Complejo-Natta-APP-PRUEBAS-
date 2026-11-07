@@ -74,7 +74,7 @@
                                                     <tr id="row-notificacion-<?= (int)$n['id'] ?>">
                                                         <td><?= (int)$n['id'] ?></td>
                                                         <td><?= (int)$n['nro_familia'] ?></td>
-                                                        <td><?php echo htmlspecialchars((string)$n['mensaje'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td style="white-space:pre-line;word-break:break-word;"><?php echo htmlspecialchars((string)$n['mensaje'], ENT_QUOTES, 'UTF-8'); ?></td>
                                                         <td><?= htmlspecialchars((string)$n['fecha'], ENT_QUOTES, 'UTF-8') ?></td>
                                                         <td><?= ((int)$n['leido'] === 1) ? 'Sí' : 'No' ?></td>
                                                         <td class="table-actions">
