@@ -435,20 +435,21 @@ if ($resCv instanceof mysqli_result) {
     error_log('informacion_general contratos_instituciones: ' . $conn->error);
 }
 
-$aceptacionesPorAlumno = [];
+// Aceptaciones activas: DNI => versiones firmadas (mismo criterio que revisión / estado_alumno).
+$aceptacionesPorDni = [];
 $resSig = @$conn->query(
-    "SELECT student_dni, nro_familia, contract_version
+    "SELECT student_dni, contract_version
      FROM contratos_aceptados
      WHERE status = 'activo'"
 );
 if ($resSig instanceof mysqli_result) {
     while ($sr = $resSig->fetch_assoc()) {
         $dni = trim((string)($sr['student_dni'] ?? ''));
-        $nf = norm_familia($sr['nro_familia'] ?? '');
-        if ($dni === '' || $nf === '') {
+        $ver = trim((string)($sr['contract_version'] ?? ''));
+        if ($dni === '' || $ver === '') {
             continue;
         }
-        $aceptacionesPorAlumno[$nf . '|' . $dni] = trim((string)($sr['contract_version'] ?? ''));
+        $aceptacionesPorDni[$dni][$ver] = true;
     }
     $resSig->free();
 } else {
@@ -456,22 +457,30 @@ if ($resSig instanceof mysqli_result) {
 }
 
 $firmadosActivos = 0;
+$cacheVersionVigente = [];
 foreach ($legajosData as $info) {
-    $k = norm_familia($info['nro_familia'] ?? '') . '|' . trim((string)($info['dni_alumno'] ?? ''));
-    if ($k === '|' || !isset($aceptacionesPorAlumno[$k])) {
-        continue;
-    }
+    $dni = trim((string)($info['dni_alumno'] ?? ''));
     $curso = trim((string)($info['curso'] ?? ''));
-    if ($curso === '') {
+    if ($dni === '' || $curso === '' || !isset($aceptacionesPorDni[$dni])) {
         continue;
     }
-    try {
-        $vigente = contrato_fetch_vigente_por_curso($conn, $curso);
-    } catch (Throwable $e) {
-        error_log('informacion_general contrato vigente: ' . $e->getMessage());
+    $codigo = contrato_codigo_institucion_desde_curso($curso);
+    if ($codigo === null) {
         continue;
     }
-    if ($vigente !== null && $aceptacionesPorAlumno[$k] === (string)$vigente['contract_version']) {
+    if (!array_key_exists($codigo, $cacheVersionVigente)) {
+        try {
+            $vigente = contrato_fetch_vigente_por_codigo($conn, $codigo);
+            $cacheVersionVigente[$codigo] = $vigente !== null
+                ? (string)$vigente['contract_version']
+                : '';
+        } catch (Throwable $e) {
+            error_log('informacion_general contrato vigente: ' . $e->getMessage());
+            $cacheVersionVigente[$codigo] = '';
+        }
+    }
+    $versionVigente = $cacheVersionVigente[$codigo];
+    if ($versionVigente !== '' && isset($aceptacionesPorDni[$dni][$versionVigente])) {
         $firmadosActivos++;
     }
 }

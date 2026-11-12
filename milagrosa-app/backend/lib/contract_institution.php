@@ -27,10 +27,48 @@ if (!function_exists('mb_substr')) {
     }
 }
 
-if (!function_exists('fetchAllFromStmt') && function_exists('fetch_all_from_stmt')) {
+if (!function_exists('fetchAllFromStmt')) {
+    /**
+     * Compatible con servidores sin mysqlnd (misma lógica que backend/bootstrap.php).
+     * Necesario cuando este lib se carga desde el panel admin sin bootstrap/estado_alumno.
+     */
     function fetchAllFromStmt(mysqli_stmt $stmt): array
     {
-        return fetch_all_from_stmt($stmt);
+        if (function_exists('fetch_all_from_stmt')) {
+            return fetch_all_from_stmt($stmt);
+        }
+
+        $rows = [];
+        if (method_exists($stmt, 'get_result')) {
+            $res = $stmt->get_result();
+            if ($res instanceof mysqli_result) {
+                while ($r = $res->fetch_assoc()) {
+                    $rows[] = $r;
+                }
+            }
+        } else {
+            $stmt->store_result();
+            $meta = $stmt->result_metadata();
+            if (!$meta) {
+                return $rows;
+            }
+            $fields = [];
+            $row = [];
+            while ($field = $meta->fetch_field()) {
+                $fields[] = &$row[$field->name];
+            }
+            call_user_func_array([$stmt, 'bind_result'], $fields);
+            while ($stmt->fetch()) {
+                $r = [];
+                foreach ($row as $k => $v) {
+                    $r[$k] = $v;
+                }
+                $rows[] = $r;
+            }
+            unset($row);
+        }
+
+        return $rows;
     }
 }
 
