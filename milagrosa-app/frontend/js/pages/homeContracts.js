@@ -52,7 +52,7 @@ function htmlContractModalInfoSection({
   <p><strong>Documento Vigente:</strong> ${escapeHtml(documentoVigente)}</p>
   <p><strong>Versión del documento:</strong> ${escapeHtml(contractVersion || '-')}</p>
   <p><strong>Huella SHA-256:</strong> ${escapeHtml(hash)}</p>
-  <p style="font-size:13px;color:#555;line-height:1.45;">Al firmar, el sistema generará el PDF y calculará la huella SHA-256 que permite verificar posteriormente que el archivo no fue modificado.</p>`;
+  <p style="font-size:12px;color:#555;line-height:1.45;">Al firmar, el sistema generará el PDF y calculará la huella SHA-256 que permite verificar posteriormente que el archivo no fue modificado.</p>`;
 }
 
 /** URL sin parámetros; los datos van en sesión vía POST previo. */
@@ -140,10 +140,116 @@ function getContractSignFormValues(root, fieldIds) {
   };
 }
 
+const PREAMBLE_NO_AT_MSG = 'Dato incorrecto, leer atentamente.';
+
+function preambleFieldContainsAt(values) {
+  return [values.declarantName, values.declarantDomicilio, values.declarantLocalidad].some(
+    (v) => String(v || '').includes('@')
+  );
+}
+
+const PREAMBLE_INPUT_ERROR_STYLE =
+  'border-color:#dc3545!important;background:#fdecea!important;box-shadow:0 0 0 2px rgba(220,53,69,.25)!important;';
+
+/** Impide ingresar @ en los campos del preámbulo (nombre, DNI, domicilio, localidad). */
+function bindPreambleNoAtGuard(root, fieldIds) {
+  const ids = [
+    fieldIds.declarantName,
+    fieldIds.declarantDni,
+    fieldIds.declarantDomicilio,
+    fieldIds.declarantLocalidad,
+  ];
+  const inputs = ids.map((id) => root.querySelector(`#${id}`)).filter(Boolean);
+  if (!inputs.length) return;
+
+  const clearFieldError = (input) => {
+    clearTimeout(input._atErrorTimer);
+    input.removeAttribute('aria-invalid');
+    const base = input.getAttribute('data-base-style');
+    if (base != null) input.setAttribute('style', base);
+    const alert = input.closest('.contract-preamble-field')?.querySelector('.contract-preamble-field-alert');
+    if (alert) alert.style.display = 'none';
+  };
+
+  const showFieldError = (input) => {
+    clearTimeout(input._atErrorTimer);
+    input.setAttribute('aria-invalid', 'true');
+    const base = input.getAttribute('data-base-style') || input.getAttribute('style') || '';
+    input.setAttribute('style', `${base};${PREAMBLE_INPUT_ERROR_STYLE}`);
+
+    const alert = input.closest('.contract-preamble-field')?.querySelector('.contract-preamble-field-alert');
+    if (alert) {
+      alert.textContent = PREAMBLE_NO_AT_MSG;
+      alert.style.display = 'block';
+    }
+
+    input._atErrorTimer = setTimeout(() => clearFieldError(input), 4500);
+  };
+
+  const stripAtFromValue = (input) => {
+    if (!input.value.includes('@')) return false;
+    const start = input.selectionStart;
+    const before = input.value.length;
+    input.value = input.value.replace(/@+/g, '');
+    const removed = before - input.value.length;
+    if (typeof start === 'number') {
+      const next = Math.max(0, start - removed);
+      try {
+        input.setSelectionRange(next, next);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+    return true;
+  };
+
+  for (const input of inputs) {
+    if (!input.getAttribute('data-base-style')) {
+      input.setAttribute('data-base-style', input.getAttribute('style') || '');
+    }
+    input.setAttribute('autocomplete', 'off');
+    input.addEventListener('keydown', (e) => {
+      if (e.key === '@') {
+        e.preventDefault();
+        showFieldError(input);
+      }
+    });
+    input.addEventListener('beforeinput', (e) => {
+      if (e.data && String(e.data).includes('@')) {
+        e.preventDefault();
+        showFieldError(input);
+      }
+    });
+    input.addEventListener('paste', (e) => {
+      const text = e.clipboardData?.getData('text') ?? '';
+      if (!text.includes('@')) return;
+      e.preventDefault();
+      const cleaned = text.replace(/@+/g, '');
+      const start = input.selectionStart ?? input.value.length;
+      const end = input.selectionEnd ?? input.value.length;
+      input.value = `${input.value.slice(0, start)}${cleaned}${input.value.slice(end)}`;
+      const caret = start + cleaned.length;
+      try {
+        input.setSelectionRange(caret, caret);
+      } catch (_) {
+        /* ignore */
+      }
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      showFieldError(input);
+    });
+    input.addEventListener('input', () => {
+      if (stripAtFromValue(input)) showFieldError(input);
+    });
+  }
+}
+
 /** Validación unificada antes de enviar la firma. */
 function validateContractSignForm(values, readGate) {
   if (!values.declarantName) {
     return { ok: false, msg: 'Debe completar nombre y apellido del firmante.' };
+  }
+  if (preambleFieldContainsAt(values)) {
+    return { ok: false, msg: PREAMBLE_NO_AT_MSG };
   }
   if (!/^\d{6,12}$/.test(values.declarantDni)) {
     return { ok: false, msg: 'Debe ingresar un DNI válido del firmante.' };
@@ -206,6 +312,7 @@ function syncContractSignConfirmButton(readGate, fieldIds, root) {
 }
 
 function bindContractSignFormWatchers(root, fieldIds, getReadGate, errorId, confirmBtn) {
+  bindPreambleNoAtGuard(root, fieldIds);
   const refresh = () => {
     showContractInlineError(errorId, '');
     const readGate = typeof getReadGate === 'function' ? getReadGate() : getReadGate;
@@ -393,29 +500,38 @@ function contractPreambleInputStyle(widthPx, swalInputs) {
 }
 
 /** Bloque del preámbulo contractual con datos del firmante y del establecimiento. */
-function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs = false } = {}) {
+function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs = false, responsableEmail = '' } = {}) {
   const fragInst = htmlFragmentoInstitucionContrato(institucionContrato || {});
   const inputClass = swalInputs ? ' class="swal2-input"' : '';
   const styleName = contractPreambleInputStyle(280, swalInputs);
   const styleDni = contractPreambleInputStyle(140, swalInputs);
   const styleDom = contractPreambleInputStyle(240, swalInputs);
   const styleLoc = contractPreambleInputStyle(180, swalInputs);
+  const emailText = String(responsableEmail || '').trim() || '—';
+  const emailStyle =
+    'display:inline-block;vertical-align:middle;max-width:100%;margin:2px 4px;padding:6px 10px;border:1px solid #c5d4f0;border-radius:6px;background:#eef3fb;color:#0c3484;font-size:12px;font-weight:600;box-sizing:border-box;word-break:break-all;';
+
+  const wrapStart = '<span class="contract-preamble-field" style="display:inline-block;position:relative;vertical-align:middle;">';
+  const fieldAlertHtml = `<span class="contract-preamble-field-alert" role="alert" aria-live="assertive" style="display:none;position:absolute;left:0;top:calc(100% + 2px);z-index:20;white-space:nowrap;padding:4px 8px;border-radius:4px;background:#fdecea;border:1px solid #f5c2c7;color:#842029;font-size:12px;line-height:1.3;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);">${PREAMBLE_NO_AT_MSG}</span>`;
+  const wrapEnd = `</span>`;
 
   return `
-  <div class="contract-preamble" style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin:12px 0;background:#fafbfd;">
-    <p style="margin:0;text-align:justify;line-height:1.65;font-size:14px;color:#222;">
-      Entre el Sr.
-      <input id="${fieldIds.declarantName}" type="text"${inputClass} aria-label="Nombre y apellido completos del firmante"
-        style="${styleName}" placeholder="Nombre y apellido completos" />
+  <div class="contract-preamble" style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px 28px 14px;margin:12px 0;background:#fafbfd;overflow:visible;">
+    <p style="margin:0;text-align:justify;line-height:1.65;font-size:13px;color:#222;">
+      Entre el Sr/Sra.
+      ${wrapStart}<input id="${fieldIds.declarantName}" type="text"${inputClass} aria-label="Nombre y apellido completos del firmante"
+        style="${styleName}" placeholder="Nombre y apellido completos" />${fieldAlertHtml}${wrapEnd}
       con DNI N°
-      <input id="${fieldIds.declarantDni}" type="text"${inputClass} inputmode="numeric" autocomplete="on" aria-label="DNI del firmante"
-        style="${styleDni}" placeholder="DNI" />,
-      con domicilio real en
-      <input id="${fieldIds.declarantDomicilio}" type="text"${inputClass} aria-label="Domicilio real del firmante"
-        style="${styleDom}" placeholder="calle y número" />
+      ${wrapStart}<input id="${fieldIds.declarantDni}" type="text"${inputClass} inputmode="numeric" autocomplete="off" aria-label="DNI del firmante"
+        style="${styleDni}" placeholder="DNI" />${fieldAlertHtml}${wrapEnd},
+      con domicilio electrónico en
+      <span class="contract-preamble-email" aria-label="Domicilio electrónico del firmante" style="${emailStyle}">${escapeHtml(emailText)}</span>
+      y domicilio real en
+      ${wrapStart}<input id="${fieldIds.declarantDomicilio}" type="text"${inputClass} aria-label="Domicilio real del firmante"
+        style="${styleDom}" placeholder="calle y número" />${fieldAlertHtml}${wrapEnd}
       localidad de
-      <input id="${fieldIds.declarantLocalidad}" type="text"${inputClass} aria-label="Localidad del firmante"
-        style="${styleLoc}" placeholder="Localidad" />, en adelante &laquo;LA FAMILIA&raquo; y ${fragInst},
+      ${wrapStart}<input id="${fieldIds.declarantLocalidad}" type="text"${inputClass} aria-label="Localidad del firmante"
+        style="${styleLoc}" placeholder="Localidad" />${fieldAlertHtml}${wrapEnd}, en adelante &laquo;LA FAMILIA&raquo; y ${fragInst},
       en adelante &laquo;ESTABLECIMIENTO EDUCATIVO&raquo; celebran el presente contrato de servicios
       educativos sujeto a las siguientes cláusulas:
     </p>
@@ -948,7 +1064,7 @@ ${htmlContractModalInfoSection({
   contractVersion: version,
   hash,
 })}
-${htmlContractPreambleSection(institucionContrato, fallbackPreambleIds)}
+${htmlContractPreambleSection(institucionContrato, fallbackPreambleIds, { responsableEmail })}
 ${htmlContractModalLinksSection(contractPreviewUrl, reglamentoUrl, {
   contratoLinkId: 'fallbackContractPdfLink',
   reglamentoLinkId: 'fallbackReglamentoPdfLink',
@@ -1262,7 +1378,7 @@ ${htmlContractModalHeader({ codigoEscuela: institucionContrato.codigo, curso })}
     contractVersion: version,
     hash,
   })}
-  ${htmlContractPreambleSection(institucionContrato, swalPreambleIds, { swalInputs: true })}
+  ${htmlContractPreambleSection(institucionContrato, swalPreambleIds, { swalInputs: true, responsableEmail })}
   ${htmlContractModalLinksSection(contractPreviewUrl, reglamentoUrl, {
     contratoLinkId: 'contractPdfLink',
     reglamentoLinkId: 'contractReglamentoPdfLink',

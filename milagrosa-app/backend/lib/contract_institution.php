@@ -413,10 +413,16 @@ function contrato_preambulo_familia_texto(
     string $declarantName,
     string $declarantDni,
     string $declarantDomicilio,
-    string $declarantLocalidad
+    string $declarantLocalidad,
+    string $declarantEmail = ''
 ): string {
-    return 'Entre el Sr. ' . $declarantName . ' con DNI N° ' . $declarantDni
-        . ', con domicilio real en ' . $declarantDomicilio . ' localidad de ' . $declarantLocalidad
+    $email = trim($declarantEmail);
+    $domicilioPart = $email !== ''
+        ? ', con domicilio electrónico en ' . $email . ' y domicilio real en '
+        : ', con domicilio real en ';
+
+    return 'Entre el Sr/Sra. ' . $declarantName . ' con DNI N° ' . $declarantDni
+        . $domicilioPart . $declarantDomicilio . ' localidad de ' . $declarantLocalidad
         . ', en adelante "LA FAMILIA"';
 }
 
@@ -425,9 +431,16 @@ function contrato_preambulo_aceptacion_texto(
     string $declarantDni,
     string $declarantDomicilio,
     string $declarantLocalidad,
-    array $instRow
+    array $instRow,
+    string $declarantEmail = ''
 ): string {
-    $familia = contrato_preambulo_familia_texto($declarantName, $declarantDni, $declarantDomicilio, $declarantLocalidad);
+    $familia = contrato_preambulo_familia_texto(
+        $declarantName,
+        $declarantDni,
+        $declarantDomicilio,
+        $declarantLocalidad,
+        $declarantEmail
+    );
     $inst = contrato_fragmento_institucion_texto($instRow);
 
     return $familia . ' y ' . $inst
@@ -511,7 +524,7 @@ function contrato_build_confirmation_email(array $data): array
         . $field('Fecha y hora de registro:', $acceptedAtDisplay)
         . $field('Dirección IP registrada:', $ip)
         . $field('Huella SHA-256 (archivo PDF depositado):', $contractHash)
-        . '<p style="margin:0 0 14px;font-size:13px;color:#555;text-align:justify;">La huella identifica el PDF íntegro aceptado y resguardado por el establecimiento. Permite verificar que el archivo no fue alterado.</p>'
+        . '<p style="margin:0 0 14px;font-size:12px;color:#555;text-align:justify;">La huella identifica el PDF íntegro aceptado y resguardado por el establecimiento. Permite verificar que el archivo no fue alterado.</p>'
         . '<h3 style="margin:22px 0 10px;font-size:15px;color:#0c3484;">Declaración de conformidad</h3>'
         . '<p style="margin:0 0 14px;text-align:justify;">El responsable mencionado precedentemente declara haber leído y aceptado el '
         . '<strong>Contrato de Servicios Educativos</strong> correspondiente al ciclo lectivo 2027, así como también el '

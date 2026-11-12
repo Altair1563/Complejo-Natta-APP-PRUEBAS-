@@ -42,6 +42,14 @@ if (
     echo json_encode(['ok' => false, 'msg' => 'Complete todos los datos requeridos antes de firmar.']);
     exit;
 }
+if (
+    str_contains($declarantName, '@')
+    || str_contains($declarantDomicilio, '@')
+    || str_contains($declarantLocalidad, '@')
+) {
+    echo json_encode(['ok' => false, 'msg' => 'Dato incorrecto, leer atentamente.']);
+    exit;
+}
 if (!preg_match('/^\d{6,12}$/', $declarantDni)) {
     echo json_encode(['ok' => false, 'msg' => 'Debe ingresar un DNI válido']);
     exit;
@@ -164,7 +172,8 @@ $preambulo = contrato_preambulo_aceptacion_texto(
     $declarantDni,
     $declarantDomicilio,
     $declarantLocalidad,
-    $instRow
+    $instRow,
+    $email
 );
 $acceptedText = $preambulo . ' ' . $baseAcceptedText
     . ' Alumno: ' . $studentName . ' (DNI ' . $studentDni . ', curso ' . $cursoAlumno . ').';

@@ -215,7 +215,7 @@ modal.innerHTML = `
 <p><strong>Versión:</strong> ${escapeHtml(version)}</p>
 <p><strong>Código único de verificación:</strong> ${escapeHtml(hash)}</p>
 <div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin:12px 0;background:#fafbfd;">
-  <p style="margin:0;text-align:justify;line-height:1.65;font-size:14px;color:#222;">
+  <p style="margin:0;text-align:justify;line-height:1.65;font-size:13px;color:#222;">
     Entre el Sr./Sra.
     <input id="fallbackDeclarantName" type="text" aria-label="Nombre y apellido completos del firmante"
       style="display:inline-block;vertical-align:middle;width:min(100%,280px);max-width:100%;margin:2px 4px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:14px;box-sizing:border-box;"
@@ -490,7 +490,7 @@ html: `
   <p><strong>Versión:</strong> ${escapeHtml(version)}</p>
   <p><strong>Código único de verificación:</strong> ${escapeHtml(hash)}</p>
   <div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px;margin:10px 0;background:#fafbfd;">
-    <p style="margin:0;text-align:justify;line-height:1.65;font-size:14px;color:#222;">
+    <p style="margin:0;text-align:justify;line-height:1.65;font-size:13px;color:#222;">
       Entre el Sr./Sra.
       <input id="contractDeclarantName" type="text" class="swal2-input"
         aria-label="Nombre y apellido completos del firmante"

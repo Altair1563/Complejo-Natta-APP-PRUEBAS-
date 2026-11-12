@@ -166,7 +166,7 @@ function contrato_parse_accepted_text(?string $acceptedText): ?array
     ];
 
     if (preg_match(
-        '/Entre el Sr\.\s+(.+?)\s+con DNI N°\s+(\d+)\s*,\s*con domicilio real en\s+(.+?)\s+localidad de\s+([^,]+)/u',
+        '/Entre el Sr(?:\/Sra)?\.\s+(.+?)\s+con DNI N°\s+(\d+)\s*,\s*con (?:domicilio electrónico en\s+\S+\s+y\s+)?domicilio real en\s+(.+?)\s+localidad de\s+([^,]+)/u',
         $text,
         $m
     )) {
