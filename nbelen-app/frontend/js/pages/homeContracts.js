@@ -547,13 +547,13 @@ function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs
   const emailStyle =
     'display:inline-block;vertical-align:middle;max-width:100%;margin:2px 4px;padding:6px 10px;border:1px solid #c5d4f0;border-radius:6px;background:#eef3fb;color:#0c3484;font-size:12px;font-weight:600;box-sizing:border-box;word-break:break-all;';
 
-  const wrapStart = '<span class="contract-preamble-field" style="display:inline-block;position:relative;vertical-align:middle;">';
+  const wrapStart = '<span class="contract-preamble-field" style="position:relative;vertical-align:middle;">';
   const fieldAlertHtml = `<span class="contract-preamble-field-alert" role="alert" aria-live="assertive" style="display:none;position:absolute;left:0;top:calc(100% + 2px);z-index:20;white-space:nowrap;padding:4px 8px;border-radius:4px;background:#fdecea;border:1px solid #f5c2c7;color:#842029;font-size:12px;line-height:1.3;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);">${PREAMBLE_NO_AT_MSG}</span>`;
   const wrapEnd = `</span>`;
 
   return `
   <div class="contract-preamble" style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px 28px 14px;margin:12px 0;background:#fafbfd;overflow:visible;">
-    <p style="margin:0;text-align:justify;line-height:1.65;font-size:13px;color:#222;">
+    <p style="margin:0;text-align:justify;line-height:1.65;font-size:12px;color:#222;">
       Entre el Sr/Sra.
       ${wrapStart}<input id="${fieldIds.declarantName}" type="text"${inputClass} aria-label="Nombre y apellido completos del firmante"
         style="${styleName}" placeholder="Nombre y apellido completos" />${fieldAlertHtml}${wrapEnd}

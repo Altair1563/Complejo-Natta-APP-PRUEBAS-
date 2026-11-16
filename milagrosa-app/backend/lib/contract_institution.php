@@ -653,10 +653,44 @@ function contrato_numero_cuota_noviembre(string $curso): int
 }
 
 /**
+ * Cursos que egresan o aún no están en la institución del ciclo siguiente.
+ * La firma queda cerrada mientras el legajo conserve uno de estos códigos.
+ *
+ * @return list<string>
+ */
+function contrato_cursos_pendientes_reubicacion(): array
+{
+    return [
+        // Sala de 5: egresan del jardín; no corresponde firma en Milagrosa.
+        'SCI',
+    ];
+}
+
+function contrato_curso_pendiente_reubicacion(?string $curso): bool
+{
+    $c = mb_strtoupper(trim((string)$curso), 'UTF-8');
+
+    return $c !== '' && in_array($c, contrato_cursos_pendientes_reubicacion(), true);
+}
+
+function contrato_msg_firma_bloqueada_reubicacion(string $curso): string
+{
+    $curso = mb_strtoupper(trim($curso), 'UTF-8');
+
+    return 'Los alumnos que se encuentran en el curso ' . $curso
+        . ' podrán firmar el contrato en febrero, una vez que ubiquemos a los alumnos en su curso correcto.';
+}
+
+/**
  * Habilitación de firma: noviembre (ciclo regular) o cuota 10 Adelanto RV 2027 (NUI).
+ * Los cursos pendientes de reubicación / egreso no pueden firmar aunque noviembre esté abonado.
  */
 function contrato_alumno_puede_firmar(mysqli $conn, string $legajo, string $curso): bool
 {
+    if (contrato_curso_pendiente_reubicacion($curso)) {
+        return false;
+    }
+
     if (curso_es_ingresante_externo_2027($curso)) {
         $adelanto = contrato_adelanto_rv_estado($conn, $legajo, $curso);
 
@@ -725,6 +759,10 @@ function contrato_msg_firma_bloqueada_adelanto_rv(): string
 
 function contrato_msg_firma_bloqueada(string $curso): string
 {
+    if (contrato_curso_pendiente_reubicacion($curso)) {
+        return contrato_msg_firma_bloqueada_reubicacion($curso);
+    }
+
     if (curso_es_ingresante_externo_2027($curso)) {
         return contrato_msg_firma_bloqueada_adelanto_rv();
     }
