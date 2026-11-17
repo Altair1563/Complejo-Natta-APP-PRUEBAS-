@@ -516,7 +516,7 @@ function initContractReadGateOnModalOpen(setGate, ids, { onReady, studentDni, pr
   });
 }
 
-const CONTRACT_DOMICILIO_ELECTRONICO_INSTITUCION = 'cobranzasinb@gmail.com';
+const CONTRACT_DOMICILIO_ELECTRONICO_INSTITUCION = 'nattadomicilioelectronico@gmail.com';
 
 /** Texto del representante del establecimiento (coincide con lo que arma el backend al guardar). */
 function htmlFragmentoInstitucionContrato(ic) {

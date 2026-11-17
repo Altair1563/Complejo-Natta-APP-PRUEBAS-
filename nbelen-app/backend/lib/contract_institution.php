@@ -397,7 +397,7 @@ function contrato_documento_vigente_titulo(?string $contractVersion): string
 
 function contrato_domicilio_electronico_institucion(): string
 {
-    return 'cobranzasinb@gmail.com';
+    return 'nattadomicilioelectronico@gmail.com';
 }
 
 function contrato_fragmento_institucion_texto(array $instRow): string
