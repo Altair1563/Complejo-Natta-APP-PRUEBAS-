@@ -89,8 +89,8 @@
         box-sizing: border-box;
     }
 
-    .swal2-modal .swal2-input,
-    .swal2-popup .swal2-input {
+    .swal2-modal .swal2-input:not(.contract-preamble-input),
+    .swal2-popup .swal2-input:not(.contract-preamble-input) {
         width: 100% !important;
         max-width: 100% !important;
         margin: 8px 0 0 !important;
@@ -164,19 +164,71 @@
     }
 
     .contract-preamble {
-        padding: 10px 12px !important;
+        padding: 10px 12px 28px !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .contract-preamble p {
-        text-align: left !important;
-        line-height: 1.55 !important;
+        text-align: justify !important;
+        line-height: 1.65 !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
     }
 
-    .contract-preamble input {
-        display: block !important;
-        width: 100% !important;
+    /* Misma distribución inline que ≥426px: no apilar a ancho completo */
+    .contract-preamble-field {
+        display: inline !important;
+        width: auto !important;
         max-width: 100% !important;
-        margin: 6px 0 !important;
+        position: relative !important;
+        vertical-align: middle !important;
+    }
+
+    .contract-preamble-email {
+        display: inline-block !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        word-break: break-all !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .contract-preamble input,
+    .contract-preamble .contract-preamble-input,
+    .contract-preamble .swal2-input,
+    .swal2-modal .contract-preamble .swal2-input,
+    .swal2-popup .contract-preamble .swal2-input {
+        display: inline-block !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin: 2px 3px !important;
+        padding: 5px 7px !important;
+        height: auto !important;
+        font-size: 12px !important;
+        vertical-align: middle !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Campos más chicos para quedar al lado del texto (no en línea sola) */
+    .contract-preamble .contract-preamble-input--name {
+        width: 150px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--dni {
+        width: 88px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--domicilio {
+        width: 220px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--localidad {
+        width: 108px !important;
+    }
+
+    .contract-preamble-field-alert {
+        white-space: normal !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
     }
 
@@ -207,8 +259,8 @@
     }
 }
 
-/* Mobile M — 370px */
-@media (max-width: 370px) {
+/* Mobile M — 345px */
+@media (max-width: 345px) {
     .swal2-container {
         padding: 4px;
     }
@@ -246,7 +298,23 @@
     }
 
     .contract-preamble p {
-        font-size: 13px !important;
+        font-size: 12px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--name {
+        width: 160px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--dni {
+        width: 110px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--domicilio {
+        width: 150px !important;
+    }
+
+    .contract-preamble .contract-preamble-input--localidad {
+        width: 110px !important;
     }
 
     .swal2-modal .swal2-styled,

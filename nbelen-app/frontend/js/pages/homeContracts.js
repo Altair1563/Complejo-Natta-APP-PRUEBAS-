@@ -528,45 +528,47 @@ function htmlFragmentoInstitucionContrato(ic) {
   return `${escapeHtml(resp)}, en representación ${escapeHtml(inst)}, con domicilio electrónico en ${escapeHtml(email)} y sede en ${escapeHtml(sede)}`;
 }
 
-function contractPreambleInputStyle(widthPx, swalInputs) {
+function contractPreambleInputStyle(widthPx) {
   const w = widthPx || 240;
-  const base = CONTRACT_PREAMBLE_INPUT_STYLE.replace('240px', `${w}px`);
-  if (!swalInputs) return base;
-  return `${base.replace(/margin:2px 4px/g, 'margin:2px 4px!important').replace(/padding:8px 10px/g, 'padding:8px 10px!important')}`;
+  // Sin !important: el CSS móvil (≤425px) puede achicar width/padding/margin.
+  return CONTRACT_PREAMBLE_INPUT_STYLE.replace('240px', `${w}px`);
 }
 
 /** Bloque del preámbulo contractual con datos del firmante y del establecimiento. */
 function htmlContractPreambleSection(institucionContrato, fieldIds, { swalInputs = false, responsableEmail = '' } = {}) {
   const fragInst = htmlFragmentoInstitucionContrato(institucionContrato || {});
-  const inputClass = swalInputs ? ' class="swal2-input"' : '';
-  const styleName = contractPreambleInputStyle(280, swalInputs);
-  const styleDni = contractPreambleInputStyle(140, swalInputs);
-  const styleDom = contractPreambleInputStyle(240, swalInputs);
-  const styleLoc = contractPreambleInputStyle(180, swalInputs);
+  const preambleInputClass = (size) =>
+    swalInputs
+      ? ` class="swal2-input contract-preamble-input contract-preamble-input--${size}"`
+      : ` class="contract-preamble-input contract-preamble-input--${size}"`;
+  const styleName = contractPreambleInputStyle(280);
+  const styleDni = contractPreambleInputStyle(140);
+  const styleDom = contractPreambleInputStyle(240);
+  const styleLoc = contractPreambleInputStyle(180);
   const emailText = String(responsableEmail || '').trim() || '—';
   const emailStyle =
-    'display:inline-block;vertical-align:middle;max-width:100%;margin:2px 4px;padding:6px 10px;border:1px solid #c5d4f0;border-radius:6px;background:#eef3fb;color:#0c3484;font-size:12px;font-weight:600;box-sizing:border-box;word-break:break-all;';
+    'display:inline-block;vertical-align:middle;max-width:100%;margin:2px 4px;padding:6px 10px;border:1px solid #c5d4f0;border-radius:6px;background:#eef3fb;color:#0c3484;font-size:12px;font-weight:600;box-sizing:border-box;word-break:break-all;overflow-wrap:anywhere;';
 
   const wrapStart = '<span class="contract-preamble-field" style="position:relative;vertical-align:middle;">';
-  const fieldAlertHtml = `<span class="contract-preamble-field-alert" role="alert" aria-live="assertive" style="display:none;position:absolute;left:0;top:calc(100% + 2px);z-index:20;white-space:nowrap;padding:4px 8px;border-radius:4px;background:#fdecea;border:1px solid #f5c2c7;color:#842029;font-size:12px;line-height:1.3;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);">${PREAMBLE_NO_AT_MSG}</span>`;
+  const fieldAlertHtml = `<span class="contract-preamble-field-alert" role="alert" aria-live="assertive" style="display:none;position:absolute;left:0;top:calc(100% + 2px);z-index:20;max-width:100%;padding:4px 8px;border-radius:4px;background:#fdecea;border:1px solid #f5c2c7;color:#842029;font-size:12px;line-height:1.3;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,.08);box-sizing:border-box;">${PREAMBLE_NO_AT_MSG}</span>`;
   const wrapEnd = `</span>`;
 
   return `
-  <div class="contract-preamble" style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px 28px 14px;margin:12px 0;background:#fafbfd;overflow:visible;">
-    <p style="margin:0;text-align:justify;line-height:1.65;font-size:12px;color:#222;">
+  <div class="contract-preamble" style="border:1px solid #e0e0e0;border-radius:8px;padding:12px 14px 28px 14px;margin:12px 0;background:#fafbfd;overflow:visible;max-width:100%;box-sizing:border-box;">
+    <p style="margin:0;text-align:justify;line-height:1.65;font-size:12px;color:#222;overflow-wrap:anywhere;word-break:break-word;">
       Entre el Sr/Sra.
-      ${wrapStart}<input id="${fieldIds.declarantName}" type="text"${inputClass} aria-label="Nombre y apellido completos del firmante"
+      ${wrapStart}<input id="${fieldIds.declarantName}" type="text"${preambleInputClass('name')} aria-label="Nombre y apellido completos del firmante"
         style="${styleName}" placeholder="Nombre y apellido completos" />${fieldAlertHtml}${wrapEnd}
       con DNI N°
-      ${wrapStart}<input id="${fieldIds.declarantDni}" type="text"${inputClass} inputmode="numeric" autocomplete="off" aria-label="DNI del firmante"
+      ${wrapStart}<input id="${fieldIds.declarantDni}" type="text"${preambleInputClass('dni')} inputmode="numeric" autocomplete="off" aria-label="DNI del firmante"
         style="${styleDni}" placeholder="DNI" />${fieldAlertHtml}${wrapEnd},
       con domicilio electrónico en
       <span class="contract-preamble-email" aria-label="Domicilio electrónico del firmante" style="${emailStyle}">${escapeHtml(emailText)}</span>
       y domicilio real en
-      ${wrapStart}<input id="${fieldIds.declarantDomicilio}" type="text"${inputClass} aria-label="Domicilio real del firmante"
-        style="${styleDom}" placeholder="calle y número" />${fieldAlertHtml}${wrapEnd}
+      ${wrapStart}<input id="${fieldIds.declarantDomicilio}" type="text"${preambleInputClass('domicilio')} aria-label="Domicilio real del firmante"
+        style="${styleDom}" placeholder="Calle y número" />${fieldAlertHtml}${wrapEnd}
       localidad de
-      ${wrapStart}<input id="${fieldIds.declarantLocalidad}" type="text"${inputClass} aria-label="Localidad del firmante"
+      ${wrapStart}<input id="${fieldIds.declarantLocalidad}" type="text"${preambleInputClass('localidad')} aria-label="Localidad del firmante"
         style="${styleLoc}" placeholder="Localidad" />${fieldAlertHtml}${wrapEnd}, en adelante &laquo;LA FAMILIA&raquo; y ${fragInst},
       en adelante &laquo;ESTABLECIMIENTO EDUCATIVO&raquo; celebran el presente contrato de servicios
       educativos sujeto a las siguientes cláusulas:
